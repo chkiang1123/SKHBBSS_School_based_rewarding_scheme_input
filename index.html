@@ -1,434 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Reward & Redemption System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #faf8f5; --card-bg: #ffffff; --text: #2d2a26; --text-muted: #6b6560;
-            --border: #e0dbd5; --input-bg: #faf8f5;
-            --gold: #d4950c; --gold-hover: #b57e0a; --gold-light: #fdf3d7; --gold-text: #7c4d00;
-            --red: #c0392b; --red-hover: #a93226; --red-light: #fce4e4; --red-text: #7b1a1a; --red-border: #e57373;
-            --green: #27ae60; --green-hover: #1e8449; --green-light: #e8f8f0; --green-text: #145a32;
-            --indigo: #5b6abf; --indigo-hover: #4a58a8;
-            --inactive-bg: #f0ece7; --inactive-text: #8a847e; --inactive-border: #d6d0c9;
-            --overlay-bg: rgba(45,42,38,0.4); --toast-bg: #fff; --toast-text: #2d2a26;
-            --chip-bg: #eee8df; --chip-text: #5a5550; --chip-hover: #e0d8cd;
-            --search-highlight: #d4950c;
-            --admin-bg: #eef2ff; --admin-border: #818cf8; --admin-text: #4338ca;
-        }
-        html.dark {
-            --bg: #1a1714; --card-bg: #252220; --text: #e8e3dc; --text-muted: #a09a93;
-            --border: #3d3832; --input-bg: #1a1714;
-            --gold-light: #3d2e0a; --gold-text: #f5d98a;
-            --red-light: #3d1414; --red-text: #f5a0a0; --red-border: #7b2020;
-            --green-light: #0e3320; --green-text: #82e6a8;
-            --inactive-bg: #302c28; --inactive-text: #8a847e; --inactive-border: #4a4540;
-            --overlay-bg: rgba(0,0,0,0.6); --toast-bg: #252220; --toast-text: #e8e3dc;
-            --chip-bg: #3a352f; --chip-text: #c0bab3; --chip-hover: #4a4540;
-            --admin-bg: #1e1b3a; --admin-border: #6366f1; --admin-text: #a5b4fc;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Nunito', 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at 20% 20%, rgba(212,149,12,0.04) 0%, transparent 50%),
-                              radial-gradient(circle at 80% 80%, rgba(91,106,191,0.04) 0%, transparent 50%);
-            padding: 16px;
-            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
-        }
-        .form-container {
-            background: var(--card-bg);
-            padding: 28px 24px;
-            border-radius: 20px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
-            width: 100%; max-width: 500px;
-        }
-        h2 { text-align: center; color: var(--text); margin-bottom: 8px; font-weight: 800; font-size: 22px; letter-spacing: -0.3px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Reward & Redemption System</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg:#faf8f5;--card-bg:#ffffff;--text:#2d2a26;--text-muted:#6b6560;
+    --border:#e0dbd5;--input-bg:#faf8f5;
+    --gold:#d4950c;--gold-hover:#b57e0a;--gold-light:#fdf3d7;--gold-text:#7c4d00;
+    --red:#c0392b;--red-hover:#a93226;--red-light:#fce4e4;--red-text:#7b1a1a;--red-border:#e57373;
+    --green:#27ae60;--green-hover:#1e8449;--green-light:#e8f8f0;--green-text:#145a32;
+    --indigo:#5b6abf;--indigo-hover:#4a58a8;
+    --inactive-bg:#f0ece7;--inactive-text:#8a847e;--inactive-border:#d6d0c9;
+    --overlay-bg:rgba(45,42,38,0.4);--toast-bg:#fff;--toast-text:#2d2a26;
+    --chip-bg:#eee8df;--chip-text:#5a5550;--chip-hover:#e0d8cd;
+    --admin-bg:#eef2ff;--admin-border:#818cf8;--admin-text:#4338ca;
+}
+html.dark {
+    --bg:#1a1714;--card-bg:#252220;--text:#e8e3dc;--text-muted:#a09a93;
+    --border:#3d3832;--input-bg:#1a1714;
+    --gold-light:#3d2e0a;--gold-text:#f5d98a;
+    --red-light:#3d1414;--red-text:#f5a0a0;--red-border:#7b2020;
+    --green-light:#0e3320;--green-text:#82e6a8;
+    --inactive-bg:#302c28;--inactive-text:#8a847e;--inactive-border:#4a4540;
+    --overlay-bg:rgba(0,0,0,0.6);--toast-bg:#252220;--toast-text:#e8e3dc;
+    --chip-bg:#3a352f;--chip-text:#c0bab3;--chip-hover:#4a4540;
+    --admin-bg:#1e1b3a;--admin-border:#6366f1;--admin-text:#a5b4fc;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+    font-family:'Nunito','Segoe UI',sans-serif;
+    background:var(--bg);
+    background-image:radial-gradient(circle at 20% 20%,rgba(212,149,12,0.04) 0%,transparent 50%),
+                      radial-gradient(circle at 80% 80%,rgba(91,106,191,0.04) 0%,transparent 50%);
+    padding:16px;min-height:100vh;
+    display:flex;justify-content:center;align-items:flex-start;
+}
 
-        /* Admin badge */
-        .admin-badge {
-            display: none; text-align: center; margin-bottom: 16px;
-            padding: 8px 14px; border-radius: 8px;
-            background: var(--admin-bg); border: 1.5px solid var(--admin-border);
-            color: var(--admin-text); font-size: 12px; font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-        .admin-badge.visible { display: block; }
+/* ═══ ADD MODE — narrow centred card ═══ */
+#addModeWrapper{
+    background:var(--card-bg);padding:28px 24px;border-radius:20px;
+    box-shadow:0 2px 20px rgba(0,0,0,0.06),0 0 0 1px rgba(0,0,0,0.03);
+    width:100%;max-width:500px;
+}
+#redeemModeWrapper{display:none;width:100%;}
 
-        /* Action mode toggle (super admin only) */
-        .action-mode-group { display: none; gap: 10px; margin-bottom: 20px; }
-        .action-mode-group.visible { display: flex; }
-        .action-btn {
-            flex: 1; padding: 12px 8px; border: 2px solid var(--inactive-border);
-            background: var(--inactive-bg); color: var(--inactive-text);
-            font-weight: 700; border-radius: 10px; cursor: pointer; text-align: center;
-            transition: all 0.2s ease; font-size: 14px; font-family: inherit;
-        }
-        .action-btn:hover { opacity: 0.85; }
-        .action-btn.active-add { background: var(--gold); color: #fff; border-color: var(--gold-hover); box-shadow: 0 2px 8px rgba(212,149,12,0.3); }
-        .action-btn.active-deduct { background: var(--red); color: #fff; border-color: var(--red-hover); box-shadow: 0 2px 8px rgba(192,57,43,0.3); }
+/* ═══ REDEEM MODE — wide 2-panel ═══ */
+body.mode-redeem{justify-content:flex-start;}
+body.mode-redeem #addModeWrapper{display:none !important;}
+body.mode-redeem #redeemModeWrapper{
+    display:flex;gap:16px;width:100%;
+    min-height:calc(100vh - 32px);
+}
+.redeem-sidebar{
+    width:320px;flex-shrink:0;
+    background:var(--card-bg);border-radius:20px;padding:24px;
+    box-shadow:0 2px 20px rgba(0,0,0,0.06),0 0 0 1px rgba(0,0,0,0.03);
+    overflow-y:auto;max-height:calc(100vh - 32px);
+    position:sticky;top:16px;
+}
+.redeem-main{flex:1;min-width:0;padding:4px;}
 
-        /* Labels & Inputs */
-        label { font-weight: 700; display: block; margin-top: 16px; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
-        label .optional { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--inactive-text); font-size: 12px; }
-        input, select, textarea {
-            width: 100%; padding: 11px 12px; margin-top: 6px;
-            border: 1.5px solid var(--border); border-radius: 10px;
-            font-size: 16px; background: var(--input-bg); color: var(--text);
-            font-family: inherit; transition: border-color 0.2s;
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); }
-        select option { background: var(--card-bg); color: var(--text); }
-        textarea { resize: vertical; height: 60px; }
+.sidebar-divider{height:1px;background:var(--border);margin:16px 0;}
 
-        /* Searchable dropdown */
-        .search-select-wrap { position: relative; margin-top: 6px; }
-        .search-select-wrap input {
-            margin-top: 0; padding-right: 36px;
-            background: var(--input-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;
-        }
-        .search-dropdown {
-            display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 100;
-            background: var(--card-bg); border: 1.5px solid var(--border); border-top: none;
-            border-radius: 0 0 10px 10px; max-height: 220px; overflow-y: auto;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
-        .search-dropdown.open { display: block; }
-        .search-dropdown-item {
-            padding: 10px 12px; cursor: pointer; font-size: 14px; color: var(--text);
-            transition: background 0.1s;
-        }
-        .search-dropdown-item:hover, .search-dropdown-item.highlighted { background: var(--gold-light); }
-        .search-dropdown-empty { padding: 12px; color: var(--text-muted); font-size: 13px; text-align: center; }
+/* ═══ Card Grid ═══ */
+.card-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:14px;
+}
+.empty-state{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:60px 20px;color:var(--text-muted);gap:12px;
+    grid-column:1/-1;min-height:300px;
+}
+.empty-state.hidden{display:none;}
+.empty-icon{font-size:52px;opacity:0.4;}
+.empty-text{font-size:15px;font-weight:600;text-align:center;line-height:1.5;}
 
-        /* Target toggle */
-        .toggle-group { display: flex; gap: 10px; margin-top: 8px; }
-        .toggle-btn {
-            flex: 1; padding: 10px; border: 2px solid var(--gold); background: var(--card-bg);
-            color: var(--text); font-weight: 700; border-radius: 10px; cursor: pointer;
-            text-align: center; font-size: 14px; transition: all 0.2s; font-family: inherit;
-        }
-        .toggle-btn.active { background: var(--gold); color: #fff; }
+/* ═══ Student Card ═══ */
+.student-card{
+    background:var(--card-bg);border-radius:14px;padding:14px;
+    border:1.5px solid var(--border);
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    display:flex;flex-direction:column;gap:8px;
+    animation:cardIn .25s ease;
+    transition:border-color .2s;
+}
+.student-card.card-insufficient{border-color:var(--red-border);}
+.student-card.card-ok{border-color:var(--green);}
+@keyframes cardIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.card-name{font-weight:800;font-size:12px;color:var(--text);flex:1;word-break:break-word;line-height:1.35;}
+.card-remove-btn{
+    background:none;border:none;color:var(--text-muted);font-size:20px;font-weight:800;
+    cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0;font-family:inherit;
+    transition:color .15s;
+}
+.card-remove-btn:hover{color:var(--red);}
+.card-bal{
+    font-size:11px;font-weight:700;padding:5px 8px;border-radius:7px;
+    display:flex;justify-content:space-between;align-items:center;
+}
+.card-bal.bal-loading{background:var(--inactive-bg);color:var(--inactive-text);}
+.card-bal.bal-ok{background:var(--green-light);color:var(--green-text);}
+.card-bal.bal-low{background:var(--red-light);color:var(--red-text);}
+.card-bal.bal-empty{background:var(--inactive-bg);color:var(--text-muted);}
+.card-items{display:flex;flex-direction:column;gap:2px;}
+.card-item-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:4px 0;
+}
+.ci-label{font-size:11px;font-weight:700;color:var(--text);flex:1;min-width:0;}
+.ci-cost{color:var(--text-muted);font-weight:600;font-size:10px;}
+.ci-qty{
+    display:flex;align-items:center;
+    border:1px solid var(--border);border-radius:7px;overflow:hidden;
+    flex-shrink:0;
+}
+.ci-qty .qb{
+    width:30px;height:30px;border:none;background:var(--chip-bg);
+    color:var(--text);font-size:16px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;transition:background .15s;line-height:1;
+    -webkit-user-select:none;user-select:none;
+}
+.ci-qty .qb:hover{background:var(--chip-hover);}
+.ci-qty .qb:active{background:var(--gold-light);}
+.ci-qty .qv{
+    width:34px;text-align:center;font-size:14px;font-weight:800;
+    color:var(--text);background:var(--card-bg);line-height:30px;
+    border-left:1px solid var(--border);border-right:1px solid var(--border);
+}
+.card-footer{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:6px 8px;border-radius:8px;font-weight:700;font-size:12px;
+    margin-top:2px;
+}
+.card-footer.cf-active{background:var(--gold-light);color:var(--gold-text);}
+.card-footer.cf-zero{background:var(--inactive-bg);color:var(--inactive-text);}
 
-        /* Tags */
-        .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 10px; }
-        .tag {
-            background: var(--gold-light); color: var(--gold-text);
-            padding: 5px 10px; border-radius: 20px; font-weight: 700; font-size: 12px;
-            display: inline-flex; align-items: center; gap: 6px;
-            animation: tagIn 0.2s ease; max-width: 100%;
-        }
-        @keyframes tagIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .tag .tag-remove { cursor: pointer; color: var(--red); font-weight: 800; font-size: 14px; line-height: 1; flex-shrink: 0; }
-        .tag .tag-remove:hover { color: var(--red-hover); }
-        .tag-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* ═══ Queue Summary ═══ */
+.queue-summary{
+    padding:12px;border-radius:10px;background:var(--gold-light);
+    margin:12px 0;text-align:center;border:1.5px solid var(--gold);
+}
+.queue-summary.qs-empty{background:var(--inactive-bg);border-color:var(--inactive-border);}
+.queue-count{font-weight:700;font-size:13px;color:var(--gold-text);}
+.queue-total{font-weight:800;font-size:16px;color:var(--gold-text);margin-top:2px;}
+.queue-summary.qs-empty .queue-count,
+.queue-summary.qs-empty .queue-total{color:var(--inactive-text);}
 
-        /* Balance indicator on tags */
-        .tag-balance {
-            font-size: 11px; font-weight: 800; padding: 1px 6px; border-radius: 10px;
-            white-space: nowrap; flex-shrink: 0;
-        }
-        .tag-balance.loading { color: var(--text-muted); }
-        .tag-balance.ok { background: var(--green-light); color: var(--green-text); }
-        .tag-balance.insufficient { background: var(--red-light); color: var(--red-text); }
-        .tag-balance.neutral { color: var(--text-muted); }
+/* ═══ Redeem All button ═══ */
+.redeem-all-btn{
+    width:100%;background:var(--red);color:#fff;padding:14px;
+    border:none;border-radius:12px;font-size:16px;cursor:pointer;
+    font-weight:800;font-family:inherit;transition:all .2s;
+    letter-spacing:.3px;box-shadow:0 2px 10px rgba(192,57,43,0.3);
+}
+.redeem-all-btn:hover{background:var(--red-hover);transform:translateY(-1px);box-shadow:0 4px 14px rgba(192,57,43,0.35);}
+.redeem-all-btn:disabled{opacity:.6;cursor:not-allowed;transform:none !important;}
 
-        /* Add row */
-        .add-row { display: flex; gap: 8px; margin-top: 6px; }
-        .add-row select { flex: 1; }
-        .add-btn {
-            flex-shrink: 0; width: auto; background: var(--indigo); padding: 10px 14px;
-            color: #fff; border: none; border-radius: 10px; cursor: pointer;
-            font-weight: 700; font-size: 14px; font-family: inherit; transition: background 0.2s;
-        }
-        .add-btn:hover { background: var(--indigo-hover); }
+/* ══════════ Shared form styles ══════════ */
+h2{text-align:center;color:var(--text);margin-bottom:8px;font-weight:800;font-size:22px;letter-spacing:-.3px;}
+.admin-badge{
+    display:none;text-align:center;margin-bottom:16px;
+    padding:8px 14px;border-radius:8px;
+    background:var(--admin-bg);border:1.5px solid var(--admin-border);
+    color:var(--admin-text);font-size:12px;font-weight:700;letter-spacing:.3px;
+}
+.admin-badge.visible{display:block;}
+.action-mode-group{display:none;gap:10px;margin-bottom:20px;}
+.action-mode-group.visible{display:flex;}
+.action-btn{
+    flex:1;padding:12px 8px;border:2px solid var(--inactive-border);
+    background:var(--inactive-bg);color:var(--inactive-text);
+    font-weight:700;border-radius:10px;cursor:pointer;text-align:center;
+    transition:all .2s;font-size:14px;font-family:inherit;
+}
+.action-btn:hover{opacity:.85;}
+.action-btn.ab-add{background:var(--gold);color:#fff;border-color:var(--gold-hover);box-shadow:0 2px 8px rgba(212,149,12,0.3);}
+.action-btn.ab-deduct{background:var(--red);color:#fff;border-color:var(--red-hover);box-shadow:0 2px 8px rgba(192,57,43,0.3);}
 
-        /* Reason chips */
-        .reason-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-        .reason-chip {
-            padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
-            background: var(--chip-bg); color: var(--chip-text); cursor: pointer;
-            border: 1.5px solid transparent; transition: all 0.15s; font-family: inherit;
-        }
-        .reason-chip:hover { background: var(--chip-hover); }
-        .reason-chip.selected { background: var(--gold-light); color: var(--gold-text); border-color: var(--gold); }
+label{font-weight:700;display:block;margin-top:16px;color:var(--text-muted);font-size:13px;text-transform:uppercase;letter-spacing:.5px;}
+label .optional{font-weight:400;text-transform:none;letter-spacing:0;color:var(--inactive-text);font-size:12px;}
+input,select,textarea{
+    width:100%;padding:11px 12px;margin-top:6px;
+    border:1.5px solid var(--border);border-radius:10px;
+    font-size:16px;background:var(--input-bg);color:var(--text);
+    font-family:inherit;transition:border-color .2s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);}
+select option{background:var(--card-bg);color:var(--text);}
+textarea{resize:vertical;height:60px;}
 
-        /* Shopping cart for redemption */
-        .cart-section { margin-top: 16px; }
-        .cart-items { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 12px;
-            background: var(--input-bg); transition: border-color 0.2s, background 0.2s;
-        }
-        .cart-item.has-qty { border-color: var(--gold); background: var(--gold-light); }
-        .cart-item-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-        .cart-item-name { font-weight: 800; font-size: 14px; color: var(--text); }
-        .cart-item-cost { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-        .cart-qty {
-            display: flex; align-items: center; gap: 0;
-            border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden;
-            flex-shrink: 0;
-        }
-        .qty-btn {
-            width: 40px; height: 40px; border: none; background: var(--chip-bg);
-            color: var(--text); font-size: 20px; font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-family: inherit; transition: background 0.15s; line-height: 1;
-            -webkit-user-select: none; user-select: none;
-        }
-        .qty-btn:hover { background: var(--chip-hover); }
-        .qty-btn:active { background: var(--gold-light); }
-        .qty-value {
-            width: 44px; text-align: center; font-size: 18px; font-weight: 800;
-            color: var(--text); background: var(--card-bg); line-height: 40px;
-            border-left: 1px solid var(--border); border-right: 1px solid var(--border);
-        }
-        .cart-summary {
-            margin-top: 12px; padding: 12px 16px; border-radius: 12px;
-            background: var(--gold-light); text-align: center;
-            border: 1.5px solid var(--gold);
-        }
-        .cart-summary-total { font-weight: 800; font-size: 18px; color: var(--gold-text); }
-        .cart-summary-label { font-size: 12px; color: var(--gold-text); opacity: 0.8; margin-top: 2px; font-weight: 600; }
-        .cart-summary.empty { background: var(--inactive-bg); border-color: var(--inactive-border); }
-        .cart-summary.empty .cart-summary-total { color: var(--inactive-text); }
-        .cart-summary.empty .cart-summary-label { color: var(--inactive-text); }
+/* Searchable dropdown */
+.search-select-wrap{position:relative;margin-top:6px;}
+.search-select-wrap input{
+    margin-top:0;padding-right:36px;
+    background:var(--input-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;
+}
+.search-dropdown{
+    display:none;position:absolute;top:100%;left:0;right:0;z-index:100;
+    background:var(--card-bg);border:1.5px solid var(--border);border-top:none;
+    border-radius:0 0 10px 10px;max-height:220px;overflow-y:auto;
+    box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+.search-dropdown.open{display:block;}
+.search-dropdown-item{padding:10px 12px;cursor:pointer;font-size:14px;color:var(--text);transition:background .1s;}
+.search-dropdown-item:hover,.search-dropdown-item.highlighted{background:var(--gold-light);}
+.search-dropdown-empty{padding:12px;color:var(--text-muted);font-size:13px;text-align:center;}
 
-        /* Submit button */
-        button[type="submit"] {
-            width: 100%; background: var(--gold); color: #fff; padding: 14px;
-            border: none; border-radius: 12px; margin-top: 24px;
-            font-size: 16px; cursor: pointer; font-weight: 800; font-family: inherit;
-            transition: all 0.2s; letter-spacing: 0.3px;
-            box-shadow: 0 2px 10px rgba(212,149,12,0.3);
-        }
-        button[type="submit"]:hover { background: var(--gold-hover); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(212,149,12,0.35); }
-        button[type="submit"].deduct-mode { background: var(--red); box-shadow: 0 2px 10px rgba(192,57,43,0.3); }
-        button[type="submit"].deduct-mode:hover { background: var(--red-hover); box-shadow: 0 4px 14px rgba(192,57,43,0.35); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+/* Toggle group */
+.toggle-group{display:flex;gap:10px;margin-top:8px;}
+.toggle-btn{
+    flex:1;padding:10px;border:2px solid var(--gold);background:var(--card-bg);
+    color:var(--text);font-weight:700;border-radius:10px;cursor:pointer;
+    text-align:center;font-size:14px;transition:all .2s;font-family:inherit;
+}
+.toggle-btn.active{background:var(--gold);color:#fff;}
 
-        .error-msg { color: var(--red); font-size: 12px; display: none; margin-top: 4px; font-weight: 700; }
-        .balance-error {
-            background: var(--red-light); color: var(--red-text); padding: 14px; border-radius: 12px;
-            border: 1px solid var(--red-border); margin-top: 16px; font-size: 13px;
-            font-weight: 600; display: none; line-height: 1.6;
-        }
+/* Tags */
+.tag-container{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;min-height:10px;}
+.tag{
+    background:var(--gold-light);color:var(--gold-text);
+    padding:5px 10px;border-radius:20px;font-weight:700;font-size:12px;
+    display:inline-flex;align-items:center;gap:6px;
+    animation:tagIn .2s ease;max-width:100%;
+}
+@keyframes tagIn{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.tag .tag-remove{cursor:pointer;color:var(--red);font-weight:800;font-size:14px;line-height:1;flex-shrink:0;}
+.tag .tag-remove:hover{color:var(--red-hover);}
+.tag-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
-        /* Toast */
-        .toast-overlay {
-            position: fixed; inset: 0; background: var(--overlay-bg);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 9999; animation: fadeIn .2s ease;
-        }
-        .toast-box {
-            background: var(--toast-bg); padding: 28px; border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2); max-width: 340px; width: 90%;
-            text-align: center; animation: scaleIn .25s ease;
-        }
-        .toast-box p { margin: 0 0 20px; font-size: 15px; color: var(--toast-text); line-height: 1.5; font-weight: 600; }
-        .toast-box button {
-            background: var(--gold); color: #fff; border: none; padding: 10px 36px;
-            border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
-        }
-        .toast-box.success-toast button { background: var(--green); }
-        .toast-box.error-toast button { background: var(--red); }
-        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-        @keyframes scaleIn { from { transform: scale(.92); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+/* Add row */
+.add-row{display:flex;gap:8px;margin-top:6px;}
+.add-row select{flex:1;}
+.add-btn{
+    flex-shrink:0;background:var(--indigo);padding:10px 14px;
+    color:#fff;border:none;border-radius:10px;cursor:pointer;
+    font-weight:700;font-size:14px;font-family:inherit;transition:background .2s;
+}
+.add-btn:hover{background:var(--indigo-hover);}
 
-        /* Select all bar */
-        .select-all-bar { display: flex; justify-content: flex-end; margin-top: 6px; }
-        .select-all-link {
-            font-size: 12px; color: var(--indigo); cursor: pointer; font-weight: 700; text-decoration: underline;
-        }
-        .select-all-link:hover { color: var(--indigo-hover); }
+/* Select all bar */
+.select-all-bar{display:flex;justify-content:flex-end;margin-top:6px;}
+.select-all-link{font-size:12px;color:var(--indigo);cursor:pointer;font-weight:700;text-decoration:underline;}
+.select-all-link:hover{color:var(--indigo-hover);}
 
-        /* Balance fetch indicator */
-        .balance-fetch-status {
-            font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 600;
-            font-style: italic; display: none;
-        }
-        .balance-fetch-status.visible { display: block; }
-    </style>
+/* Reason chips */
+.reason-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.reason-chip{
+    padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;
+    background:var(--chip-bg);color:var(--chip-text);cursor:pointer;
+    border:1.5px solid transparent;transition:all .15s;font-family:inherit;
+}
+.reason-chip:hover{background:var(--chip-hover);}
+.reason-chip.selected{background:var(--gold-light);color:var(--gold-text);border-color:var(--gold);}
+
+/* Submit button */
+.submit-btn{
+    width:100%;background:var(--gold);color:#fff;padding:14px;
+    border:none;border-radius:12px;margin-top:24px;
+    font-size:16px;cursor:pointer;font-weight:800;font-family:inherit;
+    transition:all .2s;letter-spacing:.3px;
+    box-shadow:0 2px 10px rgba(212,149,12,0.3);
+}
+.submit-btn:hover{background:var(--gold-hover);transform:translateY(-1px);box-shadow:0 4px 14px rgba(212,149,12,0.35);}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none !important;}
+
+.error-msg{color:var(--red);font-size:12px;display:none;margin-top:4px;font-weight:700;}
+.balance-error{
+    background:var(--red-light);color:var(--red-text);padding:14px;border-radius:12px;
+    border:1px solid var(--red-border);margin-top:16px;font-size:13px;
+    font-weight:600;display:none;line-height:1.6;
+}
+
+/* Toast */
+.toast-overlay{
+    position:fixed;inset:0;background:var(--overlay-bg);
+    display:flex;align-items:center;justify-content:center;
+    z-index:9999;animation:fadeIn .2s ease;
+}
+.toast-box{
+    background:var(--toast-bg);padding:28px;border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.2);max-width:340px;width:90%;
+    text-align:center;animation:scaleIn .25s ease;
+}
+.toast-box p{margin:0 0 20px;font-size:15px;color:var(--toast-text);line-height:1.5;font-weight:600;}
+.toast-box button{
+    background:var(--gold);color:#fff;border:none;padding:10px 36px;
+    border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.toast-box.success-toast button{background:var(--green);}
+.toast-box.error-toast button{background:var(--red);}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* Responsive: stack sidebar on narrow screens */
+@media(max-width:700px){
+    body.mode-redeem #redeemModeWrapper{flex-direction:column;}
+    .redeem-sidebar{width:100%;max-height:none;position:static;}
+}
+</style>
 </head>
 <body>
-<div class="form-container">
-    <h2 id="formHeader">⭐ Star Reward System</h2>
 
-    <!-- Admin badge -->
-    <div id="adminBadge" class="admin-badge"></div>
+<!-- ═══════════════════════════════════════════════════════════
+     ADD MODE WRAPPER — narrow centred card for regular teachers
+     ═══════════════════════════════════════════════════════════ -->
+<div id="addModeWrapper">
 
-    <!-- Action mode toggle (super admin KCH only) -->
-    <div id="actionModeGroup" class="action-mode-group">
-        <div id="btnModeAdd" class="action-btn active-add" onclick="setActionMode('ADD')">➕ Add Stars</div>
-        <div id="btnModeDeduct" class="action-btn" onclick="setActionMode('DEDUCT')">🎁 Redeem Stars</div>
-    </div>
+    <!-- ── Login Section (physically moves between ADD & REDEEM containers) ── -->
+    <div id="loginSection">
+        <h2 id="formHeader">&#11088; Star Reward System</h2>
+        <div id="adminBadge" class="admin-badge"></div>
 
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-    <form id="rewardForm" action="https://script.google.com/macros/s/AKfycbwpbU-F0eIqcY6YR-jEJKwCw14Rsb_o5oWETUYnQT04enn9EuME_3Um16j8VdNsB8Bj/exec" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
+        <!-- Action mode toggle (KCH super-admin only) -->
+        <div id="actionModeGroup" class="action-mode-group">
+            <div id="btnModeAdd" class="action-btn ab-add" onclick="setActionMode('ADD')">&#10133; Add Stars</div>
+            <div id="btnModeDeduct" class="action-btn" onclick="setActionMode('DEDUCT')">&#127873; Redeem Stars</div>
+        </div>
 
-        <input type="hidden" name="actionMode" id="actionMode" value="ADD">
-        <input type="hidden" name="stars" id="starsValue" value="1">
-        <input type="hidden" name="luckyDrawQty" id="luckyDrawQtyField" value="0">
-        <input type="hidden" name="bbssSurpriseQty" id="bbssSurpriseQtyField" value="0">
-        <input type="hidden" name="tuckShopCouponQty" id="tuckShopCouponQtyField" value="0">
-
-        <!-- Teacher searchable dropdown -->
         <label for="teacherSearch">Teacher / Admin Name</label>
         <div class="search-select-wrap" id="teacherWrap">
             <input type="text" id="teacherSearch" autocomplete="off" placeholder="Type name or initials..." onclick="openTeacherDropdown()" oninput="filterTeachers()">
             <div class="search-dropdown" id="teacherDropdown"></div>
         </div>
-        <input type="hidden" name="teacherName" id="teacherName">
+        <input type="hidden" id="selectedTeacher" value="">
 
-        <label for="passcode">6-Digit Secret Passcode</label>
-        <input type="password" id="passcode" name="passcode" maxlength="6" pattern="\d{6}" placeholder="Enter 6-digit code" autocomplete="new-password" required>
-        <div id="passcodeError" class="error-msg">Incorrect passcode for selected teacher!</div>
+        <label for="passcodeInput">6-Digit Secret Passcode</label>
+        <input type="password" id="passcodeInput" maxlength="6" pattern="\d{6}" placeholder="Enter 6-digit code" autocomplete="new-password">
+        <div id="passcodeError" class="error-msg">Incorrect passcode!</div>
+    </div>
 
+    <!-- ── ADD Form Content ── -->
+    <div id="addContent">
         <label>Target Type</label>
         <div class="toggle-group">
-            <div id="btnClass" class="toggle-btn active" onclick="setMode('class')">By Class</div>
-            <div id="btnStudent" class="toggle-btn" onclick="setMode('student')">By Student</div>
+            <div id="btnClass" class="toggle-btn active" onclick="setTargetMode('class')">By Class</div>
+            <div id="btnStudent" class="toggle-btn" onclick="setTargetMode('student')">By Student</div>
         </div>
-        <input type="hidden" name="rewardType" id="rewardType" value="class">
 
         <!-- Class multi-select -->
-        <div id="classStreamSection">
+        <div id="addClassSection">
             <label>Select Class(es)</label>
             <div class="add-row">
-                <select id="classSelect">
-                    <option value="" disabled selected>Pick a class (1A–6D)</option>
-                    <option value="1A">1A</option><option value="1B">1B</option><option value="1C">1C</option><option value="1D">1D</option>
-                    <option value="2A">2A</option><option value="2B">2B</option><option value="2C">2C</option><option value="2D">2D</option>
-                    <option value="3A">3A</option><option value="3B">3B</option><option value="3C">3C</option><option value="3D">3D</option>
-                    <option value="4A">4A</option><option value="4B">4B</option><option value="4C">4C</option><option value="4D">4D</option>
-                    <option value="5A">5A</option><option value="5B">5B</option><option value="5C">5C</option><option value="5D">5D</option>
-                    <option value="6A">6A</option><option value="6B">6B</option><option value="6C">6C</option><option value="6D">6D</option>
-                </select>
+                <select id="addClassSelect"><option value="" disabled selected>Pick a class (1A&#8211;6D)</option></select>
                 <button type="button" class="add-btn" onclick="addClassTag()">+ ADD</button>
             </div>
-            <div class="select-all-bar">
-                <span class="select-all-link" onclick="addAllClasses()">Select All 24 Classes</span>
-            </div>
-            <div id="selectedClassesList" class="tag-container"></div>
-            <div id="classBalanceStatus" class="balance-fetch-status">Fetching balances...</div>
-            <input type="hidden" name="classNames" id="classNames">
+            <div class="select-all-bar"><span class="select-all-link" onclick="addAllClasses()">Select All 24 Classes</span></div>
+            <div id="addClassTags" class="tag-container"></div>
         </div>
 
         <!-- Student multi-select -->
-        <div id="studentStreamSection" style="display: none;">
-            <label for="studentClass">Select Class</label>
-            <select id="studentClass" name="studentClass" onchange="populateStudents()">
+        <div id="addStudentSection" style="display:none;">
+            <label>Select Class</label>
+            <select id="addStudentClass" onchange="populateAddStudents()">
                 <option value="" disabled selected>Select class first</option>
-                <option value="1A">1A</option><option value="1B">1B</option><option value="1C">1C</option><option value="1D">1D</option>
-                <option value="2A">2A</option><option value="2B">2B</option><option value="2C">2C</option><option value="2D">2D</option>
-                <option value="3A">3A</option><option value="3B">3B</option><option value="3C">3C</option><option value="3D">3D</option>
-                <option value="4A">4A</option><option value="4B">4B</option><option value="4C">4C</option><option value="4D">4D</option>
-                <option value="5A">5A</option><option value="5B">5B</option><option value="5C">5C</option><option value="5D">5D</option>
-                <option value="6A">6A</option><option value="6B">6B</option><option value="6C">6C</option><option value="6D">6D</option>
+            </select>
+            <label>Select Student</label>
+            <div class="add-row">
+                <select id="addStudentSelect"><option value="" disabled selected>Select a student</option></select>
+                <button type="button" class="add-btn" onclick="addStudentTag()">+ ADD</button>
+            </div>
+            <div class="select-all-bar" id="addSelectAllBar" style="display:none;">
+                <span class="select-all-link" onclick="addAllStudentsInClass()">Select All Students</span>
+            </div>
+            <div id="addStudentTags" class="tag-container"></div>
+        </div>
+
+        <!-- Stars -->
+        <label>Stars Awarded</label>
+        <select id="addStarsSelect">
+            <option value="1">&#11088; 1 Star</option>
+            <option value="2">&#11088;&#11088; 2 Stars</option>
+            <option value="3">&#11088;&#11088;&#11088; 3 Stars</option>
+            <option value="4">&#11088;&#11088;&#11088;&#11088; 4 Stars</option>
+            <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; 5 Stars</option>
+        </select>
+
+        <!-- Reasons -->
+        <label>Reason / Note <span class="optional">(optional)</span></label>
+        <div class="reason-chips" id="reasonChips">
+            <span class="reason-chip" data-reason="Good manner &amp; politeness" onclick="toggleReasonChip(this)">&#129309; Good Manner &amp; Politeness</span>
+            <span class="reason-chip" data-reason="Helpfulness" onclick="toggleReasonChip(this)">&#128161; Helpfulness</span>
+            <span class="reason-chip" data-reason="Punctuality" onclick="toggleReasonChip(this)">&#9200; Punctuality</span>
+            <span class="reason-chip" data-reason="Honesty" onclick="toggleReasonChip(this)">&#9989; Honesty</span>
+            <span class="reason-chip" data-reason="Great results" onclick="toggleReasonChip(this)">&#128221; Great Results</span>
+            <span class="reason-chip" data-reason="Active participation" onclick="toggleReasonChip(this)">&#128587; Active Participation</span>
+            <span class="reason-chip" data-reason="Good teamwork" onclick="toggleReasonChip(this)">&#129309; Good Teamwork</span>
+            <span class="reason-chip" data-reason="Good homework" onclick="toggleReasonChip(this)">&#128218; Good Homework</span>
+            <span class="reason-chip" data-reason="Great effort" onclick="toggleReasonChip(this)">&#128170; Great Effort</span>
+            <span class="reason-chip" data-reason="School / class service" onclick="toggleReasonChip(this)">&#127775; School / Class Service</span>
+            <span class="reason-chip" data-reason="" id="otherChip" onclick="toggleOtherChip(this)">&#9999;&#65039; Other</span>
+        </div>
+        <textarea id="addReasonText" placeholder="Please specify your reason..." style="display:none;"></textarea>
+
+        <div id="addBalanceError" class="balance-error"></div>
+
+        <button type="button" class="submit-btn" id="addSubmitBtn" onclick="handleAddSubmit()">Submit Stars</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     REDEEM MODE WRAPPER — wide 2-panel for iPad / notebook
+     ═══════════════════════════════════════════════════════════ -->
+<div id="redeemModeWrapper">
+    <div class="redeem-sidebar" id="redeemSidebar">
+        <!-- loginSection is moved here via JS when REDEEM mode activates -->
+        <div id="sidebarControls">
+            <div class="sidebar-divider"></div>
+
+            <label for="redeemClassSelect">Select Class</label>
+            <select id="redeemClassSelect" onchange="populateRedeemStudents()">
+                <option value="" disabled selected>Select class first</option>
             </select>
 
             <label>Select Student</label>
             <div class="add-row">
-                <select id="studentSelect">
-                    <option value="" disabled selected>Select a student</option>
-                </select>
-                <button type="button" class="add-btn" onclick="addStudentTag()">+ ADD</button>
+                <select id="redeemStudentSelect"><option value="" disabled selected>Select a student</option></select>
+                <button type="button" class="add-btn" onclick="addToQueue()">+ ADD</button>
             </div>
-            <div class="select-all-bar" id="selectAllStudentsBar" style="display:none;">
-                <span class="select-all-link" onclick="addAllStudentsInClass()">Select All Students in Class</span>
+            <div class="select-all-bar" id="redeemSelectAllBar" style="display:none;">
+                <span class="select-all-link" onclick="addAllInClassToQueue()">Add All Students in Class</span>
             </div>
-            <div id="selectedStudentsList" class="tag-container"></div>
-            <div id="studentBalanceStatus" class="balance-fetch-status">Fetching balances...</div>
-            <input type="hidden" name="studentNames" id="studentNames">
+
+            <div class="sidebar-divider"></div>
+
+            <div id="queueSummary" class="queue-summary qs-empty">
+                <div class="queue-count" id="queueCount">0 students in queue</div>
+                <div class="queue-total" id="queueTotal">Total: 0 &#11088;</div>
+            </div>
+
+            <div id="redeemBalanceError" class="balance-error"></div>
+
+            <button type="button" class="redeem-all-btn" id="redeemAllBtn" onclick="redeemAll()">&#127873; Redeem All</button>
         </div>
-
-        <!-- Stars section (ADD mode only) -->
-        <div id="starsSection">
-            <label id="starsLabel">Stars Awarded</label>
-            <select id="starsSelect">
-                <option value="1">⭐ 1 Star</option>
-                <option value="2">⭐⭐ 2 Stars</option>
-                <option value="3">⭐⭐⭐ 3 Stars</option>
-                <option value="4">⭐⭐⭐⭐ 4 Stars</option>
-                <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
-            </select>
+    </div>
+    <div class="redeem-main" id="redeemMain">
+        <div id="cardGrid" class="card-grid"></div>
+        <div id="emptyState" class="empty-state">
+            <div class="empty-icon">&#128722;</div>
+            <div class="empty-text">Add students from the sidebar<br>to start building redemption carts</div>
         </div>
-
-        <!-- Shopping cart section (DEDUCT / Redeem mode) -->
-        <div id="cartSection" style="display:none;">
-            <label>Redemption Items</label>
-            <div class="cart-items">
-                <div class="cart-item" id="cartItemLucky">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">🎟️ Lucky Draw Token</span>
-                        <span class="cart-item-cost">1 ⭐ each</span>
-                    </div>
-                    <div class="cart-qty">
-                        <button type="button" class="qty-btn" onclick="changeQty('lucky', -1)">−</button>
-                        <span class="qty-value" id="qty-lucky">0</span>
-                        <button type="button" class="qty-btn" onclick="changeQty('lucky', 1)">+</button>
-                    </div>
-                </div>
-                <div class="cart-item" id="cartItemBbss">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">🎁 BBSS Surprise</span>
-                        <span class="cart-item-cost">2 ⭐ each</span>
-                    </div>
-                    <div class="cart-qty">
-                        <button type="button" class="qty-btn" onclick="changeQty('bbss', -1)">−</button>
-                        <span class="qty-value" id="qty-bbss">0</span>
-                        <button type="button" class="qty-btn" onclick="changeQty('bbss', 1)">+</button>
-                    </div>
-                </div>
-                <div class="cart-item" id="cartItemTuckshop">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">🏪 Tuck Shop Cash Coupon</span>
-                        <span class="cart-item-cost">3 ⭐ each</span>
-                    </div>
-                    <div class="cart-qty">
-                        <button type="button" class="qty-btn" onclick="changeQty('tuckshop', -1)">−</button>
-                        <span class="qty-value" id="qty-tuckshop">0</span>
-                        <button type="button" class="qty-btn" onclick="changeQty('tuckshop', 1)">+</button>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-summary empty" id="cartSummary">
-                <div class="cart-summary-total" id="cartTotalStars">0 ⭐</div>
-                <div class="cart-summary-label">Total cost per student / class</div>
-            </div>
-        </div>
-
-        <!-- Reason section (ADD mode only) -->
-        <div id="reasonSection">
-            <label>Reason / Note <span class="optional">(optional)</span></label>
-            <div class="reason-chips" id="reasonChips">
-                <span class="reason-chip" data-reason="Good manner & politeness" onclick="toggleReasonChip(this)">🤝 Good Manner & Politeness</span>
-                <span class="reason-chip" data-reason="Helpfulness" onclick="toggleReasonChip(this)">💡 Helpfulness</span>
-                <span class="reason-chip" data-reason="Punctuality" onclick="toggleReasonChip(this)">⏰ Punctuality</span>
-                <span class="reason-chip" data-reason="Honesty" onclick="toggleReasonChip(this)">✅ Honesty</span>
-                <span class="reason-chip" data-reason="Great results" onclick="toggleReasonChip(this)">📝 Great Results</span>
-                <span class="reason-chip" data-reason="Active participation" onclick="toggleReasonChip(this)">🙋 Active Participation</span>
-                <span class="reason-chip" data-reason="Good teamwork" onclick="toggleReasonChip(this)">🤝 Good Teamwork</span>
-                <span class="reason-chip" data-reason="Good homework" onclick="toggleReasonChip(this)">📚 Good Homework</span>
-                <span class="reason-chip" data-reason="Great effort" onclick="toggleReasonChip(this)">💪 Great Effort</span>
-                <span class="reason-chip" data-reason="School / class service" onclick="toggleReasonChip(this)">🌟 School / Class Service</span>
-                <span class="reason-chip" data-reason="" id="otherChip" onclick="toggleOtherChip(this)">✏️ Other (Please specify)</span>
-            </div>
-            <textarea name="reason" id="reason" placeholder="Please specify your reason..." style="display:none;"></textarea>
-        </div>
-
-        <div id="balanceError" class="balance-error"></div>
-
-        <button type="submit" id="submitBtn">Submit Stars</button>
-    </form>
+    </div>
 </div>
 
+<!-- Hidden iframe for form submission -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
 <script>
-/* ── Dark mode ── */
+/* ══════════════════════════════════════════════════════════════
+ *  DARK MODE
+ * ══════════════════════════════════════════════════════════════ */
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     document.documentElement.classList.add('dark');
 }
@@ -437,12 +463,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 });
 
 /* ══════════════════════════════════════════════════════════════
- *  CONFIGURATION — Admin & Permission Setup
- * ══════════════════════════════════════════════════════════════
- *  SUPER_ADMINS     → Can both ADD stars and REDEEM stars.
- *  REDEEM_ONLY_ADMINS → Can ONLY redeem stars (no adding).
- *  Everyone else    → Can ONLY add stars (no redeeming).
- * ────────────────────────────────────────────────────────────── */
+ *  CONFIGURATION
+ * ══════════════════════════════════════════════════════════════ */
+var FORM_ACTION = 'https://script.google.com/macros/s/AKfycbwpbU-F0eIqcY6YR-jEJKwCw14Rsb_o5oWETUYnQT04enn9EuME_3Um16j8VdNsB8Bj/exec';
+var SPREADSHEET_ID = '1xD_LThLu70H5eG8jI9GX3FvkHS8AT6ud2upnkufYg6A';
+
 var SUPER_ADMINS = [
     'Kiang Chi Hong (KCH)'
 ];
@@ -454,16 +479,23 @@ var REDEEM_ONLY_ADMINS = [
     'Admin 4'
 ];
 
-/* ── Constants ── */
-var SPREADSHEET_ID = '1xD_LThLu70H5eG8jI9GX3FvkHS8AT6ud2upnkufYg6A';
-var isSubmitting = false;
+var ALL_CLASSES = ['1A','1B','1C','1D','2A','2B','2C','2D','3A','3B','3C','3D',
+                   '4A','4B','4C','4D','5A','5B','5C','5D','6A','6B','6C','6D'];
 
+/* ══════════════════════════════════════════════════════════════
+ *  TEACHERS — Paste your full teacher list here
+ * ══════════════════════════════════════════════════════════════
+ *  Keep Admin 1–4 at the top. Add each teacher on a new line:
+ *    "Full Name (INITIALS)",
+ *  Example:
+ *    "Chan Ka Ying Anna (CKY)",
+ * ────────────────────────────────────────────────────────────── */
 var TEACHERS = [
     "Admin 1",
     "Admin 2",
     "Admin 3",
-    "Admin 4",
-    "Bezant Samantha Diana (BSD)",
+    "Admin 4"
+     "Bezant Samantha Diana (BSD)",
     "Chan Hin Chiu (CHC)",
     "Chan Ka Ying Anna (CKY)",
     "Chan Kwok Keung (CKK1)",
@@ -528,13 +560,13 @@ var TEACHERS = [
     "Yao Hing Man (YHM)",
     "Yip Kin Man (YKM)",
     "Yu Siu Ping (YSP)"
+    // ═══ PASTE YOUR TEACHER LIST BELOW THIS LINE ═══
 ];
 
 /* ══════════════════════════════════════════════════════════════
  *  CLASS_STUDENTS — Paste your student data here
  * ══════════════════════════════════════════════════════════════
- *  Replace the empty {} below with your full CLASS_STUDENTS
- *  object from the original file.  Format:
+ *  Replace the empty {} below with your full data.  Format:
  *
  *  var CLASS_STUDENTS = {
  *      "1A": ["1A01 CHAN SIN YING 陳倩凝", "1A02 ..."],
@@ -570,29 +602,27 @@ var CLASS_STUDENTS = {
     "6D": ["6D01 CHAN CHI WING 陳智穎", "6D02 CHAN SUM YIN 陳心言", "6D03 CHAN YUEN LAM 陳菀琳", "6D04 CHONG YIU TONG 莊曜同", "6D05 CHOW HO YAN 周可欣", "6D06 FENG YINGXI 馮穎熙", "6D07 HO MAN HIU CYNTHIA 何旻曉", "6D08 HO TSZ KEI 何沚錡", "6D09 KAN SUM YUET 簡心悅", "6D10 LAI HIU YUET 黎曉悅", "6D11 LAM CHUNG YAN 林頌恩", "6D12 LAU OI YING 劉靄瀅", "6D13 TANG HEI LAM 鄧希琳", "6D14 WONG KIU YAN 黃喬欣", "6D15 WONG WING HEI 黃詠希", "6D16 CHAN PAK KIU 陳柏翹", "6D17 CHAN PUN LAP 陳本立", "6D18 CHAN WAI WA 陳偉華", "6D19 CHOI WAN CHAK 蔡昀澤", "6D20 CHONG HO CHING 莊皓程", "6D21 HO PAK YIN 何珀賢", "6D22 KWONG HOI KIT 鄺凱杰", "6D23 LAU KAI SUN 劉啟辰", "6D24 LOK WAI TO 駱韋圖", "6D25 PENG YIN POK 彭彥博", "6D26 TSE KWOK KEUNG 謝國強", "6D27 TSOI YUK SAN 蔡旭燊", "6D28 WONG CHUN YIU 王雋堯", "6D29 ZHANG TIN YU 張天宇"]
 };
 
-
-/* ── State ── */
-var selectedStudents = [];
+/* ══════════════════════════════════════════════════════════════
+ *  STATE
+ * ══════════════════════════════════════════════════════════════ */
 var selectedClasses = [];
+var selectedStudents = [];
 var selectedReasons = [];
 var otherChipActive = false;
 var teacherHighlightIndex = -1;
 var balanceCache = {};
-var isFetchingBalances = false;
-var cart = { lucky: 0, bbss: 0, tuckshop: 0 };
+var isSubmitting = false;
+var lastSubmitMode = 'ADD';
+var addTargetMode = 'class';
+var currentLayoutMode = 'ADD'; // 'ADD' or 'REDEEM' — tracks which wrapper is visible
 
-/* ── Toast (replaces alert) ── */
-function showToast(message, type) {
-    var boxClass = 'toast-box';
-    if (type === 'success') boxClass += ' success-toast';
-    else if (type === 'error') boxClass += ' error-toast';
-    var overlay = document.createElement('div');
-    overlay.className = 'toast-overlay';
-    overlay.innerHTML = '<div class="' + boxClass + '"><p>' + message + '</p><button onclick="this.closest(\'.toast-overlay\').remove()">OK</button></div>';
-    document.body.appendChild(overlay);
-}
+/* redeemQueue: per-student shopping carts */
+var redeemQueue = [];
+/* Each entry: { name: "2A24 CHUK AH KWAN 卓亞君", lucky: 0, bbss: 0, tuckshop: 0 } */
 
-/* ── Helpers ── */
+/* ══════════════════════════════════════════════════════════════
+ *  UTILITY FUNCTIONS
+ * ══════════════════════════════════════════════════════════════ */
 function escapeHTML(str) {
     var d = document.createElement('div');
     d.textContent = str;
@@ -633,20 +663,42 @@ function sumStarsFromCSV(csvText, targets) {
     return sums;
 }
 
+/* ══════════════════════════════════════════════════════════════
+ *  TOAST (replaces alert/confirm)
+ * ══════════════════════════════════════════════════════════════ */
+function showToast(message, type) {
+    var boxClass = 'toast-box';
+    if (type === 'success') boxClass += ' success-toast';
+    else if (type === 'error') boxClass += ' error-toast';
+    var overlay = document.createElement('div');
+    overlay.className = 'toast-overlay';
+    overlay.innerHTML = '<div class="' + boxClass + '"><p>' + message + '</p><button onclick="this.closest(\'.toast-overlay\').remove()">OK</button></div>';
+    document.body.appendChild(overlay);
+}
+
+/* ══════════════════════════════════════════════════════════════
+ *  PERMISSION HELPERS — 3-tier model
+ * ══════════════════════════════════════════════════════════════ */
+function isSuperAdmin(name) { return SUPER_ADMINS.indexOf(name) !== -1; }
+function isRedeemOnlyAdmin(name) { return REDEEM_ONLY_ADMINS.indexOf(name) !== -1; }
+function isAnyAdmin(name) { return isSuperAdmin(name) || isRedeemOnlyAdmin(name); }
+
+/* ══════════════════════════════════════════════════════════════
+ *  BALANCE CALCULATION (Google Sheets CSV)
+ * ══════════════════════════════════════════════════════════════ */
 async function calculateBalances(targets) {
     var base = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/gviz/tq?tqx=out:csv&sheet=';
-    var recordsCSV = '';
-    var redemptionsCSV = '';
-    var recordsResp = await fetch(base + 'Records');
-    if (!recordsResp.ok) throw new Error('Cannot read Records sheet');
-    recordsCSV = await recordsResp.text();
+    var recordsCSV = '', redemptionsCSV = '';
+    var resp1 = await fetch(base + 'Records');
+    if (!resp1.ok) throw new Error('Cannot read Records sheet');
+    recordsCSV = await resp1.text();
     try {
-        var redemptionsResp = await fetch(base + 'Redemptions');
-        if (redemptionsResp.ok) {
-            var txt = await redemptionsResp.text();
+        var resp2 = await fetch(base + 'Redemptions');
+        if (resp2.ok) {
+            var txt = await resp2.text();
             if (txt && !txt.trim().startsWith('<')) redemptionsCSV = txt;
         }
-    } catch (ignored) {}
+    } catch (ignored) { /* Redemptions sheet may not exist yet */ }
     var earned = sumStarsFromCSV(recordsCSV, targets);
     var redeemed = sumStarsFromCSV(redemptionsCSV, targets);
     var balances = {};
@@ -657,51 +709,24 @@ async function calculateBalances(targets) {
     return balances;
 }
 
-/* ══════════════════════════════════════════════════════════════
- *  Permission helpers — 3-tier model
- * ────────────────────────────────────────────────────────────── */
-function isSuperAdmin(name) {
-    return SUPER_ADMINS.indexOf(name) !== -1;
-}
-function isRedeemOnlyAdmin(name) {
-    return REDEEM_ONLY_ADMINS.indexOf(name) !== -1;
-}
-function isAnyAdmin(name) {
-    return isSuperAdmin(name) || isRedeemOnlyAdmin(name);
-}
-
-function updateAdminUI(teacherName) {
-    var modeGroup = document.getElementById('actionModeGroup');
-    var badge = document.getElementById('adminBadge');
-
-    if (isSuperAdmin(teacherName)) {
-        /* KCH: show toggle (Add + Redeem) */
-        modeGroup.classList.add('visible');
-        badge.classList.add('visible');
-        badge.textContent = '\uD83D\uDD11 SUPER ADMIN \u2014 Add Stars & Redeem Stars';
-        /* Default to ADD if not already in DEDUCT */
-        if (document.getElementById('actionMode').value !== 'DEDUCT') {
-            setActionMode('ADD');
-        }
-    } else if (isRedeemOnlyAdmin(teacherName)) {
-        /* Admin 1–4: lock to DEDUCT, hide toggle */
-        modeGroup.classList.remove('visible');
-        badge.classList.add('visible');
-        badge.textContent = '\uD83C\uDF81 REDEEM ADMIN \u2014 Redemption Only';
-        setActionMode('DEDUCT');
-    } else {
-        /* Regular teacher: ADD only, hide toggle */
-        modeGroup.classList.remove('visible');
-        badge.classList.remove('visible');
-        setActionMode('ADD');
+async function fetchBalancesForQueue(targets) {
+    if (!targets || targets.length === 0) return;
+    var uncached = targets.filter(function(t) { return balanceCache[t] === undefined; });
+    if (uncached.length === 0) { renderCards(); return; }
+    try {
+        var balances = await calculateBalances(uncached);
+        uncached.forEach(function(t) { balanceCache[t] = (balances[t] !== undefined) ? balances[t] : 0; });
+    } catch (e) {
+        uncached.forEach(function(t) { balanceCache[t] = 0; });
+        console.log('Balance fetch error: ' + e.message);
     }
+    renderCards();
 }
 
-/* ── Searchable Teacher dropdown ── */
-function getInitials(name) {
-    var m = name.match(/\(([^)]+)\)/);
-    return m ? m[1] : '';
-}
+/* ══════════════════════════════════════════════════════════════
+ *  TEACHER SEARCHABLE DROPDOWN
+ * ══════════════════════════════════════════════════════════════ */
+function getInitials(name) { var m = name.match(/\(([^)]+)\)/); return m ? m[1] : ''; }
 
 function openTeacherDropdown() {
     filterTeachers();
@@ -714,14 +739,11 @@ function filterTeachers() {
     var query = input.value.trim().toLowerCase();
     dropdown.innerHTML = '';
     teacherHighlightIndex = -1;
-
     var filtered = TEACHERS.filter(function(t) {
         if (!query) return true;
         var initials = getInitials(t).toLowerCase();
-        var fullLower = t.toLowerCase();
-        return initials.indexOf(query) === 0 || fullLower.indexOf(query) !== -1;
+        return initials.indexOf(query) === 0 || t.toLowerCase().indexOf(query) !== -1;
     });
-
     if (filtered.length === 0) {
         dropdown.innerHTML = '<div class="search-dropdown-empty">No teacher found</div>';
     } else {
@@ -729,10 +751,7 @@ function filterTeachers() {
             var item = document.createElement('div');
             item.className = 'search-dropdown-item';
             item.textContent = teacher;
-            item.addEventListener('mousedown', function(e) {
-                e.preventDefault();
-                selectTeacher(teacher);
-            });
+            item.addEventListener('mousedown', function(e) { e.preventDefault(); selectTeacher(teacher); });
             dropdown.appendChild(item);
         });
     }
@@ -741,543 +760,594 @@ function filterTeachers() {
 
 function selectTeacher(teacher) {
     document.getElementById('teacherSearch').value = teacher;
-    document.getElementById('teacherName').value = teacher;
+    document.getElementById('selectedTeacher').value = teacher;
     document.getElementById('teacherDropdown').classList.remove('open');
     document.getElementById('passcodeError').style.display = 'none';
     updateAdminUI(teacher);
 }
 
-/* ── Cart functions ── */
-function changeQty(item, delta) {
-    cart[item] = Math.max(0, cart[item] + delta);
-    document.getElementById('qty-' + item).textContent = cart[item];
-
-    var itemIds = { lucky: 'cartItemLucky', bbss: 'cartItemBbss', tuckshop: 'cartItemTuckshop' };
-    var el = document.getElementById(itemIds[item]);
-    if (el) { el.classList.toggle('has-qty', cart[item] > 0); }
-
-    updateCartDisplay();
+/* ══════════════════════════════════════════════════════════════
+ *  LAYOUT SWITCHING (ADD ↔ REDEEM)
+ * ══════════════════════════════════════════════════════════════ */
+function switchToAddMode() {
+    if (currentLayoutMode === 'ADD') return;
+    currentLayoutMode = 'ADD';
+    document.body.classList.remove('mode-redeem');
+    /* Move loginSection back into addModeWrapper */
+    var wrapper = document.getElementById('addModeWrapper');
+    wrapper.insertBefore(document.getElementById('loginSection'), document.getElementById('addContent'));
+    document.getElementById('teacherDropdown').classList.remove('open');
 }
 
-function getCartTotal() {
-    return (cart.lucky * 1) + (cart.bbss * 2) + (cart.tuckshop * 3);
+function switchToRedeemMode() {
+    if (currentLayoutMode === 'REDEEM') return;
+    currentLayoutMode = 'REDEEM';
+    document.body.classList.add('mode-redeem');
+    /* Move loginSection into redeemSidebar */
+    var sidebar = document.getElementById('redeemSidebar');
+    sidebar.insertBefore(document.getElementById('loginSection'), document.getElementById('sidebarControls'));
+    document.getElementById('teacherDropdown').classList.remove('open');
 }
 
-function getCartReason() {
-    var parts = [];
-    if (cart.lucky > 0) parts.push('Lucky Draw Token \u00d7' + cart.lucky);
-    if (cart.bbss > 0) parts.push('BBSS Surprise \u00d7' + cart.bbss);
-    if (cart.tuckshop > 0) parts.push('Tuck Shop Cash Coupon \u00d7' + cart.tuckshop);
-    return parts.join(', ') || 'Redemption';
-}
+function setActionMode(mode) {
+    document.getElementById('passcodeError').style.display = 'none';
 
-function updateCartDisplay() {
-    var total = getCartTotal();
-    var summaryEl = document.getElementById('cartSummary');
-    document.getElementById('cartTotalStars').textContent = total + ' \u2b50';
-    summaryEl.classList.toggle('empty', total === 0);
-    renderCurrentTags();
-}
-
-/* ── Balance functions ── */
-function isDeductMode() {
-    return document.getElementById('actionMode').value === 'DEDUCT';
-}
-
-function getCurrentTargets() {
-    var type = document.getElementById('rewardType').value;
-    return type === 'class' ? selectedClasses.slice() : selectedStudents.slice();
-}
-
-function renderCurrentTags() {
-    var type = document.getElementById('rewardType').value;
-    if (type === 'class') renderClassTags();
-    else renderStudentTags();
-}
-
-async function fetchBalanceForTargets(targets) {
-    if (!targets || targets.length === 0) return;
-    var uncached = targets.filter(function(t) { return balanceCache[t] === undefined; });
-    if (uncached.length === 0) {
-        renderCurrentTags();
-        return;
+    if (mode === 'ADD') {
+        switchToAddMode();
+        document.getElementById('btnModeAdd').className = 'action-btn ab-add';
+        document.getElementById('btnModeDeduct').className = 'action-btn';
+        document.getElementById('formHeader').textContent = '\u2B50 Star Reward System';
+    } else {
+        switchToRedeemMode();
+        document.getElementById('btnModeDeduct').className = 'action-btn ab-deduct';
+        document.getElementById('btnModeAdd').className = 'action-btn';
+        document.getElementById('formHeader').textContent = '\uD83C\uDF81 Reward Redemption';
     }
-
-    isFetchingBalances = true;
-    showBalanceFetchStatus(true);
-
-    try {
-        var balances = await calculateBalances(uncached);
-        uncached.forEach(function(t) {
-            balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
-        });
-    } catch (e) {
-        uncached.forEach(function(t) {
-            balanceCache[t] = 0;
-        });
-        console.log('Balance fetch error: ' + e.message);
-    }
-
-    isFetchingBalances = false;
-    showBalanceFetchStatus(false);
-    renderCurrentTags();
 }
 
-function showBalanceFetchStatus(show) {
-    var type = document.getElementById('rewardType').value;
-    var statusId = type === 'class' ? 'classBalanceStatus' : 'studentBalanceStatus';
-    var el = document.getElementById(statusId);
-    el.classList.toggle('visible', show);
+function updateAdminUI(teacherName) {
+    var modeGroup = document.getElementById('actionModeGroup');
+    var badge = document.getElementById('adminBadge');
+
+    if (isSuperAdmin(teacherName)) {
+        modeGroup.classList.add('visible');
+        badge.classList.add('visible');
+        badge.textContent = '\uD83D\uDD11 SUPER ADMIN \u2014 Add Stars & Redeem Stars';
+        setActionMode('ADD');
+    } else if (isRedeemOnlyAdmin(teacherName)) {
+        modeGroup.classList.remove('visible');
+        badge.classList.add('visible');
+        badge.textContent = '\uD83C\uDF81 REDEEM ADMIN \u2014 Redemption Only';
+        setActionMode('DEDUCT');
+    } else {
+        modeGroup.classList.remove('visible');
+        badge.classList.remove('visible');
+        badge.textContent = '';
+        setActionMode('ADD');
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+ *  ADD MODE — Target selection, tags, reasons
+ * ══════════════════════════════════════════════════════════════ */
+function setTargetMode(mode) {
+    addTargetMode = mode;
+    if (mode === 'class') {
+        document.getElementById('btnClass').classList.add('active');
+        document.getElementById('btnStudent').classList.remove('active');
+        document.getElementById('addClassSection').style.display = 'block';
+        document.getElementById('addStudentSection').style.display = 'none';
+    } else {
+        document.getElementById('btnStudent').classList.add('active');
+        document.getElementById('btnClass').classList.remove('active');
+        document.getElementById('addClassSection').style.display = 'none';
+        document.getElementById('addStudentSection').style.display = 'block';
+    }
+}
+
+function populateAddStudents() {
+    var cls = document.getElementById('addStudentClass').value;
+    var sel = document.getElementById('addStudentSelect');
+    sel.innerHTML = '<option value="" disabled selected>Select a student</option>';
+    if (CLASS_STUDENTS[cls]) {
+        CLASS_STUDENTS[cls].forEach(function(name) {
+            var o = document.createElement('option'); o.value = name; o.textContent = name;
+            sel.appendChild(o);
+        });
+        document.getElementById('addSelectAllBar').style.display = 'flex';
+    } else {
+        document.getElementById('addSelectAllBar').style.display = 'none';
+    }
+}
+
+/* ── Class tags ── */
+function addClassTag() {
+    var val = document.getElementById('addClassSelect').value;
+    if (val && selectedClasses.indexOf(val) === -1) {
+        selectedClasses.push(val);
+        renderClassTags();
+    }
+}
+function removeClassTag(name) {
+    selectedClasses = selectedClasses.filter(function(s) { return s !== name; });
+    renderClassTags();
+}
+function addAllClasses() {
+    ALL_CLASSES.forEach(function(cls) {
+        if (selectedClasses.indexOf(cls) === -1) selectedClasses.push(cls);
+    });
+    renderClassTags();
+}
+function renderClassTags() {
+    var c = document.getElementById('addClassTags');
+    c.innerHTML = '';
+    selectedClasses.forEach(function(name) {
+        var tag = document.createElement('div'); tag.className = 'tag';
+        var lbl = document.createElement('span'); lbl.className = 'tag-label'; lbl.textContent = name;
+        var btn = document.createElement('span'); btn.className = 'tag-remove'; btn.textContent = '\u00d7';
+        btn.addEventListener('click', function() { removeClassTag(name); });
+        tag.appendChild(lbl); tag.appendChild(btn); c.appendChild(tag);
+    });
+}
+
+/* ── Student tags ── */
+function addStudentTag() {
+    var val = document.getElementById('addStudentSelect').value;
+    if (val && selectedStudents.indexOf(val) === -1) {
+        selectedStudents.push(val);
+        renderStudentTags();
+    }
+}
+function removeStudentTag(name) {
+    selectedStudents = selectedStudents.filter(function(s) { return s !== name; });
+    renderStudentTags();
+}
+function addAllStudentsInClass() {
+    var cls = document.getElementById('addStudentClass').value;
+    if (CLASS_STUDENTS[cls]) {
+        CLASS_STUDENTS[cls].forEach(function(name) {
+            if (selectedStudents.indexOf(name) === -1) selectedStudents.push(name);
+        });
+        renderStudentTags();
+    }
+}
+function renderStudentTags() {
+    var c = document.getElementById('addStudentTags');
+    c.innerHTML = '';
+    selectedStudents.forEach(function(name) {
+        var tag = document.createElement('div'); tag.className = 'tag';
+        var lbl = document.createElement('span'); lbl.className = 'tag-label';
+        lbl.textContent = name.length > 22 ? name.substring(0, 22) + '...' : name;
+        var btn = document.createElement('span'); btn.className = 'tag-remove'; btn.textContent = '\u00d7';
+        btn.addEventListener('click', function() { removeStudentTag(name); });
+        tag.appendChild(lbl); tag.appendChild(btn); c.appendChild(tag);
+    });
 }
 
 /* ── Reason chips ── */
 function toggleReasonChip(el) {
     var reason = el.getAttribute('data-reason');
     var idx = selectedReasons.indexOf(reason);
-    if (idx === -1) {
-        selectedReasons.push(reason);
-        el.classList.add('selected');
-    } else {
-        selectedReasons.splice(idx, 1);
-        el.classList.remove('selected');
-    }
+    if (idx === -1) { selectedReasons.push(reason); el.classList.add('selected'); }
+    else { selectedReasons.splice(idx, 1); el.classList.remove('selected'); }
 }
-
 function toggleOtherChip(el) {
     otherChipActive = !otherChipActive;
     el.classList.toggle('selected', otherChipActive);
-    var textarea = document.getElementById('reason');
-    textarea.style.display = otherChipActive ? 'block' : 'none';
-    if (otherChipActive) {
-        textarea.focus();
-    } else {
-        textarea.value = '';
-    }
+    var ta = document.getElementById('addReasonText');
+    ta.style.display = otherChipActive ? 'block' : 'none';
+    if (otherChipActive) ta.focus(); else ta.value = '';
 }
-
 function getFullReason() {
-    var chipReasons = selectedReasons.join('; ');
-    var customNote = document.getElementById('reason').value.trim();
-    if (chipReasons && customNote) return chipReasons + '; ' + customNote;
-    if (chipReasons) return chipReasons;
-    return customNote;
+    var chips = selectedReasons.join('; ');
+    var custom = document.getElementById('addReasonText').value.trim();
+    if (chips && custom) return chips + '; ' + custom;
+    return chips || custom;
 }
 
-/* ── UI functions ── */
-function setActionMode(mode) {
-    document.getElementById('actionMode').value = mode;
-    var submitBtn = document.getElementById('submitBtn');
-    hideBalanceError();
-
-    if (mode === 'ADD') {
-        document.getElementById('btnModeAdd').className = 'action-btn active-add';
-        document.getElementById('btnModeDeduct').className = 'action-btn';
-        submitBtn.className = '';
-        submitBtn.textContent = 'Submit Stars';
-        document.getElementById('formHeader').textContent = '\u2b50 Star Reward System';
-        document.getElementById('reasonSection').style.display = 'block';
-        document.getElementById('starsSection').style.display = 'block';
-        document.getElementById('cartSection').style.display = 'none';
-    } else {
-        document.getElementById('btnModeDeduct').className = 'action-btn active-deduct';
-        document.getElementById('btnModeAdd').className = 'action-btn';
-        submitBtn.className = 'deduct-mode';
-        submitBtn.textContent = '\uD83C\uDF81 Redeem Items';
-        document.getElementById('formHeader').textContent = '\uD83C\uDF81 Reward Redemption';
-        document.getElementById('reasonSection').style.display = 'none';
-        document.getElementById('starsSection').style.display = 'none';
-        document.getElementById('cartSection').style.display = 'block';
-
-        selectedReasons = [];
-        otherChipActive = false;
-        document.querySelectorAll('.reason-chip.selected').forEach(function(c) { c.classList.remove('selected'); });
-        document.getElementById('reason').value = '';
-        document.getElementById('reason').style.display = 'none';
-
-        var targets = getCurrentTargets();
-        if (targets.length > 0) {
-            fetchBalanceForTargets(targets);
-        }
-    }
-
-    renderCurrentTags();
-}
-
-function setMode(mode) {
-    document.getElementById('rewardType').value = mode;
-    hideBalanceError();
-    if (mode === 'class') {
-        document.getElementById('btnClass').classList.add('active');
-        document.getElementById('btnStudent').classList.remove('active');
-        document.getElementById('classStreamSection').style.display = 'block';
-        document.getElementById('studentStreamSection').style.display = 'none';
-    } else {
-        document.getElementById('btnStudent').classList.add('active');
-        document.getElementById('btnClass').classList.remove('active');
-        document.getElementById('classStreamSection').style.display = 'none';
-        document.getElementById('studentStreamSection').style.display = 'block';
-    }
-}
-
-function populateStudents() {
-    var cls = document.getElementById('studentClass').value;
-    var sel = document.getElementById('studentSelect');
+/* ══════════════════════════════════════════════════════════════
+ *  REDEEM MODE — Student selection & queue management
+ * ══════════════════════════════════════════════════════════════ */
+function populateRedeemStudents() {
+    var cls = document.getElementById('redeemClassSelect').value;
+    var sel = document.getElementById('redeemStudentSelect');
     sel.innerHTML = '<option value="" disabled selected>Select a student</option>';
     if (CLASS_STUDENTS[cls]) {
         CLASS_STUDENTS[cls].forEach(function(name) {
-            var o = document.createElement('option');
-            o.value = name; o.textContent = name;
+            var o = document.createElement('option'); o.value = name; o.textContent = name;
             sel.appendChild(o);
         });
-        document.getElementById('selectAllStudentsBar').style.display = 'flex';
+        document.getElementById('redeemSelectAllBar').style.display = 'flex';
     } else {
-        document.getElementById('selectAllStudentsBar').style.display = 'none';
+        document.getElementById('redeemSelectAllBar').style.display = 'none';
     }
 }
 
-function addStudentTag() {
-    var val = document.getElementById('studentSelect').value;
-    if (val && selectedStudents.indexOf(val) === -1) {
-        selectedStudents.push(val);
-        renderStudentTags();
-        if (isDeductMode()) {
-            fetchBalanceForTargets([val]);
-        }
-    }
+function addToQueue() {
+    var sel = document.getElementById('redeemStudentSelect');
+    var name = sel.value;
+    if (!name) { showToast('Please select a student first.', 'error'); return; }
+    var exists = redeemQueue.some(function(e) { return e.name === name; });
+    if (exists) { showToast('This student is already in the queue.', 'error'); return; }
+    redeemQueue.push({ name: name, lucky: 0, bbss: 0, tuckshop: 0 });
+    renderCards();
+    if (balanceCache[name] === undefined) fetchBalancesForQueue([name]);
+    sel.selectedIndex = 0;
 }
 
-function removeStudentTag(name) {
-    selectedStudents = selectedStudents.filter(function(s) { return s !== name; });
-    renderStudentTags();
-    hideBalanceError();
-}
-
-function addAllStudentsInClass() {
-    var cls = document.getElementById('studentClass').value;
-    var newTargets = [];
-    if (CLASS_STUDENTS[cls]) {
-        CLASS_STUDENTS[cls].forEach(function(name) {
-            if (selectedStudents.indexOf(name) === -1) {
-                selectedStudents.push(name);
-                newTargets.push(name);
-            }
-        });
-        renderStudentTags();
-        if (isDeductMode() && newTargets.length > 0) {
-            fetchBalanceForTargets(newTargets);
-        }
-    }
-}
-
-function renderStudentTags() {
-    var c = document.getElementById('selectedStudentsList');
-    c.innerHTML = '';
-    var deductMode = isDeductMode();
-    var cartTotal = getCartTotal();
-
-    selectedStudents.forEach(function(name) {
-        var tag = document.createElement('div');
-        tag.className = 'tag';
-
-        var labelSpan = document.createElement('span');
-        labelSpan.className = 'tag-label';
-        var shortLabel = name.length > 20 ? name.substring(0, 20) + '...' : name;
-        labelSpan.textContent = shortLabel;
-        tag.appendChild(labelSpan);
-
-        if (deductMode) {
-            var balSpan = document.createElement('span');
-            balSpan.className = 'tag-balance';
-            var balance = balanceCache[name];
-            if (balance === undefined) {
-                balSpan.textContent = '...';
-                balSpan.className += ' loading';
-            } else if (cartTotal > 0 && balance >= cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2714';
-                balSpan.className += ' ok';
-            } else if (cartTotal > 0 && balance < cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2718';
-                balSpan.className += ' insufficient';
-            } else {
-                balSpan.textContent = '\u2b50' + balance;
-                balSpan.className += ' neutral';
-            }
-            tag.appendChild(balSpan);
-        }
-
-        var btn = document.createElement('span');
-        btn.className = 'tag-remove';
-        btn.textContent = '\u00d7';
-        btn.addEventListener('click', function() { removeStudentTag(name); });
-        tag.appendChild(btn);
-        c.appendChild(tag);
-    });
-    document.getElementById('studentNames').value = selectedStudents.join(',');
-}
-
-function addClassTag() {
-    var val = document.getElementById('classSelect').value;
-    if (val && selectedClasses.indexOf(val) === -1) {
-        selectedClasses.push(val);
-        renderClassTags();
-        if (isDeductMode()) {
-            fetchBalanceForTargets([val]);
-        }
-    }
-}
-
-function removeClassTag(name) {
-    selectedClasses = selectedClasses.filter(function(s) { return s !== name; });
-    renderClassTags();
-    hideBalanceError();
-}
-
-function addAllClasses() {
-    var allClasses = ["1A","1B","1C","1D","2A","2B","2C","2D","3A","3B","3C","3D","4A","4B","4C","4D","5A","5B","5C","5D","6A","6B","6C","6D"];
-    var newTargets = [];
-    allClasses.forEach(function(cls) {
-        if (selectedClasses.indexOf(cls) === -1) {
-            selectedClasses.push(cls);
-            newTargets.push(cls);
+function addAllInClassToQueue() {
+    var cls = document.getElementById('redeemClassSelect').value;
+    if (!cls || !CLASS_STUDENTS[cls]) return;
+    var newNames = [];
+    CLASS_STUDENTS[cls].forEach(function(name) {
+        var exists = redeemQueue.some(function(e) { return e.name === name; });
+        if (!exists) {
+            redeemQueue.push({ name: name, lucky: 0, bbss: 0, tuckshop: 0 });
+            newNames.push(name);
         }
     });
-    renderClassTags();
-    if (isDeductMode() && newTargets.length > 0) {
-        fetchBalanceForTargets(newTargets);
-    }
+    renderCards();
+    if (newNames.length > 0) fetchBalancesForQueue(newNames);
 }
 
-function renderClassTags() {
-    var c = document.getElementById('selectedClassesList');
-    c.innerHTML = '';
-    var deductMode = isDeductMode();
-    var cartTotal = getCartTotal();
+function removeFromQueue(idx) {
+    redeemQueue.splice(idx, 1);
+    renderCards();
+}
 
-    selectedClasses.forEach(function(name) {
-        var tag = document.createElement('div');
-        tag.className = 'tag';
+function changeCardQty(idx, item, delta) {
+    var entry = redeemQueue[idx];
+    if (!entry) return;
+    entry[item] = Math.max(0, entry[item] + delta);
+    /* Targeted update: only re-render this card + summary */
+    var grid = document.getElementById('cardGrid');
+    var oldCard = grid.children[idx];
+    if (oldCard) {
+        var newCard = buildCardElement(entry, idx);
+        grid.replaceChild(newCard, oldCard);
+    }
+    updateQueueSummary();
+}
 
-        var labelSpan = document.createElement('span');
-        labelSpan.className = 'tag-label';
-        labelSpan.textContent = name;
-        tag.appendChild(labelSpan);
+function getCardTotal(entry) {
+    return (entry.lucky * 1) + (entry.bbss * 2) + (entry.tuckshop * 3);
+}
 
-        if (deductMode) {
-            var balSpan = document.createElement('span');
-            balSpan.className = 'tag-balance';
-            var balance = balanceCache[name];
-            if (balance === undefined) {
-                balSpan.textContent = '...';
-                balSpan.className += ' loading';
-            } else if (cartTotal > 0 && balance >= cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2714';
-                balSpan.className += ' ok';
-            } else if (cartTotal > 0 && balance < cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2718';
-                balSpan.className += ' insufficient';
-            } else {
-                balSpan.textContent = '\u2b50' + balance;
-                balSpan.className += ' neutral';
-            }
-            tag.appendChild(balSpan);
-        }
+function getCardStatus(entry) {
+    var total = getCardTotal(entry);
+    var bal = balanceCache[entry.name];
+    if (bal === undefined || bal === null) return 'loading';
+    if (total === 0) return 'empty';
+    return bal >= total ? 'ok' : 'low';
+}
 
-        var btn = document.createElement('span');
-        btn.className = 'tag-remove';
-        btn.textContent = '\u00d7';
-        btn.addEventListener('click', function() { removeClassTag(name); });
-        tag.appendChild(btn);
-        c.appendChild(tag);
+/* ══════════════════════════════════════════════════════════════
+ *  CARD RENDERING
+ * ══════════════════════════════════════════════════════════════ */
+function renderCards() {
+    var grid = document.getElementById('cardGrid');
+    grid.innerHTML = '';
+    redeemQueue.forEach(function(entry, idx) {
+        grid.appendChild(buildCardElement(entry, idx));
     });
-    document.getElementById('classNames').value = selectedClasses.join(',');
+    updateEmptyState();
+    updateQueueSummary();
 }
 
-function hideBalanceError() { var e = document.getElementById('balanceError'); e.style.display = 'none'; e.innerHTML = ''; }
-function showBalanceError(msg) { var e = document.getElementById('balanceError'); e.style.display = 'block'; e.innerHTML = msg; }
+function buildCardElement(entry, idx) {
+    var total = getCardTotal(entry);
+    var bal = balanceCache[entry.name];
+    var status = getCardStatus(entry);
 
-/* ── PostMessage listener (server-side feedback) ── */
-window.addEventListener('message', function(event) {
-    if (!event.data || event.data.type !== 'STAR_RESULT' || !isSubmitting) return;
-    isSubmitting = false;
-    var submitBtn = document.getElementById('submitBtn');
-    var actionMode = document.getElementById('actionMode').value;
-    submitBtn.disabled = false;
+    var card = document.createElement('div');
+    card.className = 'student-card';
+    if (status === 'low') card.className += ' card-insufficient';
+    else if (status === 'ok') card.className += ' card-ok';
 
-    if (event.data.success) {
-        var msg = event.data.mode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2b50 Stars Submitted Successfully!';
-        showToast(msg, 'success');
-        setTimeout(function() { location.reload(); }, 1500);
-    } else if (event.data.insufficientList) {
-        var html = '\u274c <strong>Server Rejected!</strong> Not enough stars.<br>';
-        event.data.insufficientList.forEach(function(item) {
-            html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> only has <strong>' + item.balance + ' star(s)</strong> remaining.<br>';
-        });
-        html += '<br>You requested: <strong>' + event.data.requested + ' star(s)</strong>.';
-        showBalanceError(html);
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
-    } else if (event.data.error && event.data.error.indexOf('Invalid passcode') !== -1) {
-        document.getElementById('passcodeError').textContent = event.data.error;
-        document.getElementById('passcodeError').style.display = 'block';
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
-    } else if (event.data.error && (event.data.error.indexOf('administrator') !== -1 || event.data.error.indexOf('only perform') !== -1)) {
-        showToast(event.data.error, 'error');
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
-    } else {
-        showToast('Error: ' + (event.data.error || 'Unknown error'), 'error');
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
-    }
-});
-
-/* ── Form submission ── */
-async function handleFormSubmit(event) {
-    if (isSubmitting) return;
-    event.preventDefault();
-    hideBalanceError();
-
-    var teacher = document.getElementById('teacherName').value;
-    if (!teacher) {
-        showToast('Please select a teacher / admin before submitting.', 'error');
-        return;
+    /* Balance text */
+    var balText, statusText;
+    if (bal === undefined || bal === null) { balText = 'Balance: loading\u2026'; statusText = ''; }
+    else { balText = 'Balance: ' + bal + ' \u2B50'; statusText = ''; }
+    if (total > 0 && bal !== undefined && bal !== null) {
+        statusText = (bal >= total) ? '\u2714 OK' : '\u2718 Low';
     }
 
-    var code = document.getElementById('passcode').value;
-    if (!code || code.length !== 6) {
-        document.getElementById('passcodeError').style.display = 'block';
-        document.getElementById('passcodeError').textContent = 'Please enter a 6-digit passcode.';
-        return;
-    }
+    card.innerHTML =
+        '<div class="card-header">' +
+            '<div class="card-name">' + escapeHTML(entry.name) + '</div>' +
+            '<button class="card-remove-btn" data-idx="' + idx + '">\u00d7</button>' +
+        '</div>' +
+        '<div class="card-bal bal-' + status + '">' +
+            '<span>' + balText + '</span>' +
+            '<span>' + statusText + '</span>' +
+        '</div>' +
+        '<div class="card-items">' +
+            itemRowHTML(idx, 'lucky', '\uD83C\uDF9F\uFE0F Lucky Draw', 1, entry.lucky) +
+            itemRowHTML(idx, 'bbss', '\uD83C\uDF81 BBSS Surprise', 2, entry.bbss) +
+            itemRowHTML(idx, 'tuckshop', '\uD83C\uDFEA Tuck Shop', 3, entry.tuckshop) +
+        '</div>' +
+        '<div class="card-footer ' + (total > 0 ? 'cf-active' : 'cf-zero') + '">' +
+            '<span>Card Total</span>' +
+            '<span>' + total + ' \u2B50</span>' +
+        '</div>';
 
-    var targetMode = document.getElementById('rewardType').value;
-    if (targetMode === 'class' && selectedClasses.length === 0) {
-        showToast('Please add at least one class before submitting.', 'error');
-        return;
-    }
-    if (targetMode === 'student' && selectedStudents.length === 0) {
-        showToast('Please add at least one student before submitting.', 'error');
-        return;
-    }
+    return card;
+}
 
-    var actionMode = document.getElementById('actionMode').value;
-    var submitBtn = document.getElementById('submitBtn');
+function itemRowHTML(idx, item, label, cost, qty) {
+    return '<div class="card-item-row">' +
+        '<span class="ci-label">' + label + ' <span class="ci-cost">(' + cost + '\u2B50)</span></span>' +
+        '<div class="ci-qty">' +
+            '<button class="qb" data-idx="' + idx + '" data-item="' + item + '" data-delta="-1">\u2212</button>' +
+            '<span class="qv">' + qty + '</span>' +
+            '<button class="qb" data-idx="' + idx + '" data-item="' + item + '" data-delta="1">+</button>' +
+        '</div>' +
+    '</div>';
+}
 
-    /* Client-side permission guard */
-    if (actionMode === 'ADD' && isRedeemOnlyAdmin(teacher)) {
-        showToast('This admin account can only redeem stars, not add.', 'error');
-        return;
-    }
-    if (actionMode === 'DEDUCT' && !isAnyAdmin(teacher)) {
-        showToast('Only administrators can redeem stars.', 'error');
-        return;
-    }
+function updateEmptyState() {
+    document.getElementById('emptyState').classList.toggle('hidden', redeemQueue.length > 0);
+}
 
-    /* Set hidden form values based on mode */
-    if (actionMode === 'ADD') {
-        document.getElementById('starsValue').value = document.getElementById('starsSelect').value;
-        document.getElementById('luckyDrawQtyField').value = 0;
-        document.getElementById('bbssSurpriseQtyField').value = 0;
-        document.getElementById('tuckShopCouponQtyField').value = 0;
-        var fullReason = getFullReason();
-        document.getElementById('reason').value = fullReason;
-    } else {
-        var cartTotalVal = getCartTotal();
-        if (cartTotalVal === 0) {
-            showToast('Please select at least one redemption item.', 'error');
-            return;
+function updateQueueSummary() {
+    var count = redeemQueue.length;
+    var totalStars = 0;
+    redeemQueue.forEach(function(e) { totalStars += getCardTotal(e); });
+    document.getElementById('queueCount').textContent = count + ' student' + (count !== 1 ? 's' : '') + ' in queue';
+    document.getElementById('queueTotal').textContent = 'Total: ' + totalStars + ' \u2B50';
+    var summary = document.getElementById('queueSummary');
+    summary.classList.toggle('qs-empty', count === 0);
+}
+
+/* ══════════════════════════════════════════════════════════════
+ *  FORM SUBMISSION HELPER
+ * ══════════════════════════════════════════════════════════════ */
+function createHiddenForm(fields) {
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = FORM_ACTION;
+    form.target = 'hidden_iframe';
+    form.style.display = 'none';
+    Object.keys(fields).forEach(function(key) {
+        var inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = key; inp.value = fields[key];
+        form.appendChild(inp);
+    });
+    document.body.appendChild(form);
+    return form;
+}
+
+function submitAndTrack(form, btn, originalText) {
+    isSubmitting = true;
+    form.submit();
+    document.body.removeChild(form);
+
+    var fallbackTimer = setTimeout(function() {
+        if (isSubmitting) {
+            isSubmitting = false;
+            btn.disabled = false;
+            var msg = lastSubmitMode === 'ADD' ? '\u2B50 Stars Submitted Successfully!' : '\uD83C\uDF81 Stars Redeemed Successfully!';
+            showToast(msg, 'success');
+            setTimeout(function() { location.reload(); }, 1500);
         }
-        document.getElementById('starsValue').value = cartTotalVal;
-        document.getElementById('luckyDrawQtyField').value = cart.lucky;
-        document.getElementById('bbssSurpriseQtyField').value = cart.bbss;
-        document.getElementById('tuckShopCouponQtyField').value = cart.tuckshop;
-        document.getElementById('reason').value = getCartReason();
-    }
+    }, 8000);
 
-    submitBtn.disabled = true;
-
-    try {
-        if (actionMode === 'DEDUCT') {
-            var starsRequested = getCartTotal();
-            submitBtn.textContent = 'Checking Balance...';
-            var targets = [];
-            if (targetMode === 'class') {
-                targets = selectedClasses.slice();
-            } else {
-                targets = selectedStudents.slice();
-            }
-
-            var balances = await calculateBalances(targets);
-            targets.forEach(function(t) {
-                balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
-            });
-            renderCurrentTags();
-
-            var insufficientList = [];
-            targets.forEach(function(t) {
-                var bal = balances[t] !== undefined ? balances[t] : 0;
-                if (bal < starsRequested) {
-                    insufficientList.push({ name: t, balance: bal });
-                }
-            });
-            if (insufficientList.length > 0) {
-                var html = '\u274c <strong>Redemption Rejected!</strong> Not enough stars.<br>';
-                insufficientList.forEach(function(item) {
-                    html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> only has <strong>' + item.balance + ' star(s)</strong> remaining.<br>';
-                });
-                html += '<br>You requested: <strong>' + starsRequested + ' star(s)</strong> per target.';
-                showBalanceError(html);
-                submitBtn.disabled = false;
-                submitBtn.textContent = '\uD83C\uDF81 Redeem Items';
-                return;
-            }
-        }
-
-        if (targetMode === 'class') {
-            document.getElementById('classNames').value = selectedClasses.join(',');
-        } else {
-            document.getElementById('studentNames').value = selectedStudents.join(',');
-        }
-
-        submitBtn.textContent = 'Submitting...';
-        isSubmitting = true;
-
-        var form = document.getElementById('rewardForm');
-        form.submit();
-
-        var fallbackTimer = setTimeout(function() {
+    document.getElementById('hidden_iframe').onload = function() {
+        setTimeout(function() {
             if (isSubmitting) {
                 isSubmitting = false;
-                submitBtn.disabled = false;
-                showToast(actionMode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2b50 Stars Submitted Successfully!', 'success');
+                clearTimeout(fallbackTimer);
+                var msg = lastSubmitMode === 'ADD' ? '\u2B50 Stars Submitted Successfully!' : '\uD83C\uDF81 Stars Redeemed Successfully!';
+                showToast(msg, 'success');
                 setTimeout(function() { location.reload(); }, 1500);
             }
-        }, 8000);
+        }, 1500);
+    };
+}
 
-        document.getElementById('hidden_iframe').onload = function() {
-            setTimeout(function() {
-                if (isSubmitting) {
-                    isSubmitting = false;
-                    clearTimeout(fallbackTimer);
-                    showToast(actionMode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2b50 Stars Submitted Successfully!', 'success');
-                    setTimeout(function() { location.reload(); }, 1500);
-                }
-            }, 1500);
-        };
+/* ══════════════════════════════════════════════════════════════
+ *  ADD MODE SUBMISSION
+ * ══════════════════════════════════════════════════════════════ */
+function handleAddSubmit() {
+    if (isSubmitting) return;
+    var teacher = document.getElementById('selectedTeacher').value;
+    if (!teacher) { showToast('Please select a teacher before submitting.', 'error'); return; }
+    var passcode = document.getElementById('passcodeInput').value;
+    if (!passcode || passcode.length !== 6) {
+        var pe = document.getElementById('passcodeError');
+        pe.textContent = 'Please enter a 6-digit passcode.'; pe.style.display = 'block';
+        return;
+    }
+    if (isRedeemOnlyAdmin(teacher)) {
+        showToast('This admin account can only redeem stars, not add.', 'error'); return;
+    }
+    if (addTargetMode === 'class' && selectedClasses.length === 0) {
+        showToast('Please add at least one class.', 'error'); return;
+    }
+    if (addTargetMode === 'student' && selectedStudents.length === 0) {
+        showToast('Please add at least one student.', 'error'); return;
+    }
+
+    var btn = document.getElementById('addSubmitBtn');
+    btn.disabled = true; btn.textContent = 'Submitting\u2026';
+    lastSubmitMode = 'ADD';
+    document.getElementById('addBalanceError').style.display = 'none';
+
+    var form = createHiddenForm({
+        actionMode: 'ADD',
+        teacherName: teacher,
+        passcode: passcode,
+        rewardType: addTargetMode,
+        classNames: addTargetMode === 'class' ? selectedClasses.join(',') : '',
+        studentNames: addTargetMode === 'student' ? selectedStudents.join(',') : '',
+        stars: document.getElementById('addStarsSelect').value,
+        reason: getFullReason(),
+        luckyDrawQty: '0',
+        bbssSurpriseQty: '0',
+        tuckShopCouponQty: '0'
+    });
+    submitAndTrack(form, btn, 'Submit Stars');
+}
+
+/* ══════════════════════════════════════════════════════════════
+ *  REDEEM ALL SUBMISSION
+ * ══════════════════════════════════════════════════════════════ */
+async function redeemAll() {
+    if (isSubmitting) return;
+    if (redeemQueue.length === 0) { showToast('No students in queue. Add students first.', 'error'); return; }
+
+    var teacher = document.getElementById('selectedTeacher').value;
+    if (!teacher) { showToast('Please select a teacher / admin first.', 'error'); return; }
+    var passcode = document.getElementById('passcodeInput').value;
+    if (!passcode || passcode.length !== 6) {
+        var pe = document.getElementById('passcodeError');
+        pe.textContent = 'Please enter a 6-digit passcode.'; pe.style.display = 'block';
+        return;
+    }
+    if (!isAnyAdmin(teacher)) { showToast('Only administrators can redeem stars.', 'error'); return; }
+
+    /* Filter cards that have at least one item */
+    var activeEntries = redeemQueue.filter(function(e) { return getCardTotal(e) > 0; });
+    if (activeEntries.length === 0) { showToast('No items selected on any card. Adjust quantities first.', 'error'); return; }
+
+    var btn = document.getElementById('redeemAllBtn');
+    btn.disabled = true; btn.textContent = 'Checking Balances\u2026';
+    lastSubmitMode = 'REDEEM';
+
+    var errEl = document.getElementById('redeemBalanceError');
+    errEl.style.display = 'none';
+
+    try {
+        /* Fetch fresh balances */
+        var names = activeEntries.map(function(e) { return e.name; });
+        var balances = await calculateBalances(names);
+        names.forEach(function(n) { balanceCache[n] = (balances[n] !== undefined) ? balances[n] : 0; });
+        renderCards();
+
+        /* Check sufficiency */
+        var insufficient = [];
+        activeEntries.forEach(function(e) {
+            var bal = (balances[e.name] !== undefined) ? balances[e.name] : 0;
+            var needed = getCardTotal(e);
+            if (bal < needed) { insufficient.push({ name: e.name, balance: bal, needed: needed }); }
+        });
+
+        if (insufficient.length > 0) {
+            var html = '\u274C <strong>Redemption Rejected!</strong> Not enough stars.<br>';
+            insufficient.forEach(function(item) {
+                html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> has <strong>' + item.balance + '</strong> \u2B50 but needs <strong>' + item.needed + '</strong> \u2B50<br>';
+            });
+            errEl.innerHTML = html; errEl.style.display = 'block';
+            btn.disabled = false; btn.textContent = '\uD83C\uDF81 Redeem All';
+            return;
+        }
+
+        /* Build redeemData JSON */
+        var redeemData = activeEntries.map(function(e) {
+            return { name: e.name, lucky: e.lucky, bbss: e.bbss, tuckshop: e.tuckshop, stars: getCardTotal(e) };
+        });
+
+        btn.textContent = 'Submitting\u2026';
+
+        var form = createHiddenForm({
+            actionMode: 'DEDUCT',
+            teacherName: teacher,
+            passcode: passcode,
+            redeemData: JSON.stringify(redeemData)
+        });
+        submitAndTrack(form, btn, '\uD83C\uDF81 Redeem All');
 
     } catch (error) {
         showToast('Error: ' + escapeHTML(error.message), 'error');
-        submitBtn.disabled = false;
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
+        btn.disabled = false; btn.textContent = '\uD83C\uDF81 Redeem All';
     }
 }
 
-/* ── Init ── */
+/* ══════════════════════════════════════════════════════════════
+ *  POSTMESSAGE HANDLER (server-side feedback)
+ * ══════════════════════════════════════════════════════════════ */
+window.addEventListener('message', function(event) {
+    if (!event.data || event.data.type !== 'STAR_RESULT' || !isSubmitting) return;
+    isSubmitting = false;
+
+    var btn = lastSubmitMode === 'ADD'
+        ? document.getElementById('addSubmitBtn')
+        : document.getElementById('redeemAllBtn');
+    var defaultText = lastSubmitMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem All';
+    btn.disabled = false;
+
+    if (event.data.success) {
+        var msg = event.data.mode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2B50 Stars Submitted Successfully!';
+        showToast(msg, 'success');
+        setTimeout(function() { location.reload(); }, 1500);
+    } else if (event.data.insufficientList) {
+        var errEl = lastSubmitMode === 'ADD'
+            ? document.getElementById('addBalanceError')
+            : document.getElementById('redeemBalanceError');
+        var html = '\u274C <strong>Server Rejected!</strong> Not enough stars.<br>';
+        event.data.insufficientList.forEach(function(item) {
+            html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> has <strong>' + item.balance + '</strong> \u2B50<br>';
+        });
+        if (event.data.requested) html += '<br>Requested: <strong>' + event.data.requested + '</strong> \u2B50 per target.';
+        errEl.innerHTML = html; errEl.style.display = 'block';
+        btn.textContent = defaultText;
+    } else if (event.data.error && event.data.error.indexOf('Invalid passcode') !== -1) {
+        document.getElementById('passcodeError').textContent = event.data.error;
+        document.getElementById('passcodeError').style.display = 'block';
+        btn.textContent = defaultText;
+    } else if (event.data.error && (event.data.error.indexOf('administrator') !== -1 || event.data.error.indexOf('only perform') !== -1)) {
+        showToast(event.data.error, 'error');
+        btn.textContent = defaultText;
+    } else {
+        showToast('Error: ' + (event.data.error || 'Unknown error'), 'error');
+        btn.textContent = defaultText;
+    }
+});
+
+/* ══════════════════════════════════════════════════════════════
+ *  EVENT DELEGATION — Card grid button clicks
+ * ══════════════════════════════════════════════════════════════ */
+document.getElementById('cardGrid').addEventListener('click', function(e) {
+    var t = e.target;
+    if (t.classList.contains('qb')) {
+        var idx = parseInt(t.getAttribute('data-idx'), 10);
+        var item = t.getAttribute('data-item');
+        var delta = parseInt(t.getAttribute('data-delta'), 10);
+        changeCardQty(idx, item, delta);
+    }
+    if (t.classList.contains('card-remove-btn')) {
+        var idx2 = parseInt(t.getAttribute('data-idx'), 10);
+        removeFromQueue(idx2);
+    }
+});
+
+/* ══════════════════════════════════════════════════════════════
+ *  INITIALISATION
+ * ══════════════════════════════════════════════════════════════ */
+function fillClassOptions(selId) {
+    var s = document.getElementById(selId);
+    ALL_CLASSES.forEach(function(c) {
+        var o = document.createElement('option'); o.value = c; o.textContent = c;
+        s.appendChild(o);
+    });
+}
+
 window.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('passcode').value = '';
+    document.getElementById('passcodeInput').value = '';
+
+    /* Populate class dropdowns */
+    fillClassOptions('addClassSelect');
+    fillClassOptions('addStudentClass');
+    fillClassOptions('redeemClassSelect');
+
+    /* Close teacher dropdown when clicking outside */
     document.addEventListener('click', function(e) {
-        var wrap = document.getElementById('teacherWrap');
-        if (!wrap.contains(e.target)) {
+        if (!document.getElementById('teacherWrap').contains(e.target)) {
             document.getElementById('teacherDropdown').classList.remove('open');
         }
     });
+
+    /* Keyboard navigation for teacher dropdown */
     document.getElementById('teacherSearch').addEventListener('keydown', function(e) {
         var dropdown = document.getElementById('teacherDropdown');
         var items = dropdown.querySelectorAll('.search-dropdown-item');
@@ -1299,9 +1369,11 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    /* Clear teacher when search is emptied */
     document.getElementById('teacherSearch').addEventListener('input', function() {
         if (!this.value.trim()) {
-            document.getElementById('teacherName').value = '';
+            document.getElementById('selectedTeacher').value = '';
             updateAdminUI('');
         }
     });
