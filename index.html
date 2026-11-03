@@ -65,7 +65,6 @@
 
         h2 { text-align: center; color: var(--text); margin-bottom: 8px; font-weight: 800; font-size: 22px; letter-spacing: -0.3px; }
 
-        /* Admin badge */
         .admin-badge {
             display: none; text-align: center; margin-bottom: 16px;
             padding: 8px 14px; border-radius: 8px;
@@ -75,7 +74,6 @@
         }
         .admin-badge.visible { display: block; }
 
-        /* Action mode toggle (super admin only) */
         .action-mode-group { display: none; gap: 10px; margin-bottom: 20px; }
         .action-mode-group.visible { display: flex; }
         .action-btn {
@@ -88,7 +86,6 @@
         .action-btn.active-add { background: var(--gold); color: #fff; border-color: var(--gold-hover); box-shadow: 0 2px 8px rgba(212,149,12,0.3); }
         .action-btn.active-deduct { background: var(--red); color: #fff; border-color: var(--red-hover); box-shadow: 0 2px 8px rgba(192,57,43,0.3); }
 
-        /* Labels & Inputs */
         label { font-weight: 700; display: block; margin-top: 16px; color: var(--text-muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
         label .optional { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--inactive-text); font-size: 12px; }
         input, select, textarea {
@@ -101,7 +98,6 @@
         select option { background: var(--card-bg); color: var(--text); }
         textarea { resize: vertical; height: 60px; }
 
-        /* Searchable dropdown */
         .search-select-wrap { position: relative; margin-top: 6px; }
         .search-select-wrap input {
             margin-top: 0; padding-right: 36px;
@@ -114,37 +110,10 @@
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
         }
         .search-dropdown.open { display: block; }
-        .search-dropdown-item {
-            padding: 10px 12px; cursor: pointer; font-size: 14px; color: var(--text);
-            transition: background 0.1s;
-        }
+        .search-dropdown-item { padding: 10px 12px; cursor: pointer; font-size: 14px; color: var(--text); transition: background 0.1s; }
         .search-dropdown-item:hover, .search-dropdown-item.highlighted { background: var(--gold-light); }
         .search-dropdown-empty { padding: 12px; color: var(--text-muted); font-size: 13px; text-align: center; }
 
-        /* Target toggle */
-        .toggle-group { display: flex; gap: 10px; margin-top: 8px; }
-        .toggle-btn {
-            flex: 1; padding: 10px; border: 2px solid var(--gold); background: var(--card-bg);
-            color: var(--text); font-weight: 700; border-radius: 10px; cursor: pointer;
-            text-align: center; font-size: 14px; transition: all 0.2s; font-family: inherit;
-        }
-        .toggle-btn.active { background: var(--gold); color: #fff; }
-
-        /* Tags */
-        .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 10px; }
-        body.wide .tag-container { display: none; } /* carts replace tags in redemption mode */
-        .tag {
-            background: var(--gold-light); color: var(--gold-text);
-            padding: 5px 10px; border-radius: 20px; font-weight: 700; font-size: 12px;
-            display: inline-flex; align-items: center; gap: 6px;
-            animation: tagIn 0.2s ease; max-width: 100%;
-        }
-        @keyframes tagIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .tag .tag-remove { cursor: pointer; color: var(--red); font-weight: 800; font-size: 14px; line-height: 1; flex-shrink: 0; }
-        .tag .tag-remove:hover { color: var(--red-hover); }
-        .tag-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        /* Add row */
         .add-row { display: flex; gap: 8px; margin-top: 6px; }
         .add-row select { flex: 1; }
         .add-btn {
@@ -155,7 +124,87 @@
         .add-btn:hover { background: var(--indigo-hover); }
         body.wide .add-btn { padding: 10px 18px; font-size: 15px; }
 
-        /* Reason chips */
+        /* ── Pick students / quick add boxes ── */
+        .group-pick {
+            margin-top: 18px; padding: 14px; border: 1.5px dashed var(--border);
+            border-radius: 14px; background: var(--input-bg);
+        }
+        .group-pick-title { font-weight: 800; font-size: 14px; color: var(--text); }
+        .group-pick-sub { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 2px; line-height: 1.5; }
+        .group-pick code { background: var(--chip-bg); color: var(--chip-text); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+        .group-pick textarea { height: 70px; font-size: 15px; }
+        .pick-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .pick-count {
+            font-size: 12px; font-weight: 800; color: var(--gold-text); background: var(--gold-light);
+            padding: 4px 10px; border-radius: 20px; border: 1px solid var(--gold);
+        }
+        .pick-links { display: flex; gap: 14px; }
+        .pick-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 6px; margin-top: 8px; max-height: 320px; overflow-y: auto; padding: 2px;
+        }
+        .pick-grid:empty { display: none; }
+        .pick-tile {
+            display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+            border: 1.5px solid var(--border); border-radius: 10px; background: var(--card-bg);
+            cursor: pointer; font-size: 13px; font-weight: 800; color: var(--text);
+            -webkit-user-select: none; user-select: none; transition: all 0.15s;
+            text-align: left; font-family: inherit; min-width: 0; touch-action: manipulation;
+        }
+        .pick-tile:hover { border-color: var(--gold); }
+        .pick-box {
+            width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--inactive-border);
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            font-size: 12px; color: #fff; font-weight: 800;
+        }
+        .pick-tile.checked { border-color: var(--gold); background: var(--gold-light); }
+        .pick-tile.checked .pick-box { background: var(--gold); border-color: var(--gold); }
+        .pick-tile.added { opacity: 0.55; cursor: default; }
+        .pick-tile.added:hover { border-color: var(--border); }
+        .pick-tile.added .pick-box { background: var(--green); border-color: var(--green); }
+        .pick-tile-text { min-width: 0; overflow: hidden; }
+        .pick-tile-text small {
+            display: block; font-weight: 600; color: var(--text-muted); font-size: 11px;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .pick-add-btn { width: 100%; margin-top: 10px; padding: 12px; }
+        .quick-msg { font-size: 12px; font-weight: 700; margin-top: 6px; line-height: 1.5; }
+        .quick-msg .ok { color: var(--green); }
+        .quick-msg .bad { color: var(--red); }
+
+        /* ── NEW: Reward list (each target has its own stars) ── */
+        .sl-toolbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .sl-hint { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+        .sl-quick {
+            padding: 5px 10px; border-radius: 20px; border: 1.5px solid var(--gold);
+            background: var(--card-bg); color: var(--gold-text); font-weight: 800; font-size: 12px;
+            cursor: pointer; font-family: inherit;
+        }
+        .sl-quick:hover { background: var(--gold-light); }
+        .sl-toolbar .select-all-link { margin-left: auto; color: var(--red); }
+        .star-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; max-height: 420px; overflow-y: auto; padding: 2px; }
+        .sl-row {
+            display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+            border: 1.5px solid var(--border); border-radius: 12px; background: var(--input-bg);
+        }
+        .sl-row.new { animation: cardIn 0.3s ease; }
+        .sl-row.is-class { border-color: var(--gold); }
+        .sl-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .sl-code { font-weight: 800; font-size: 15px; color: var(--text); }
+        .sl-name { font-size: 12px; font-weight: 600; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sl-warn { font-size: 11px; font-weight: 700; color: var(--red); }
+        .sl-row .rcard-remove { width: 32px; height: 32px; }
+        .sl-empty {
+            padding: 16px; text-align: center; border: 1.5px dashed var(--border); border-radius: 12px;
+            color: var(--text-muted); font-size: 13px; font-weight: 600;
+        }
+        .sl-total {
+            margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: var(--gold-light);
+            color: var(--gold-text); font-weight: 800; font-size: 14px; text-align: center;
+        }
+        .cart-qty.sm .qty-btn { width: 36px; height: 36px; font-size: 18px; }
+        .cart-qty.sm .qty-value { width: 54px; line-height: 36px; font-size: 15px; }
+
         .reason-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
         .reason-chip {
             padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
@@ -165,7 +214,6 @@
         .reason-chip:hover { background: var(--chip-hover); }
         .reason-chip.selected { background: var(--gold-light); color: var(--gold-text); border-color: var(--gold); }
 
-        /* Quantity stepper (used inside cart cards) */
         .cart-qty {
             display: flex; align-items: center; gap: 0;
             border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden;
@@ -186,7 +234,6 @@
             border-left: 1px solid var(--border); border-right: 1px solid var(--border);
         }
 
-        /* Submit button */
         button[type="submit"] {
             width: 100%; background: var(--gold); color: #fff; padding: 14px;
             border: none; border-radius: 12px; margin-top: 24px;
@@ -198,7 +245,7 @@
         button[type="submit"].deduct-mode { background: var(--red); box-shadow: 0 2px 10px rgba(192,57,43,0.3); }
         button[type="submit"].deduct-mode:hover { background: var(--red-hover); box-shadow: 0 4px 14px rgba(192,57,43,0.35); }
         body.wide button[type="submit"] { padding: 16px; font-size: 17px; }
-        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
         .error-msg { color: var(--red); font-size: 12px; display: none; margin-top: 4px; font-weight: 700; }
         .balance-error {
@@ -207,7 +254,6 @@
             font-weight: 600; display: none; line-height: 1.6;
         }
 
-        /* Toast */
         .toast-overlay {
             position: fixed; inset: 0; background: var(--overlay-bg);
             display: flex; align-items: center; justify-content: center;
@@ -215,7 +261,7 @@
         }
         .toast-box {
             background: var(--toast-bg); padding: 28px; border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2); max-width: 360px; width: 90%;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2); max-width: 380px; width: 90%;
             text-align: center; animation: scaleIn .25s ease;
         }
         .toast-box p { margin: 0 0 20px; font-size: 15px; color: var(--toast-text); line-height: 1.5; font-weight: 600; }
@@ -228,14 +274,10 @@
         @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
         @keyframes scaleIn { from { transform: scale(.92); opacity: 0 } to { transform: scale(1); opacity: 1 } }
 
-        /* Select all bar */
         .select-all-bar { display: flex; justify-content: flex-end; margin-top: 6px; }
-        .select-all-link {
-            font-size: 12px; color: var(--indigo); cursor: pointer; font-weight: 700; text-decoration: underline;
-        }
+        .select-all-link { font-size: 12px; color: var(--indigo); cursor: pointer; font-weight: 700; text-decoration: underline; }
         .select-all-link:hover { color: var(--indigo-hover); }
 
-        /* Balance fetch indicator */
         .balance-fetch-status {
             font-size: 11px; color: var(--text-muted); margin-top: 4px; font-weight: 600;
             font-style: italic; display: none;
@@ -249,6 +291,7 @@
             box-shadow: 0 2px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
             min-height: 420px;
         }
+        body.wide #starListSection { display: none !important; }
         .board-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px; }
         .board-head h3 { font-size: 20px; font-weight: 800; color: var(--text); }
         .board-sub { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
@@ -271,10 +314,7 @@
         .stat-chip.gold { background: var(--gold-light); border-color: var(--gold); color: var(--gold-text); }
         .stat-chip.gold strong { color: var(--gold-text); }
 
-        .board-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px; margin-top: 14px;
-        }
+        .board-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 14px; }
         .board-empty {
             grid-column: 1 / -1; text-align: center; padding: 60px 20px;
             border: 2px dashed var(--border); border-radius: 16px; color: var(--text-muted);
@@ -339,25 +379,26 @@
 <div class="form-container">
     <h2 id="formHeader">&#11088; Star Reward System</h2>
 
-    <!-- Admin badge -->
     <div id="adminBadge" class="admin-badge"></div>
 
-    <!-- Action mode toggle (super admin KCH only) -->
     <div id="actionModeGroup" class="action-mode-group">
         <div id="btnModeAdd" class="action-btn active-add" onclick="setActionMode('ADD')">&#10133; Add Stars</div>
         <div id="btnModeDeduct" class="action-btn" onclick="setActionMode('DEDUCT')">&#127873; Redeem Stars</div>
     </div>
 
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-    <form id="rewardForm" action="https://script.google.com/macros/s/AKfycbxQMjtjWzf9eEGNkzRc8jrGO8gRXz9o2dgMfubtL-SlSV5RTMz5Z9Wep-R7SnVnISZE/exec" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
+    <form id="rewardForm" action="https://script.google.com/macros/s/AKfycbwfyKpw2W4TucjahhrxOMDNRwy5goCARYcFtAo_QRgzEj-8RQFjzTHva2m6VLTbT0Pm/exec" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
 
         <input type="hidden" name="actionMode" id="actionMode" value="ADD">
         <input type="hidden" name="stars" id="starsValue" value="1">
         <input type="hidden" name="luckyDrawQty" id="luckyDrawQtyField" value="0">
         <input type="hidden" name="bbssSurpriseQty" id="bbssSurpriseQtyField" value="0">
         <input type="hidden" name="tuckShopCouponQty" id="tuckShopCouponQtyField" value="0">
+        <!-- Still sent to the server for each batch (no visible toggle any more) -->
+        <input type="hidden" name="rewardType" id="rewardType" value="class">
+        <input type="hidden" name="classNames" id="classNames">
+        <input type="hidden" name="studentNames" id="studentNames">
 
-        <!-- Teacher searchable dropdown -->
         <label for="teacherSearch">Teacher / Admin Name</label>
         <div class="search-select-wrap" id="teacherWrap">
             <input type="text" id="teacherSearch" autocomplete="off" placeholder="Type name or initials..." onclick="openTeacherDropdown()" oninput="filterTeachers()">
@@ -369,16 +410,21 @@
         <input type="password" id="passcode" name="passcode" maxlength="6" pattern="\d{6}" placeholder="Enter 6-digit code" autocomplete="new-password" required>
         <div id="passcodeError" class="error-msg">Incorrect passcode for selected teacher!</div>
 
-        <label>Target Type</label>
-        <div class="toggle-group">
-            <div id="btnClass" class="toggle-btn active" onclick="setMode('class')">By Class</div>
-            <div id="btnStudent" class="toggle-btn" onclick="setMode('student')">By Student</div>
+        <!-- Default stars (ADD mode only) -->
+        <div id="starsSection">
+            <label id="starsLabel" for="starsSelect">Default Stars <span class="optional">(for newly added classes / students &mdash; change each one below)</span></label>
+            <select id="starsSelect" onchange="updatePickCount()">
+                <option value="1">&#11088; 1 Star</option>
+                <option value="2">&#11088;&#11088; 2 Stars</option>
+                <option value="3">&#11088;&#11088;&#11088; 3 Stars</option>
+                <option value="4">&#11088;&#11088;&#11088;&#11088; 4 Stars</option>
+                <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; 5 Stars</option>
+            </select>
         </div>
-        <input type="hidden" name="rewardType" id="rewardType" value="class">
 
-        <!-- Class multi-select -->
         <div id="classStreamSection">
-            <label>Select Class(es)</label>
+            <!-- Whole classes -->
+            <label>Select Whole Class(es)</label>
             <div class="add-row">
                 <select id="classSelect">
                     <option value="" disabled selected>Pick a class (1A&#8211;6D)</option>
@@ -394,52 +440,55 @@
             <div class="select-all-bar">
                 <span class="select-all-link" onclick="addAllClasses()">Select All 24 Classes</span>
             </div>
-            <div id="selectedClassesList" class="tag-container"></div>
-            <div id="classBalanceStatus" class="balance-fetch-status">Fetching balances...</div>
-            <input type="hidden" name="classNames" id="classNames">
-        </div>
 
-        <!-- Student multi-select -->
-        <div id="studentStreamSection" style="display: none;">
-            <label for="studentClass">Select Class</label>
-            <select id="studentClass" name="studentClass" onchange="populateStudents()">
-                <option value="" disabled selected>Select class first</option>
-                <option value="1A">1A</option><option value="1B">1B</option><option value="1C">1C</option><option value="1D">1D</option>
-                <option value="2A">2A</option><option value="2B">2B</option><option value="2C">2C</option><option value="2D">2D</option>
-                <option value="3A">3A</option><option value="3B">3B</option><option value="3C">3C</option><option value="3D">3D</option>
-                <option value="4A">4A</option><option value="4B">4B</option><option value="4C">4C</option><option value="4D">4D</option>
-                <option value="5A">5A</option><option value="5B">5B</option><option value="5C">5C</option><option value="5D">5D</option>
-                <option value="6A">6A</option><option value="6B">6B</option><option value="6C">6C</option><option value="6D">6D</option>
-            </select>
-
-            <label>Select Student</label>
-            <div class="add-row">
-                <select id="studentSelect">
-                    <option value="" disabled selected>Select a student</option>
+            <!-- Pick students (tap) -->
+            <div class="group-pick" id="groupPick">
+                <div class="group-pick-title">&#128101; Pick Students</div>
+                <div class="group-pick-sub">Choose a class, tap the students you want, then press ADD. Switch to another class and repeat to add more.</div>
+                <select id="groupClassSelect" onchange="onGroupClassChange()">
+                    <option value="" disabled selected>Choose one class...</option>
                 </select>
-                <button type="button" class="add-btn" onclick="addStudentTag()">+ ADD</button>
+                <div class="pick-toolbar" id="pickToolbar" style="display:none;">
+                    <span class="pick-count" id="pickCount">0 selected</span>
+                    <span class="pick-links">
+                        <span class="select-all-link" onclick="pickAll()">Select All</span>
+                        <span class="select-all-link" onclick="pickNone()">Clear</span>
+                    </span>
+                </div>
+                <div class="pick-grid" id="pickGrid"></div>
+                <button type="button" class="add-btn pick-add-btn" id="pickAddBtn" onclick="addPickedStudents()" disabled>+ ADD Selected Students</button>
             </div>
-            <div class="select-all-bar" id="selectAllStudentsBar" style="display:none;">
-                <span class="select-all-link" onclick="addAllStudentsInClass()">Select All Students in Class</span>
+
+            <!-- NEW: Quick add by student number -->
+            <div class="group-pick">
+                <div class="group-pick-title">&#9000;&#65039; Quick Add by Student Number</div>
+                <div class="group-pick-sub">
+                    Type or paste student numbers, separated by spaces, commas or new lines.<br>
+                    &bull; <code>1A01</code> one student &nbsp; &bull; <code>2B03-2B08</code> a range &nbsp; &bull; <code>4C</code> whole class<br>
+                    &bull; Add <code>:3</code> to give a different number of stars, e.g. <code>1A05:3</code> <code>2B03-08:2</code>
+                </div>
+                <textarea id="quickAddBox" placeholder="1A01 1A05:3&#10;2B03-2B08:2"></textarea>
+                <button type="button" class="add-btn pick-add-btn" onclick="quickAdd()">+ ADD from List</button>
+                <div id="quickAddMsg" class="quick-msg"></div>
             </div>
-            <div id="selectedStudentsList" class="tag-container"></div>
-            <div id="studentBalanceStatus" class="balance-fetch-status">Fetching balances...</div>
-            <input type="hidden" name="studentNames" id="studentNames">
         </div>
 
-        <!-- Stars section (ADD mode only) -->
-        <div id="starsSection">
-            <label id="starsLabel">Stars Awarded</label>
-            <select id="starsSelect">
-                <option value="1">&#11088; 1 Star</option>
-                <option value="2">&#11088;&#11088; 2 Stars</option>
-                <option value="3">&#11088;&#11088;&#11088; 3 Stars</option>
-                <option value="4">&#11088;&#11088;&#11088;&#11088; 4 Stars</option>
-                <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; 5 Stars</option>
-            </select>
+        <!-- NEW: Reward list with stars per class/student (ADD mode only) -->
+        <div id="starListSection">
+            <label>Reward List <span class="optional" id="starListCount"></span></label>
+            <div class="sl-toolbar">
+                <span class="sl-hint">Set all to:</span>
+                <button type="button" class="sl-quick" onclick="setAllStars(1)">1&#11088;</button>
+                <button type="button" class="sl-quick" onclick="setAllStars(2)">2&#11088;</button>
+                <button type="button" class="sl-quick" onclick="setAllStars(3)">3&#11088;</button>
+                <button type="button" class="sl-quick" onclick="setAllStars(4)">4&#11088;</button>
+                <button type="button" class="sl-quick" onclick="setAllStars(5)">5&#11088;</button>
+                <span class="select-all-link" onclick="removeAllTargets()">Remove all</span>
+            </div>
+            <div id="starList" class="star-list"></div>
+            <div id="starListTotal" class="sl-total" style="display:none;"></div>
         </div>
 
-        <!-- Reason section (ADD mode only) -->
         <div id="reasonSection">
             <label>Reason / Note <span class="optional">(optional)</span></label>
             <div class="reason-chips" id="reasonChips">
@@ -499,12 +548,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 
 /* ══════════════════════════════════════════════════════════════
  *  CONFIGURATION — Admin & Permission Setup
- * ══════════════════════════════════════════════════════════════
- *  SUPER_ADMINS       -> Can both ADD stars and REDEEM stars.
- *  REDEEM_ONLY_ADMINS -> Can ONLY redeem stars (no adding).
- *  Everyone else      -> Can ONLY add stars (no redeeming).
- *  When an admin is in redeem mode, the page switches to the
- *  wide shopping-cart layout automatically.
  * ────────────────────────────────────────────────────────────── */
 var SUPER_ADMINS = [
     'Kiang Chi Hong (KCH)'
@@ -520,129 +563,80 @@ var REDEEM_ONLY_ADMINS = [
 /* ── Constants ── */
 var SPREADSHEET_ID = '1xD_LThLu70H5eG8jI9GX3FvkHS8AT6ud2upnkufYg6A';
 var isSubmitting = false;
+var MAX_STARS = 5;   /* highest number of stars per class/student (same as the old dropdown) */
 
-/* Redemption items */
 var ITEMS = [
-    { key: 'lucky',    icon: '\uD83C\uDF9F\uFE0F', name: 'Lucky Draw Token',      cost: 1, field: 'luckyDrawQtyField' },
-    { key: 'bbss',     icon: '\uD83C\uDF81',       name: 'BBSS Surprise',         cost: 2, field: 'bbssSurpriseQtyField' },
-    { key: 'tuckshop', icon: '\uD83C\uDFEA',       name: 'Tuck Shop Cash Coupon', cost: 3, field: 'tuckShopCouponQtyField' }
+    { key: 'lucky',    icon: '\uD83C\uDF9F\uFE0F', name: 'Lucky Draw Token',      cost: 1 },
+    { key: 'bbss',     icon: '\uD83C\uDF81',       name: 'BBSS Surprise',         cost: 2 },
+    { key: 'tuckshop', icon: '\uD83C\uDFEA',       name: 'Tuck Shop Cash Coupon', cost: 3 }
 ];
 
 /* ── Teachers ── */
 var TEACHERS = [
-    "Bezant Samantha Diana (BSD)",
-    "Chan Hin Chiu (CHC)",
-    "Chan Ka Ying Anna (CKY)",
-    "Chan Kwok Keung (CKK1)",
-    "Chan Kwok Kwan (CKK)",
-    "Chan Lok Hin (CLH)",
-    "Chan Lok In (CLI)",
-    "Chan Oi Yan (COY)",
-    "Chan Shuk Man (CSM)",
-    "Chan Tsz Man (CTM)",
-    "Chan Wing Yin (CWY)",
-    "Chan Yau Sing (CYS)",
-    "Chan Yuk Wah (CYW)",
-    "Chan Yung Cheung (CYC)",
-    "Chang Yee Wai Isabella (CYW2)",
-    "Cheung Chi Wai (CCW)",
-    "Cheung Hoi Ning (CHN)",
-    "Cheung Man Bun (CMB)",
-    "Cheung Pak Ho (CPH)",
-    "Chu Ki Cheong (CKC)",
-    "Chung Ting Kai (CTK)",
-    "Chung Yuen Wah (CYW1)",
-    "Dou Xiaoye (DX)",
-    "Fong Pik Yuk (FPY)",
-    "Ho Yi Lok (HYL)",
-    "Hung Chun Man (HCM)",
-    "Husein Salem Shardow (HSS)",
-    "Hussain Nibla Shabir (HNS)",
-    "Kiang Chi Hong (KCH)",
-    "Kong Lai Han (KLH)",
-    "Koo Yiu (KY)",
-    "Kwok Pui Pui (KPP)",
-    "Lam Ka Yan (LKY)",
-    "Lam Mei Po (LMP)",
-    "Lam On Nei (LON)",
-    "Lam Shuk Ying (LSY)",
-    "Lam Wai Ling (LWL)",
-    "Lam Wai Man (LWM)",
-    "Lau Nga Man (LNM)",
-    "Lau Wing Kwan (LWK1)",
-    "Leung Pui Ling (LPL)",
-    "Li Chi Shing (LCS)",
-    "Li Silin (LS)",
-    "Lo Chiu Wing (LCW)",
-    "Lui Yu Fong (LYF)",
-    "Mak Shuk Man (MSM)",
-    "Mak Sin Yee (MSY)",
-    "Mak Tsui Han (MTH)",
-    "Ng Oi Yan (NOY)",
-    "Ng Yau Mei Shirley (NYMS)",
-    "Sha Wai Pak (SWP)",
-    "Suen Chun Long (SCL)",
-    "Tang Wui Wa (TWW)",
-    "Toa Wai Fook (TWF)",
-    "Tong Sai Yeung (TSY)",
-    "Tsao Man Fai (TMF)",
-    "Tsoi Yiu Lam (TYL)",
-    "Wong Hui Wing (WHW)",
-    "Wong Kwok Tai (WKT)",
-    "Wong Man Han (WMH)",
-    "Wong Shing Fung (WSF)",
-    "Wong Suk Yin (WSY)",
-    "Yao Hing Man (YHM)",
-    "Yip Kin Man (YKM)",
-    "Yu Siu Ping (YSP)",
-    "Admin 1",
-    "Admin 2",
-    "Admin 3",
-    "Admin 4"
+    "Bezant Samantha Diana (BSD)", "Chan Hin Chiu (CHC)", "Chan Ka Ying Anna (CKY)", "Chan Kwok Keung (CKK1)",
+    "Chan Kwok Kwan (CKK)", "Chan Lok Hin (CLH)", "Chan Lok In (CLI)", "Chan Oi Yan (COY)",
+    "Chan Shuk Man (CSM)", "Chan Tsz Man (CTM)", "Chan Wing Yin (CWY)", "Chan Yau Sing (CYS)",
+    "Chan Yuk Wah (CYW)", "Chan Yung Cheung (CYC)", "Chang Yee Wai Isabella (CYW2)", "Cheung Chi Wai (CCW)",
+    "Cheung Hoi Ning (CHN)", "Cheung Man Bun (CMB)", "Cheung Pak Ho (CPH)", "Chu Ki Cheong (CKC)",
+    "Chung Ting Kai (CTK)", "Chung Yuen Wah (CYW1)", "Dou Xiaoye (DX)", "Fong Pik Yuk (FPY)",
+    "Ho Yi Lok (HYL)", "Hung Chun Man (HCM)", "Husein Salem Shardow (HSS)", "Hussain Nibla Shabir (HNS)",
+    "Kiang Chi Hong (KCH)", "Kong Lai Han (KLH)", "Koo Yiu (KY)", "Kwok Pui Pui (KPP)",
+    "Lam Ka Yan (LKY)", "Lam Mei Po (LMP)", "Lam On Nei (LON)", "Lam Shuk Ying (LSY)",
+    "Lam Wai Ling (LWL)", "Lam Wai Man (LWM)", "Lau Nga Man (LNM)", "Lau Wing Kwan (LWK1)",
+    "Leung Pui Ling (LPL)", "Li Chi Shing (LCS)", "Li Silin (LS)", "Lo Chiu Wing (LCW)",
+    "Lui Yu Fong (LYF)", "Mak Shuk Man (MSM)", "Mak Sin Yee (MSY)", "Mak Tsui Han (MTH)",
+    "Ng Oi Yan (NOY)", "Ng Yau Mei Shirley (NYMS)", "Sha Wai Pak (SWP)", "Suen Chun Long (SCL)",
+    "Tang Wui Wa (TWW)", "Toa Wai Fook (TWF)", "Tong Sai Yeung (TSY)", "Tsao Man Fai (TMF)",
+    "Tsoi Yiu Lam (TYL)", "Wong Hui Wing (WHW)", "Wong Kwok Tai (WKT)", "Wong Man Han (WMH)",
+    "Wong Shing Fung (WSF)", "Wong Suk Yin (WSY)", "Yao Hing Man (YHM)", "Yip Kin Man (YKM)",
+    "Yu Siu Ping (YSP)", "Admin 1", "Admin 2", "Admin 3", "Admin 4"
 ];
 
 /* ── Students ── */
 var CLASS_STUDENTS = {
-    "1A": ["1A01 CHAN SIN YING 陳倩凝", "1A02 CHAN SUM YIN 陳芯賢", "1A03 CHAN SZE LOK 陳詩駱", "1A04 CHAN TSE YU 陳沚如", "1A05 CHAN TSZ WING 陳紫穎", "1A06 CHIU TSZ YUE 趙紫妤", "1A07 IP NGA CHING 葉雅澄", "1A08 LAI CHUNG YAN 賴頌恩", "1A09 LAM HEI TUNG CALEY 林桸橦", "1A10 LAW PO HEI 羅寶曦", "1A11 LI TSZ YUE 李籽予", "1A12 NG SZE TING 吳施婷", "1A13 TANG YEE HEI HANNAH 鄧薾晞", "1A14 WONG CHING KIU 黃靖蕎", "1A15 WONG SUM YU YUNA 黃心瑜", "1A16 YAM CHING 任晴", "1A17 YEUNG TSZ CHING 楊芷晴", "1A18 AU YEUNG NGAI NGAI 歐陽巍巍", "1A19 CHAN PAAK KIU 陳珀喬", "1A20 CHUNG KA TUNG 鍾家棟", "1A21 FUNG YU KI 馮宇麒", "1A22 GURUNG UDHANT 余文達", "1A23 IP YIN KWAN 葉彥均", "1A24 LAW YUNG HO 羅榕灝", "1A25 LEE HO YEUNG 李灝揚", "1A26 NG HO CHUN 吳澔臻", "1A27 SIN YEE HANG 冼以恒", "1A28 TANG NING NGAI 鄧甯毅", "1A29 TANG SZE POK 鄧思博", "1A30 TSO TSZ MING 曹子銘", "1A31 WANG CHEUK YU 王琸宇", "1A32 YIM WAI KIU 嚴韋翹"],
-    "1B": ["1B01 AU YEUNG TSZ NAM 歐陽芷楠", "1B02 CHAI YEE TUNG 蔡依彤", "1B03 CHEN YAN 陳恩", "1B04 CHEUNG SHIN YIN BRITNEY 張善然", "1B05 LAM LONG KIU 林朗翹", "1B06 LEE SIU BING 李紹冰", "1B07 LEE WING YIN 李穎妍", "1B08 LI PUI YING 李沛鎣", "1B09 LUI MAN HUEN 呂敏暄", "1B10 MOK KASUMI 莫夏澄", "1B11 NG CADENCE 吳海雪", "1B12 NG HOI TUNG 吳海僮", "1B13 POON WENDY 潘芷晴", "1B14 WONG TSZ CHING 黃梓晴", "1B15 WONG TSZ KIU 黃梓喬", "1B16 YAU WING YAU 邱詠悠", "1B17 YIN HEI WAI 殷希蕙", "1B18 ZHOU JIAJIA 周家嘉", "1B19 CHAN WING LUN 陳詠璘", "1B20 CHENG YU CHEUNG 鄭宇翔", "1B21 HUANG YI JE 黃以喆", "1B22 HUI KWAN LONG 許君朗", "1B23 KWOK YIK HANG KASPAR 郭奕亨", "1B24 LAM YIK HEI 林翊曦", "1B25 LAW HO FUNG 羅灝鋒", "1B26 LEE CHUNG NAM 李重男", "1B27 LEE LUNG WO 李龍和", "1B28 LIN PAK WAI 連柏維", "1B30 WONG CHUN YIP 黃振業", "1B31 YE YANGBIN 葉楊濱", "1B32 YIP SHUN KI 葉信祈"],
-    "1C": ["1C01 CHAN SUM YAU 陳琛柔", "1C02 CHAN WING MAN 陳穎玟", "1C03 CHEONG YAN NOK 昌恩諾", "1C04 CHOI HO KI 蔡可琪", "1C05 CHOW TSZ CHING ZOE 周子晴", "1C06 CHOW TUNG 周童", "1C07 KAY SUM YU 紀沁雨", "1C08 KO WAI YIN 高鏏妍", "1C09 KWAN TIN LAN 關天嵐", "1C10 KWOK HEI LAM 郭希琳", "1C11 LAM HEI WING 林曦穎", "1C12 LAN KA ON 藍迦安", "1C13 LAU SUM YU 劉芯語", "1C14 LEE MAN YI 李萬宜", "1C15 LIU HOI LAM 廖凱琳", "1C16 SUEN HOI CHING 孫塏晴", "1C17 TANG TING SUM 鄧婷心", "1C18 TSANG HOI YIN 曾凱妍", "1C19 WONG IEOK CHENG HAILEY 黃若晴", "1C20 YEUNG TSZ YING 楊梓縈", "1C21 CHANG CHIT LONG 張哲朗", "1C22 CHENG YAT LONG ISSAC 鄭逸朗", "1C23 HO TAT YEUNG 何達揚", "1C24 LAI LOK YIN 黎珞然", "1C25 LEUNG HO FUNG 梁昊峯", "1C26 LEUNG HO LAM 梁皓霖", "1C27 LIN PAK HEI 連柏郗", "1C28 MAU WAI SHUN 繆偉迅", "1C29 TAM LONG TING 譚朗霆", "1C30 TO CHEUK KIN 陶卓鍵", "1C31 WONG RANG 王壤", "1C32 YING YAU KA 邢祐嘉", "1C33 YIU WING YAN 姚榮恩", "1C34 ZHENG JIN FENG 鄭錦峰"],
-    "1D": ["1D01 CHAN MAN HEI HEIDA 陳汶希", "1D02 CHAU FUK WING 鄒福詠", "1D03 CHENG YAN YU 鄭恩瑜", "1D04 CHEUNG FARRAH HEI MAN 張琋雯", "1D05 CHOI YEE MAN 蔡依雯", "1D06 CHU KA PO 朱加寶", "1D07 HO NGA YAU 賀雅悠", "1D08 HUNG JACQUELINE JANE 洪韻詠", "1D09 KWOK CHUNG HUEN 郭頌萱", "1D10 KWOK SZE UE 郭詩妤", "1D11 LAM YI CHING 林依澄", "1D12 LAW HAU TUNG 羅巧彤", "1D13 LEE LOK TUNG 李洛潼", "1D14 LI YIN HEI 李彦熹", "1D15 LIN KEXIN 林可心", "1D16 LUI KACEY 雷茜棋", "1D17 MAK HO YEE 麥皓兒", "1D18 SIU HOI NEI KYLIE 蕭凱妮", "1D19 TANG WAI BING 鄧慧冰", "1D20 WONG TSZ CHING 黃紫晴", "1D21 CHAN CHUN LAM AIDEN 陳俊霖", "1D22 CHAN KA YIU 陳嘉耀", "1D23 CHING TSZ LONG 程子朗", "1D24 CHOI CHI CHUNG CYRUS 蔡致沖", "1D25 CHOW PAK HEI 周柏希", "1D26 CHU CHUN NOK 朱俊諾", "1D27 FOK TSZ YU 霍梓瑜", "1D28 FUNG NOK TO 馮諾陶", "1D29 HA KA WING 夏嘉榮", "1D30 LAM YIN NOK 林彥諾", "1D31 MOK TSZ WO 莫子和", "1D32 TSANG CHO FUNG 曾楚丰", "1D33 WONG LONG WUN 黃朗桓", "1D34 WU CHUN HANG 胡雋亨"],
-    "2A": ["2A01 CHAN KA HEI 陳嘉琋", "2A02 CHAN PO YAN 陳寶欣", "2A03 CHAN TSZ YING 陳紫瑩", "2A04 CHAU CHUNG YAN EMILY 周頌恩", "2A05 CHOW TSZ YU 周祉妤", "2A06 CHU HOI CHING 朱凱晴", "2A07 CHUNG YUEN SING 鍾緣升", "2A08 LAM XING YUE 林星悦", "2A09 LEUNG YEE LAM 梁以琳", "2A10 MAN HOI CHING 文鎧澄", "2A11 NG HEI YEE 吳僖頤", "2A12 NG PUI LAM 吳佩霖", "2A13 NG YI JING 吳怡靜", "2A14 TO YUET YIU 杜玥瑤", "2A15 TSE MIKI 謝美希", "2A16 TSUI SHEE YING 徐抒瀅", "2A17 WONG HOI LAM 黃海琳", "2A18 WONG LOK YAU 黃樂柔", "2A19 WONG SUET YING 王雪瑩", "2A20 CHAN CHEUK LONG 陳卓朗", "2A21 CHAN SHING CHIT 陳承哲", "2A22 CHENG CHUN 鄭進", "2A23 CHEUNG WING YUET 張榮悅", "2A24 CHUK AH KWAN 竹亞坤", "2A25 KONG CHUNG NAM 江訟男", "2A26 KWOK WING HIM 郭永謙", "2A27 LEUNG HON TIN 梁瀚天", "2A28 LEUNG KA WING 梁嘉潁", "2A29 POON PAK FUNG 潘泊鋒", "2A30 TONG HOI CHEUNG 湯凱祥", "2A31 TSE SZE HON CYRIL 謝思翰", "2A32 YE WING YAM 葉穎欽"],
-    "2B": ["2B01 CHAN TSZ YU 陳梓瑜", "2B02 CHAN YU YIU 陳汝鎐", "2B03 CHAN YUK PUI 陳鈺佩", "2B04 CHIU TSZ KWAN 邱子珺", "2B05 CHU ON YI 朱安兒", "2B06 CHU TSZ WING 朱芷詠", "2B07 GUO HAIYU 郭海鈺", "2B08 LAM TSZ YIU 林芷瑤", "2B09 LAM YAT HEI 林日晞", "2B10 LAU YIK YAN 劉奕欣", "2B11 LIN YU QIAN 林羽芊", "2B12 MAK LING FUNG 麥甯豐", "2B13 POON TSOI YING 潘采凝", "2B14 SHIH YAT CHING 施逸晴", "2B15 SIU CHING MAN 蕭靜雯", "2B16 WO HOI CHING 胡暟晴", "2B17 WONG TSZ CHING NATALIE 王梓澄", "2B18 YIP HOI YEE 葉鎧而", "2B19 YUEN YAT LING 袁一伶", "2B20 CHAN LOK SUM 陳諾琛", "2B21 HO MOSES 何慕正", "2B22 KWONG HAU YIN 江孝賢", "2B23 LAM CHUNG NAM 林頌藍", "2B24 LAM FUNG 林豐", "2B25 LEUNG SZE LONG 梁思朗", "2B26 LEUNG TSUN HIM 梁峻謙", "2B27 MAN KEI YIP 文基業", "2B28 SO JERON 蘇梓朗", "2B29 TSANG HARRIS 曾憬謙", "2B30 WONG KWAN HO JEFF 黃君昊", "2B31 WONG OCEAN 黃傲舜", "2B32 YEUNG TSZ LOK 楊子樂"],
-    "2C": ["2C01 FAN SUM LUI 樊心蕾", "2C02 GI SZE WING 紀思穎", "2C04 LAI MAN PING 賴文平", "2C05 LAI SIN NAM 黎倩楠", "2C06 LAI TSZ YU 黎梓瑜", "2C07 LAU HOI SHAN 劉愷珊", "2C08 LAU SI TING 劉鍶庭", "2C09 LAW HEI YAN 羅晞昕", "2C10 LEUNG PUI KA 梁貝嘉", "2C11 LEUNG SIN KIU 梁善喬", "2C12 LI SUM YAU 李心柔", "2C13 LI TSZ YUET 李紫釔", "2C14 LI WAI SZE 李蕙詩", "2C15 MAN HOI TAI 文凱蒂", "2C16 MOK HOI CHING 莫鎧澄", "2C17 NG PUI KEI 吳佩錡", "2C18 NG WING KA KATE 吳詠迦", "2C19 TO TSZ YIN 杜芷嫣", "2C20 CHAN CHUN HEI 陳圳希", "2C21 CHAN LAI YIN 陳禮賢", "2C22 CHAN LING WO 陳令和", "2C23 CHAN YIN CHI 陳言知", "2C24 KING HAU YIN 金孝賢", "2C25 KWOK RAY 郭祐維", "2C26 LI TSZ HIN 李子軒", "2C27 LIU CHUN KIT 劉俊杰", "2C28 LIU XINGANG 劉馨港", "2C29 MAK HO SUM 麥皓森", "2C30 SOO CHUN YIN 蘇進研", "2C31 TANG HONG CHIT 鄧匡哲", "2C32 TANG KING LAM 鄧敬霖"],
-    "2D": ["2D01 CHAN LOK YAN 陳樂恩", "2D02 CHAN NGOU ZIT 陳傲哲", "2D03 CHAN SZE WING 陳詩穎", "2D04 CHAN TSZ CHING 陳梓晴", "2D05 CHENG HEI YIN 鄭曦妍", "2D06 HO NOK SZE 何諾詩", "2D07 HON TSZ CHING 韓梓晴", "2D08 HUI YING 許瑩", "2D09 KWONG HEI NAM HANNAH 鄺晞嵐", "2D10 LAU SZE YU 劉偲羽", "2D11 LEE SUM UE 李芯妤", "2D12 LO HO YING 盧可盈", "2D13 LUO ZHANGSHUO 羅張爍", "2D14 REITZEL QUINN CONNOR 韋睿知", "2D15 TANG HAI YUET 鄧琋玥", "2D16 TSANG KOK YIN 曾珏言", "2D17 WONG KA YEE 黃嘉儀", "2D18 YAN SZE NGA 殷詩雅", "2D19 ZENG NICOLE 曾珮雅", "2D20 CEN SUEN TUNG 岑煊桐", "2D21 CHAU CHING KI 周正祁", "2D22 CHEUNG KIN HEI 張鍵晞", "2D23 CHOI YIK TAT 蔡易達", "2D24 CHOW KWAN YIN 周鈞賢", "2D25 FUNG HO LONG 馮皓塱", "2D26 LAW TSZ HO 羅子顥", "2D27 LEUNG CHUNG HIN 梁仲軒", "2D28 NG KWOK KEUNG 吳國強", "2D29 NGAI CHUN YU 魏俊羽", "2D30 PANG YUK TIN 彭煜天", "2D31 TSANG CHUN YAT 曾進一", "2D32 ZAFAR ISAM 沙宜芯"],
-    "3A": ["3A01 CHUNG MAN YAN 鍾汶恩", "3A02 FONG CHO YUET 方初悅", "3A03 HO YIN CHUN 何彥津", "3A04 LAI TSZ YIU 黎子瑤", "3A05 LAU WING LAM 劉穎霖", "3A06 LAW YING HEI 羅盈熙", "3A07 LEUNG TSZ KIU 梁紫翹", "3A08 LO KALAEN HARMONY 羅芷薇", "3A09 LUK WING KWAN 陸穎君", "3A10 MA YUEN WAI 馬箢蔚", "3A11 TSE HEI YEE 謝希儀", "3A12 WONG CHING 黃靖", "3A13 WONG HEI MAN 王希汶", "3A14 WONG SUM YI 黃心兒", "3A15 CHAN JAK YIN AIDEN 陳則言", "3A16 CHAN PAK NGAI 陳栢毅", "3A17 CHAN YEUK FUNG 陳約夆", "3A18 CHIU TSZ SHUN 趙子醇", "3A20 FANG HIN CHUN 范顯臻", "3A21 HO PAK LAM 何柏霖", "3A22 LAM NOK TING 林諾霆", "3A23 LAW DIK 羅迪", "3A24 NG PO YU 吳溥瑜", "3A25 NG SHEUNG HEI 吳尚熹", "3A26 TAM LOK CHING 譚樂澄", "3A27 TANG CHEUK NAM 鄧綽楠", "3A28 TANG KAI LOK 鄧啟樂", "3A29 TSE TSZ KUI 謝梓鉅", "3A30 WONG KIT NAM KEITH 黃杰嵐", "3A31 ZHAO WAI SHING 趙偉成"],
-    "3B": ["3B01 CHAN KRISTY 陳靜彤", "3B02 CHEUNG YEE YIN 張貽然", "3B03 HO HO KEI 何可琦", "3B04 LAM CHING YU 林靖瑜", "3B05 LAM CHUNG CHING 林鍾靜", "3B06 LAM YU YAN 林愈恩", "3B07 LEE I LAM 李苡琳", "3B08 LEE SUM YAU 李琛柔", "3B09 NG SZE WING 吳思穎", "3B10 TAI LOK KIU 戴珞蕎", "3B11 TSOI HAU CHING 蔡巧晴", "3B12 WONG TSZ CHING 黃梓晴", "3B13 YIP SZE TUNG 葉思桐", "3B14 YU QUINN MORNE ARIA 尤格里安兒", "3B15 YUNG HIU WAI 翁曉蔚", "3B16 CHAN CHUN SING 陳鎮星", "3B17 CHEUNG CHIN KWOK KINGSLEY 張展國", "3B18 CHEUNG TSZ HIM 張子謙", "3B19 CHEUNG WAI HIN 張瑋軒", "3B20 FUNG KING CHAK 馮景澤", "3B21 HO MING HEI 何銘希", "3B22 HO TSZ LONG 何子朗", "3B23 IP HAU LAAM 葉考嵐", "3B24 MAK HO YIN 麥皓然", "3B25 MAN KING LONG 文敬朗", "3B26 SHEK YAT SUM 石一森", "3B27 SIU HOI LUNG KYLE 蕭凱龍", "3B28 TANG CHING CHI 鄧清之", "3B29 WONG KA CHIU 黃嘉昭", "3B30 WONG KIN MAN 黃建文", "3B31 YEUNG KING HO CLEATUS 楊經灝", "3B32 YIP WUN SHING 葉桓晟"],
-    "3C": ["3C01 AU HO YEE 區可頤", "3C02 CHAN YU SZE 陳雨時", "3C03 CHEUNG MANSI 張曈", "3C04 CHEUNG TSZ YU 張芷瑜", "3C05 CHOW KA YAU 周珈滺", "3C06 CHU CHI CHING 朱淽澄", "3C07 KAN YIP CHING ICY 簡葉晴", "3C08 KING WING CHI 金穎姿", "3C09 LAW HIU CHING 羅曉晴", "3C10 LI TSZ CHING 利芷晴", "3C11 LI VIVIAN 李洺瑄", "3C12 LING TING KA MELISSA 凌廷嘉", "3C13 POON SUM YEE 潘杺沂", "3C14 SIU HOI CHING 蕭凱澄", "3C15 WONG WING YIN 黃詠妍", "3C16 YUEN TSZ YIU 源芷瑤", "3C17 CHAN NGOU LING 陳傲嶺", "3C18 CHAN SUI TUNG 陳帥曈", "3C19 CHAN YAT LONG 陳溢朗", "3C20 CHEUNG YEE CHUN 張以駿", "3C21 CHOW HIN TUNG CRUZ 周顯東", "3C22 FOK PAK YUK 霍栢彧", "3C23 FU LI HO 符理灝", "3C24 FUNG YUI YIN 馮睿賢", "3C25 KWOK CHUN HIN 郭進軒", "3C26 KWONG YUI YEE 鄺睿懿", "3C27 LAM TING YAN 林庭殷", "3C28 LANIJAH MING CHUN 蔡旻真", "3C29 LEUNG LOK TANG 梁樂騰", "3C30 TONG KIN YUI 湯健睿", "3C31 YEUNG HO MAN 楊皓文", "3C32 ZHANG SHING HIN 張誠軒"],
-    "3D": ["3D01 CHAK YING LAM 翟映琳", "3D02 CHAN CHUNG MAN 陳頌汶", "3D03 CHAN TSZ IP 陳祉燁", "3D04 CHUNG HEI YI HAILEY 鍾希兒", "3D05 HO HEI MAN 何希敏", "3D06 HUANG BIXUAN 黃碧萱", "3D07 LAI TING YAN 賴亭銦", "3D08 LAW SOFIA 羅上知", "3D09 LEE ARWEN 李加韻", "3D10 NG WAI TING 吳慧婷", "3D11 TANG SHEUNG YUNG 鄧湘蓉", "3D12 TANG TSZ CHING 鄧梓晴", "3D13 TIN HEI YU 田郗如", "3D14 WU SUM KIU 胡心蕎", "3D16 ZHANG XINYI 張芯怡", "3D17 CHAN CHEUK HIM 陳卓謙", "3D18 CHAN LOK MAN 陳樂文", "3D19 CHEN JIANXIN 陳健鑫", "3D20 CHEUNG SHUN HEI 張信晞", "3D21 HUI SHU WAI 許書瑋", "3D22 KWOK TSZ NGO GIO 郭子翱", "3D23 LAM PING YIN 林平彥", "3D24 LAM YIK LONG 林奕朗", "3D25 LAU YU HIM 劉諭謙", "3D26 LAW CHI CHUN 羅梓駿", "3D27 NG CHUNG HIM 吳頌謙", "3D28 NG YEE HIN HINSLEY 吳貽汧", "3D29 PANG WUI YIU 彭滙堯", "3D30 PUN TSZ LUNG 潘祉龍", "3D31 TANG CHING YIN 鄧政言", "3D32 WONG KI CHUN 黃淇雋", "3D33 ZHAN WENLUO 詹汶洛"],
-    "4A": ["4A01 CHAN JUN YI 陳津兒", "4A02 CHAU HIU YIN 周曉玹", "4A03 CHEUNG HO CHING 張可晴", "4A04 CHEUNG SHIN TUNG BLAIR 張善童", "4A05 CHEUNG WING TUNG 張穎彤", "4A06 CHOY KA LEE 蔡嘉莉", "4A07 HO SZE WING 何思穎", "4A08 LAM YAN KEI 林欣錡", "4A09 LAM YU YIN 林雨嫣", "4A10 LEE SI NOK CHARLOTTE 李司諾", "4A11 LEUNG CHEUK LAM 梁焯嵐", "4A12 LI YAN CHING 李昕澄", "4A13 LIN LIXIN 林麗欣", "4A14 LO OI KIU 羅皚翹", "4A15 TAM SZE KI 譚詩琪", "4A16 WONG LOK 黃洛", "4A17 WU HIU TUNG KATIE 胡曉彤", "4A18 YIP SIN CHING 葉善晴", "4A19 ZENG HING YIU 曾馨瑶", "4A20 CHAN PAK HEI CHRIS 陳柏熹", "4A21 CHAN YIN WANG 陳彥宏", "4A22 CHOW TSUN WANG 周峻弘", "4A23 HO CHUN YAT 何俊逸", "4A24 HO TIM LOK 何添樂", "4A25 HONG WANG HEI 康弘熹", "4A26 KEI HO WANG 紀昊宏", "4A27 LAW KIT HEI 羅傑禧", "4A28 LEE HIN NAM 李顯男", "4A29 SIU YIP HUNG 蕭業洪", "4A30 SO TZE SUM 蘇梓森", "4A31 TANG HO SUM 鄧皓心", "4A32 WANG CLEAR 王金港", "4A33 WU CHI YUEN 吳志炫", "4A34 YANG LI YAN 楊立言", "4A35 YUEN PAK SHING 阮栢誠"],
-    "4B": ["4B01 CHAN MING WAI 陳明慧", "4B02 CHAN NOI YI 陳奈兒", "4B03 CHAN SZE UE 陳思妤", "4B04 CHENG YUEN CHING 鄭苑澄", "4B05 CHEUNG NGAI YING 張藝瀠", "4B06 CHONG WING YEE 莊穎兒", "4B07 KONG SUET TING VIE 江雪霆", "4B08 LAM TSZ YAN 藍梓甄", "4B09 LAU SZE CHING AMARIS 劉詩晴", "4B10 PAU HOI TING 鮑凱婷", "4B11 SIN I LOK 冼苡樂", "4B12 TANG HEI TO 鄧晞桃", "4B13 TANG I CHING 鄧苡晴", "4B14 TONG TIK KI 湯廸淇", "4B15 YE YU SHAN 葉雨珊", "4B16 ZHU JUNRU ANNY 朱軍如", "4B17 CHENG CHUN HIN 鄭俊軒", "4B18 CHEUNG KING HUNG 張景雄", "4B19 CHONG HONG TO 莊康圖", "4B20 CHOW LOK TIN 周樂天", "4B21 CHOW YUK CHIT 周煜喆", "4B22 FOK NGAI 霍毅", "4B23 FONG KIN ONE 方健一", "4B24 LO CHUN HO 羅俊皓", "4B25 LUO LEUNG CHING 羅良正", "4B26 NG CHUN NOK DEREK 伍俊諾", "4B27 TAN JOY 譚業臻", "4B28 TSOI TING ON 蔡霆桉", "4B29 TSUI TSZ CHUNG 徐梓聰", "4B30 WAI HO CHING 韋昊澄", "4B31 WONG CHI FAI BRANDON 黃智暉", "4B32 WONG TORRES CHEUK HEI 黃綽禧", "4B33 ZENG FOR YUEN 曾科源"],
-    "4C": ["4C01 CHAN HOI TING 陳凱庭", "4C02 CHAU OI TING 鄒磑亭", "4C03 CHEN HAU NGA 陳巧雅", "4C04 CUI LOK YIN KITTY 崔樂言", "4C05 HE NGA LAM 何雅琳", "4C06 HO KA MAN CARMAN 何家雯", "4C07 HUI KWAN YI 許筠沂", "4C08 LAU CHEUK SZE 劉卓思", "4C09 LI CHIN TUNG 李芊曈", "4C10 LUO SI HAN 羅思涵", "4C11 MAN KIU YAN 文喬姻", "4C12 NG SZE NGA 吳詩雅", "4C13 WONG CHUNG SUM 黃頌芯", "4C14 WONG TSZ CHING 黃子晴", "4C15 YIM SZE YU 嚴絲雨", "4C16 YIP PO HON 葉寶韓", "4C17 CHAU TSZ HIN 周子軒", "4C18 CHENG LAP KIU 鄭立翹", "4C19 CHEUNG KING YIU 張景堯", "4C20 CHOI CHI LAM 蔡知霖", "4C21 LAM CHI LONG 林智朗", "4C22 LEUNG LOK TIN 梁樂天", "4C23 LOU TAK CHI 盧德治", "4C24 TSE TIN YIU STEFAN 謝天堯", "4C25 TSUI YI 徐懿", "4C26 WONG KIN CHEUNG 王建翔", "4C27 WONG YIN HEI 黃彥希", "4C28 YE ENXIANG 叶恩祥"],
-    "4D": ["4D01 CHAN SUM YUET 陳琛悅", "4D02 CHAN YAT TUNG 陳逸彤", "4D03 DING XIN YA 丁欣雅", "4D04 FONG YEE LAM 方依琳", "4D05 LEI HIU TUNG ZITA 李曉彤", "4D06 LEUNG HOI MAN 梁海汶", "4D07 LIANG ZI HANG 梁紫含", "4D08 LO HING YI 羅馨怡", "4D09 LO WING SA 勞泳莎", "4D10 NG WING KIU 吳詠荍", "4D11 TSUNG HONG KIU 曾康喬", "4D12 WONG CHING NAM 黃靖嵐", "4D13 WONG TIN OI AUDREY 黃天愛", "4D14 CHAN CHEUK HEI 陳卓希", "4D15 CHAN YU HEI 陳宇熙", "4D16 CHEUNG KING HIN 張景軒", "4D17 FAN AYDEN ZHUO XI 樊卓熙", "4D18 LEE YIN CHIT 李賢哲", "4D19 MA CHEUK HIM 馬卓謙", "4D20 TONG YUI KI 湯睿祈", "4D21 WO CHIT NING 胡哲寧", "4D22 WONG CHI WAH SAMUEL 黃子華", "4D23 WONG CHING FUNG 黃靖峰", "4D24 WONG LOK HANG 黃樂恆", "4D25 WONG YU HEI 王裕羲", "4D26 YU AUSTIN 余卓帆", "4D27 ZHONG YU HIN 鍾宇軒"],
-    "5A": ["5A01 CHAN HOI CHING PATRICIA 陳凱晴", "5A02 CHAN SUM YUI 陳心睿", "5A03 CHAN TSZ KEI 陳子崎", "5A04 CHAN YEE WAN YANNIS 陳漪勻", "5A05 CHENG TSZ YIU 鄭紫瑤", "5A06 CHOW CHI YAN 周枳昕", "5A07 DENG MENGYUAN 鄧夢圓", "5A08 FAN KA YING 范珈瑩", "5A09 FUNG KA WING 馮家穎", "5A10 KWOK CHING TUNG 郭靖瞳", "5A11 LEUNG HO LI ELISE 梁可莉", "5A12 LIANG KIT YING 梁潔盈", "5A13 LIU XIN YING 劉幸瑩", "5A14 SO KA YIN 蘇珈然", "5A15 SO TUNG YUET 蘇彤悅", "5A16 WAN KA HEI 温珈羲", "5A17 WONG YING YUET 黃盈悅", "5A18 YIM KA CHING 嚴嘉晴", "5A19 ZHENG HAU YU 鄭巧渝", "5A20 CHEN ZIAN 陳子安", "5A21 CHEUNG LON 張朗", "5A22 CHIU PAK HEI 趙柏羲", "5A23 LEE CHEVO LIAM 李子和", "5A24 LEUNG FOON 梁寬", "5A25 LIANG CHIU HO 梁釗豪", "5A26 PANG HOI HIN 彭凱軒", "5A27 TANG CHI HUNG 鄧志鴻", "5A28 WONG HO LAM 王灝霖", "5A29 WONG TSZ KIT 黃祉傑", "5A30 XUE NUOLE 薛諾樂", "5A31 YEUNG MAN WAI 楊文偉"],
-    "5B": ["5B01 CHAN HOI TUNG 陳凱童", "5B02 CHAN YING SHUN 陳映淳", "5B03 CHEN JINGYING 陳景莹", "5B04 CHEN YOYO 陳嘉嬋", "5B05 CHEUNG NGAI MEI 張藝鶥", "5B06 CHUI NGAI FEI 徐藝菲", "5B07 FUNG SZE WAI 馮思惠", "5B08 KUK MEI TING 谷美婷", "5B09 KWONG HAU YI 江巧怡", "5B10 LAM HUEN YAU 林瑄悠", "5B11 LAU HO YI 劉皓兒", "5B12 LI SUM YAN 李心欣", "5B13 MAN TSOI YI 文采兒", "5B14 POK MAN TING 濮敏婷", "5B15 TSE WING YI 謝詠兒", "5B16 WONG OI YING JADE 黃愛盈", "5B17 WU SHANSHAN 吳姍珊", "5B18 YAU KA YAN 丘家甄", "5B19 YEUNG WAI YIN 楊惠研", "5B20 CHEUNG HOK YU 張學儒", "5B21 CHUNG KAM HIN 鍾錦軒", "5B22 HUNG KA LEUK 洪嘉略", "5B23 LAM TSUN HANG HENRY 林浚鏗", "5B24 LAW TSZ LONG 羅子朗", "5B25 LI HUNG CHI 李雄始", "5B26 NG TSZ HIM 吳子謙", "5B27 OU YANG XUCHENG 歐陽旭成", "5B28 PAN YIN KWAN 潘彥均", "5B29 RONG KIN PAN 容健彬", "5B30 TAM DANIEL 譚俊希", "5B31 WU RUI 吳瑞"],
-    "5C": ["5C01 CHAN SUM YI 陳心怡", "5C02 FAN HIU TUNG 樊曉彤", "5C03 GUAN MANYU 管曼羽", "5C04 GUO PUI YAN 郭貝恩", "5C05 HUANG HUIXIN CINDY 黃惠馨", "5C06 LAI SUM YUET 黎心悦", "5C07 LAI TSZ YIN 黎紫嫣", "5C08 LAU SIN YAN 劉倩欣", "5C09 LOONG WING TUNG 龍穎彤", "5C10 WONG WING SUM 黃穎芯", "5C11 YIU LOK CHING 姚樂晴", "5C12 CHAN CHUN HEI 陳俊熙", "5C13 CHAN HIU MING 陳曉銘", "5C14 CHAN LUK HEI 陳祿晞", "5C15 CHEN NIANXUN 陳念勛", "5C16 CHEUNG KIT YIU 張杰堯", "5C17 CHEUNG SHING KIT 張鋮杰", "5C18 HO HO SUM 何浩琛", "5C19 KOO TSZ HIN 顧梓騫", "5C20 LEUNG KA SHING 梁家鋮", "5C21 MA LOK MAN 馬樂民", "5C22 NG PAK KWAN 吳柏君", "5C23 TANG WANG CHUN 鄧泓雋", "5C24 YAU WING LOK 邱永樂", "5C25 YE YAN HEI 葉恩希", "5C26 ZHANG BAIHAO 張柏浩", "5C27 ZHANG TING KAI 張廷楷"],
-    "5D": ["5D01 CHAU KA IU 鄒泇嬈", "5D02 CHAU TSZ WAN 鄒旨蘊", "5D03 HSUI WING KI 許穎淇", "5D04 HUEW PUI NAM 禤珮嵐", "5D05 HUI CHING 許晴", "5D06 LAU YIN LING 劉彥伶", "5D07 MAN CHING NAM 文靜嵐", "5D08 NG CHING YAU 吳青悠", "5D09 TSOI YEE TUNG 蔡依桐", "5D10 WAH KA WING 華迦詠", "5D11 WONG SIN YI 王善儀", "5D12 WONG TSZ YIN CAT 王子嫣", "5D13 XIONG QINGQIAN 熊慶茜", "5D14 YE HIU WAI 葉曉慧", "5D15 CHAN CHEUK LAM 陳卓霖", "5D16 CHAN HIU FAI 陳曉煇", "5D17 CHAN KA CHUN 陳嘉俊", "5D18 CHAN KING YIN KINGSLEY 陳敬賢", "5D19 CHEN YIU KIN 陳堯堅", "5D20 CHENG ISAAC 鄭子頌", "5D21 CHEUNG HIU KWAN 張曉軍", "5D22 HUNG HING HEY 孔慶熙", "5D23 KOON LOK HANG 官樂恆", "5D24 LAM WAI LOK 林湋洛", "5D25 LAU WING TO 劉穎濤", "5D26 LEE TSZ HIN 李子軒", "5D27 LEUNG HOI TIK 梁凱廸", "5D28 MAN HO SUM 文皓心", "5D29 WANEM BIJAY 王太明", "5D30 WONG YIU HONG 王耀康", "5D31 ZHOU CHAK HEI ETHAN 周澤曦"],
-    "6A": ["6A01 CHENG HAU YEE 鄭巧兒", "6A02 CHENG KA YI 鄭家懿", "6A03 CHEUNG WAN HEI 張芸晞", "6A04 CHEUNG WUN YAN 張桓欣", "6A05 CHOI MAN SHAN 蔡旻姍", "6A06 DU CLARE 杜春雨", "6A07 GUO FEIQING 郭菲晴", "6A08 KONG KA YAN 江嘉欣", "6A09 LAM LOK YIU 林洛瑤", "6A10 LAM SIN YEE 林善儀", "6A11 LIN PUI SHAN 林沛珊", "6A12 NG MAN KI 吳曼錤", "6A13 SUEN CHING TUNG 孫靖桐", "6A14 TAM WING SZE 譚穎詩", "6A15 TANG CHUN SUM 鄧盡心", "6A16 TSANG SUM YIN 曾心鈃", "6A17 WONG PO IN 黃寶妍", "6A18 WONG SHUK YIN 王淑賢", "6A19 YIP HOI YAN 葉凱欣", "6A20 ZHENG SIYAN 鄭思言", "6A21 LAI PUN HIM 賴本謙", "6A22 LAW HO HIN 羅浩軒", "6A23 LEUNG CHING YIN 梁政彥", "6A25 WONG KAI LOK 黃啟樂"],
-    "6B": ["6B01 CHAN HAU YU 陳巧瑜", "6B02 CHAN SUM YU ALGIE 陳杺榆", "6B03 CHIU WAI KI 趙韋淇", "6B04 HO PUI YEE 何沛頤", "6B05 HO SZE YUI 何思睿", "6B06 HUI LOK LAM CYNTHIA 許樂琳", "6B07 LIN MAN YUNG 林漫蓉", "6B08 LIU HOI YING 廖凱楹", "6B09 MANG TSZ YING 孟芷瑩", "6B10 MOK HOI TIK 莫凱迪", "6B11 NG YAN WAI 吳茵慧", "6B12 POON CHING PO 潘証寶", "6B13 TANG CHEUK YI 鄧卓兒", "6B14 TSANG HOI TUNG 曾凱彤", "6B15 VONG HO KIU 黃可喬", "6B16 WEI YI LIN 魏怡琳", "6B17 WONG SIN TUNG 黃茜瞳", "6B18 WONG TSZ HUEN 黃子瑄", "6B19 XIE KA YEE 謝嘉儀", "6B20 YU KA YING 余加盈", "6B21 CHAN KING HONG 陳景匡", "6B22 CHIU CHEUK LAM 趙卓藍", "6B23 CHUNG CHEUK KIT 鍾焯傑", "6B24 FUNG YAT HEI 馮逸希", "6B25 HUANG ZHE 黃哲", "6B26 NG CHUN YU 吳俊儒", "6B27 YIU CHI HIM 姚沚謙"],
-    "6C": ["6C01 CHING CHIN YI 程千懿", "6C02 CHU WAI CHING 朱葦晴", "6C03 CHUNG YU TUNG 鍾雨潼", "6C04 FUNG SI MING 馮思銘", "6C05 KWAN ELLIE 關詠姸", "6C06 KWOK CHEUK TUNG 郭芍彤", "6C07 LAI CHEUK LAM 黎焯琳", "6C08 LAM TSZ KI 林子淇", "6C09 LEE YUI CHING 李睿婧", "6C10 LEUNG KWAN CHING 梁筠晴", "6C11 NG TSZ KI 吳紫祈", "6C12 TAM HEI YIN 譚曦賢", "6C13 WONG CHU WUN 王姝媛", "6C14 WONG YAT CHING 黃溢晴", "6C15 CHAN CHEUK LAP 陳卓立", "6C16 CHAN YIU CHUEN 陳耀全", "6C17 HE LAM TSANG 何林錚", "6C18 HO CHUEN HIM 何存謙", "6C19 LEI DEYU 雷德裕", "6C20 LI LOK HIM 李樂謙", "6C21 TANG HONG YU 鄧康裕", "6C22 TANG LONG KIU ROY 鄧朗翹", "6C23 TONG CHEUK HAN 唐卓恒", "6C24 TSANG CHEUK HIM 曾焯謙", "6C25 WEI KWING YU 魏炯裕", "6C26 WONG CHUN CHIU 黃俊潮", "6C27 YEUNG LOK TO 楊洛滔", "6C28 ZHU SUI WAN TONY 諸瑞雲"],
-    "6D": ["6D01 CHAN CHI WING 陳智穎", "6D02 CHAN SUM YIN 陳心言", "6D03 CHAN YUEN LAM 陳菀琳", "6D04 CHONG YIU TONG 莊曜同", "6D05 CHOW HO YAN 周可欣", "6D06 FENG YINGXI 馮穎熙", "6D07 HO MAN HIU CYNTHIA 何旻曉", "6D08 HO TSZ KEI 何沚錡", "6D09 KAN SUM YUET 簡心悅", "6D10 LAI HIU YUET 黎曉悅", "6D11 LAM CHUNG YAN 林頌恩", "6D12 LAU OI YING 劉靄瀅", "6D13 TANG HEI LAM 鄧希琳", "6D14 WONG KIU YAN 黃喬欣", "6D15 WONG WING HEI 黃詠希", "6D16 CHAN PAK KIU 陳柏翹", "6D17 CHAN PUN LAP 陳本立", "6D18 CHAN WAI WA 陳偉華", "6D19 CHOI WAN CHAK 蔡昀澤", "6D20 CHONG HO CHING 莊皓程", "6D21 HO PAK YIN 何珀賢", "6D22 KWONG HOI KIT 鄺凱杰", "6D23 LAU KAI SUN 劉啟辰", "6D24 LOK WAI TO 駱韋圖", "6D25 PENG YIN POK 彭彥博", "6D26 TSE KWOK KEUNG 謝國強", "6D27 TSOI YUK SAN 蔡旭燊", "6D28 WONG CHUN YIU 王雋堯", "6D29 ZHANG TIN YU 張天宇"]
+"1A": ["1A01 CHAN SIN YING 陳倩凝", "1A02 CHAN SUM YIN 陳芯賢", "1A03 CHAN SZE LOK 陳詩駱", "1A04 CHAN TSE YU 陳沚如", "1A05 CHAN TSZ WING 陳紫穎", "1A06 CHIU TSZ YUE 趙紫妤", "1A07 IP NGA CHING 葉雅澄", "1A08 LAI CHUNG YAN 賴頌恩", "1A09 LAM HEI TUNG CALEY 林桸橦", "1A10 LAW PO HEI 羅寶曦", "1A11 LI TSZ YUE 李籽予", "1A12 NG SZE TING 吳施婷", "1A13 TANG YEE HEI HANNAH 鄧薾晞", "1A14 WONG CHING KIU 黃靖蕎", "1A15 WONG SUM YU YUNA 黃心瑜", "1A16 YAM CHING 任晴", "1A17 YEUNG TSZ CHING 楊芷晴", "1A18 AU YEUNG NGAI NGAI 歐陽巍巍", "1A19 CHAN PAAK KIU 陳珀喬", "1A20 CHUNG KA TUNG 鍾家棟", "1A21 FUNG YU KI 馮宇麒", "1A22 GURUNG UDHANT 余文達", "1A23 IP YIN KWAN 葉彥均", "1A24 LAW YUNG HO 羅榕灝", "1A25 LEE HO YEUNG 李灝揚", "1A26 NG HO CHUN 吳澔臻", "1A27 SIN YEE HANG 冼以恒", "1A28 TANG NING NGAI 鄧甯毅", "1A29 TANG SZE POK 鄧思博", "1A30 TSO TSZ MING 曹子銘", "1A31 WANG CHEUK YU 王琸宇", "1A32 YIM WAI KIU 嚴韋翹"],
+"1B": ["1B01 AU YEUNG TSZ NAM 歐陽芷楠", "1B02 CHAI YEE TUNG 蔡依彤", "1B03 CHEN YAN 陳恩", "1B04 CHEUNG SHIN YIN BRITNEY 張善然", "1B05 LAM LONG KIU 林朗翹", "1B06 LEE SIU BING 李紹冰", "1B07 LEE WING YIN 李穎妍", "1B08 LI PUI YING 李沛鎣", "1B09 LUI MAN HUEN 呂敏暄", "1B10 MOK KASUMI 莫夏澄", "1B11 NG CADENCE 吳海雪", "1B12 NG HOI TUNG 吳海僮", "1B13 POON WENDY 潘芷晴", "1B14 WONG TSZ CHING 黃梓晴", "1B15 WONG TSZ KIU 黃梓喬", "1B16 YAU WING YAU 邱詠悠", "1B17 YIN HEI WAI 殷希蕙", "1B18 ZHOU JIAJIA 周家嘉", "1B19 CHAN WING LUN 陳詠璘", "1B20 CHENG YU CHEUNG 鄭宇翔", "1B21 HUANG YI JE 黃以喆", "1B22 HUI KWAN LONG 許君朗", "1B23 KWOK YIK HANG KASPAR 郭奕亨", "1B24 LAM YIK HEI 林翊曦", "1B25 LAW HO FUNG 羅灝鋒", "1B26 LEE CHUNG NAM 李重男", "1B27 LEE LUNG WO 李龍和", "1B28 LIN PAK WAI 連柏維", "1B30 WONG CHUN YIP 黃振業", "1B31 YE YANGBIN 葉楊濱", "1B32 YIP SHUN KI 葉信祈"],
+"1C": ["1C01 CHAN SUM YAU 陳琛柔", "1C02 CHAN WING MAN 陳穎玟", "1C03 CHEONG YAN NOK 昌恩諾", "1C04 CHOI HO KI 蔡可琪", "1C05 CHOW TSZ CHING ZOE 周子晴", "1C06 CHOW TUNG 周童", "1C07 KAY SUM YU 紀沁雨", "1C08 KO WAI YIN 高鏏妍", "1C09 KWAN TIN LAN 關天嵐", "1C10 KWOK HEI LAM 郭希琳", "1C11 LAM HEI WING 林曦穎", "1C12 LAN KA ON 藍迦安", "1C13 LAU SUM YU 劉芯語", "1C14 LEE MAN YI 李萬宜", "1C15 LIU HOI LAM 廖凱琳", "1C16 SUEN HOI CHING 孫塏晴", "1C17 TANG TING SUM 鄧婷心", "1C18 TSANG HOI YIN 曾凱妍", "1C19 WONG IEOK CHENG HAILEY 黃若晴", "1C20 YEUNG TSZ YING 楊梓縈", "1C21 CHANG CHIT LONG 張哲朗", "1C22 CHENG YAT LONG ISSAC 鄭逸朗", "1C23 HO TAT YEUNG 何達揚", "1C24 LAI LOK YIN 黎珞然", "1C25 LEUNG HO FUNG 梁昊峯", "1C26 LEUNG HO LAM 梁皓霖", "1C27 LIN PAK HEI 連柏郗", "1C28 MAU WAI SHUN 繆偉迅", "1C29 TAM LONG TING 譚朗霆", "1C30 TO CHEUK KIN 陶卓鍵", "1C31 WONG RANG 王壤", "1C32 YING YAU KA 邢祐嘉", "1C33 YIU WING YAN 姚榮恩", "1C34 ZHENG JIN FENG 鄭錦峰"],
+"1D": ["1D01 CHAN MAN HEI HEIDA 陳汶希", "1D02 CHAU FUK WING 鄒福詠", "1D03 CHENG YAN YU 鄭恩瑜", "1D04 CHEUNG FARRAH HEI MAN 張琋雯", "1D05 CHOI YEE MAN 蔡依雯", "1D06 CHU KA PO 朱加寶", "1D07 HO NGA YAU 賀雅悠", "1D08 HUNG JACQUELINE JANE 洪韻詠", "1D09 KWOK CHUNG HUEN 郭頌萱", "1D10 KWOK SZE UE 郭詩妤", "1D11 LAM YI CHING 林依澄", "1D12 LAW HAU TUNG 羅巧彤", "1D13 LEE LOK TUNG 李洛潼", "1D14 LI YIN HEI 李彦熹", "1D15 LIN KEXIN 林可心", "1D16 LUI KACEY 雷茜棋", "1D17 MAK HO YEE 麥皓兒", "1D18 SIU HOI NEI KYLIE 蕭凱妮", "1D19 TANG WAI BING 鄧慧冰", "1D20 WONG TSZ CHING 黃紫晴", "1D21 CHAN CHUN LAM AIDEN 陳俊霖", "1D22 CHAN KA YIU 陳嘉耀", "1D23 CHING TSZ LONG 程子朗", "1D24 CHOI CHI CHUNG CYRUS 蔡致沖", "1D25 CHOW PAK HEI 周柏希", "1D26 CHU CHUN NOK 朱俊諾", "1D27 FOK TSZ YU 霍梓瑜", "1D28 FUNG NOK TO 馮諾陶", "1D29 HA KA WING 夏嘉榮", "1D30 LAM YIN NOK 林彥諾", "1D31 MOK TSZ WO 莫子和", "1D32 TSANG CHO FUNG 曾楚丰", "1D33 WONG LONG WUN 黃朗桓", "1D34 WU CHUN HANG 胡雋亨"],
+"2A": ["2A01 CHAN KA HEI 陳嘉琋", "2A02 CHAN PO YAN 陳寶欣", "2A03 CHAN TSZ YING 陳紫瑩", "2A04 CHAU CHUNG YAN EMILY 周頌恩", "2A05 CHOW TSZ YU 周祉妤", "2A06 CHU HOI CHING 朱凱晴", "2A07 CHUNG YUEN SING 鍾緣升", "2A08 LAM XING YUE 林星悦", "2A09 LEUNG YEE LAM 梁以琳", "2A10 MAN HOI CHING 文鎧澄", "2A11 NG HEI YEE 吳僖頤", "2A12 NG PUI LAM 吳佩霖", "2A13 NG YI JING 吳怡靜", "2A14 TO YUET YIU 杜玥瑤", "2A15 TSE MIKI 謝美希", "2A16 TSUI SHEE YING 徐抒瀅", "2A17 WONG HOI LAM 黃海琳", "2A18 WONG LOK YAU 黃樂柔", "2A19 WONG SUET YING 王雪瑩", "2A20 CHAN CHEUK LONG 陳卓朗", "2A21 CHAN SHING CHIT 陳承哲", "2A22 CHENG CHUN 鄭進", "2A23 CHEUNG WING YUET 張榮悅", "2A24 CHUK AH KWAN 竹亞坤", "2A25 KONG CHUNG NAM 江訟男", "2A26 KWOK WING HIM 郭永謙", "2A27 LEUNG HON TIN 梁瀚天", "2A28 LEUNG KA WING 梁嘉潁", "2A29 POON PAK FUNG 潘泊鋒", "2A30 TONG HOI CHEUNG 湯凱祥", "2A31 TSE SZE HON CYRIL 謝思翰", "2A32 YE WING YAM 葉穎欽"],
+"2B": ["2B01 CHAN TSZ YU 陳梓瑜", "2B02 CHAN YU YIU 陳汝鎐", "2B03 CHAN YUK PUI 陳鈺佩", "2B04 CHIU TSZ KWAN 邱子珺", "2B05 CHU ON YI 朱安兒", "2B06 CHU TSZ WING 朱芷詠", "2B07 GUO HAIYU 郭海鈺", "2B08 LAM TSZ YIU 林芷瑤", "2B09 LAM YAT HEI 林日晞", "2B10 LAU YIK YAN 劉奕欣", "2B11 LIN YU QIAN 林羽芊", "2B12 MAK LING FUNG 麥甯豐", "2B13 POON TSOI YING 潘采凝", "2B14 SHIH YAT CHING 施逸晴", "2B15 SIU CHING MAN 蕭靜雯", "2B16 WO HOI CHING 胡暟晴", "2B17 WONG TSZ CHING NATALIE 王梓澄", "2B18 YIP HOI YEE 葉鎧而", "2B19 YUEN YAT LING 袁一伶", "2B20 CHAN LOK SUM 陳諾琛", "2B21 HO MOSES 何慕正", "2B22 KWONG HAU YIN 江孝賢", "2B23 LAM CHUNG NAM 林頌藍", "2B24 LAM FUNG 林豐", "2B25 LEUNG SZE LONG 梁思朗", "2B26 LEUNG TSUN HIM 梁峻謙", "2B27 MAN KEI YIP 文基業", "2B28 SO JERON 蘇梓朗", "2B29 TSANG HARRIS 曾憬謙", "2B30 WONG KWAN HO JEFF 黃君昊", "2B31 WONG OCEAN 黃傲舜", "2B32 YEUNG TSZ LOK 楊子樂"],
+"2C": ["2C01 FAN SUM LUI 樊心蕾", "2C02 GI SZE WING 紀思穎", "2C04 LAI MAN PING 賴文平", "2C05 LAI SIN NAM 黎倩楠", "2C06 LAI TSZ YU 黎梓瑜", "2C07 LAU HOI SHAN 劉愷珊", "2C08 LAU SI TING 劉鍶庭", "2C09 LAW HEI YAN 羅晞昕", "2C10 LEUNG PUI KA 梁貝嘉", "2C11 LEUNG SIN KIU 梁善喬", "2C12 LI SUM YAU 李心柔", "2C13 LI TSZ YUET 李紫釔", "2C14 LI WAI SZE 李蕙詩", "2C15 MAN HOI TAI 文凱蒂", "2C16 MOK HOI CHING 莫鎧澄", "2C17 NG PUI KEI 吳佩錡", "2C18 NG WING KA KATE 吳詠迦", "2C19 TO TSZ YIN 杜芷嫣", "2C20 CHAN CHUN HEI 陳圳希", "2C21 CHAN LAI YIN 陳禮賢", "2C22 CHAN LING WO 陳令和", "2C23 CHAN YIN CHI 陳言知", "2C24 KING HAU YIN 金孝賢", "2C25 KWOK RAY 郭祐維", "2C26 LI TSZ HIN 李子軒", "2C27 LIU CHUN KIT 劉俊杰", "2C28 LIU XINGANG 劉馨港", "2C29 MAK HO SUM 麥皓森", "2C30 SOO CHUN YIN 蘇進研", "2C31 TANG HONG CHIT 鄧匡哲", "2C32 TANG KING LAM 鄧敬霖"],
+"2D": ["2D01 CHAN LOK YAN 陳樂恩", "2D02 CHAN NGOU ZIT 陳傲哲", "2D03 CHAN SZE WING 陳詩穎", "2D04 CHAN TSZ CHING 陳梓晴", "2D05 CHENG HEI YIN 鄭曦妍", "2D06 HO NOK SZE 何諾詩", "2D07 HON TSZ CHING 韓梓晴", "2D08 HUI YING 許瑩", "2D09 KWONG HEI NAM HANNAH 鄺晞嵐", "2D10 LAU SZE YU 劉偲羽", "2D11 LEE SUM UE 李芯妤", "2D12 LO HO YING 盧可盈", "2D13 LUO ZHANGSHUO 羅張爍", "2D14 REITZEL QUINN CONNOR 韋睿知", "2D15 TANG HAI YUET 鄧琋玥", "2D16 TSANG KOK YIN 曾珏言", "2D17 WONG KA YEE 黃嘉儀", "2D18 YAN SZE NGA 殷詩雅", "2D19 ZENG NICOLE 曾珮雅", "2D20 CEN SUEN TUNG 岑煊桐", "2D21 CHAU CHING KI 周正祁", "2D22 CHEUNG KIN HEI 張鍵晞", "2D23 CHOI YIK TAT 蔡易達", "2D24 CHOW KWAN YIN 周鈞賢", "2D25 FUNG HO LONG 馮皓塱", "2D26 LAW TSZ HO 羅子顥", "2D27 LEUNG CHUNG HIN 梁仲軒", "2D28 NG KWOK KEUNG 吳國強", "2D29 NGAI CHUN YU 魏俊羽", "2D30 PANG YUK TIN 彭煜天", "2D31 TSANG CHUN YAT 曾進一", "2D32 ZAFAR ISAM 沙宜芯"],
+"3A": ["3A01 CHUNG MAN YAN 鍾汶恩", "3A02 FONG CHO YUET 方初悅", "3A03 HO YIN CHUN 何彥津", "3A04 LAI TSZ YIU 黎子瑤", "3A05 LAU WING LAM 劉穎霖", "3A06 LAW YING HEI 羅盈熙", "3A07 LEUNG TSZ KIU 梁紫翹", "3A08 LO KALAEN HARMONY 羅芷薇", "3A09 LUK WING KWAN 陸穎君", "3A10 MA YUEN WAI 馬箢蔚", "3A11 TSE HEI YEE 謝希儀", "3A12 WONG CHING 黃靖", "3A13 WONG HEI MAN 王希汶", "3A14 WONG SUM YI 黃心兒", "3A15 CHAN JAK YIN AIDEN 陳則言", "3A16 CHAN PAK NGAI 陳栢毅", "3A17 CHAN YEUK FUNG 陳約夆", "3A18 CHIU TSZ SHUN 趙子醇", "3A20 FANG HIN CHUN 范顯臻", "3A21 HO PAK LAM 何柏霖", "3A22 LAM NOK TING 林諾霆", "3A23 LAW DIK 羅迪", "3A24 NG PO YU 吳溥瑜", "3A25 NG SHEUNG HEI 吳尚熹", "3A26 TAM LOK CHING 譚樂澄", "3A27 TANG CHEUK NAM 鄧綽楠", "3A28 TANG KAI LOK 鄧啟樂", "3A29 TSE TSZ KUI 謝梓鉅", "3A30 WONG KIT NAM KEITH 黃杰嵐", "3A31 ZHAO WAI SHING 趙偉成"],
+"3B": ["3B01 CHAN KRISTY 陳靜彤", "3B02 CHEUNG YEE YIN 張貽然", "3B03 HO HO KEI 何可琦", "3B04 LAM CHING YU 林靖瑜", "3B05 LAM CHUNG CHING 林鍾靜", "3B06 LAM YU YAN 林愈恩", "3B07 LEE I LAM 李苡琳", "3B08 LEE SUM YAU 李琛柔", "3B09 NG SZE WING 吳思穎", "3B10 TAI LOK KIU 戴珞蕎", "3B11 TSOI HAU CHING 蔡巧晴", "3B12 WONG TSZ CHING 黃梓晴", "3B13 YIP SZE TUNG 葉思桐", "3B14 YU QUINN MORNE ARIA 尤格里安兒", "3B15 YUNG HIU WAI 翁曉蔚", "3B16 CHAN CHUN SING 陳鎮星", "3B17 CHEUNG CHIN KWOK KINGSLEY 張展國", "3B18 CHEUNG TSZ HIM 張子謙", "3B19 CHEUNG WAI HIN 張瑋軒", "3B20 FUNG KING CHAK 馮景澤", "3B21 HO MING HEI 何銘希", "3B22 HO TSZ LONG 何子朗", "3B23 IP HAU LAAM 葉考嵐", "3B24 MAK HO YIN 麥皓然", "3B25 MAN KING LONG 文敬朗", "3B26 SHEK YAT SUM 石一森", "3B27 SIU HOI LUNG KYLE 蕭凱龍", "3B28 TANG CHING CHI 鄧清之", "3B29 WONG KA CHIU 黃嘉昭", "3B30 WONG KIN MAN 黃建文", "3B31 YEUNG KING HO CLEATUS 楊經灝", "3B32 YIP WUN SHING 葉桓晟"],
+"3C": ["3C01 AU HO YEE 區可頤", "3C02 CHAN YU SZE 陳雨時", "3C03 CHEUNG MANSI 張曈", "3C04 CHEUNG TSZ YU 張芷瑜", "3C05 CHOW KA YAU 周珈滺", "3C06 CHU CHI CHING 朱淽澄", "3C07 KAN YIP CHING ICY 簡葉晴", "3C08 KING WING CHI 金穎姿", "3C09 LAW HIU CHING 羅曉晴", "3C10 LI TSZ CHING 利芷晴", "3C11 LI VIVIAN 李洺瑄", "3C12 LING TING KA MELISSA 凌廷嘉", "3C13 POON SUM YEE 潘杺沂", "3C14 SIU HOI CHING 蕭凱澄", "3C15 WONG WING YIN 黃詠妍", "3C16 YUEN TSZ YIU 源芷瑤", "3C17 CHAN NGOU LING 陳傲嶺", "3C18 CHAN SUI TUNG 陳帥曈", "3C19 CHAN YAT LONG 陳溢朗", "3C20 CHEUNG YEE CHUN 張以駿", "3C21 CHOW HIN TUNG CRUZ 周顯東", "3C22 FOK PAK YUK 霍栢彧", "3C23 FU LI HO 符理灝", "3C24 FUNG YUI YIN 馮睿賢", "3C25 KWOK CHUN HIN 郭進軒", "3C26 KWONG YUI YEE 鄺睿懿", "3C27 LAM TING YAN 林庭殷", "3C28 LANIJAH MING CHUN 蔡旻真", "3C29 LEUNG LOK TANG 梁樂騰", "3C30 TONG KIN YUI 湯健睿", "3C31 YEUNG HO MAN 楊皓文", "3C32 ZHANG SHING HIN 張誠軒"],
+"3D": ["3D01 CHAK YING LAM 翟映琳", "3D02 CHAN CHUNG MAN 陳頌汶", "3D03 CHAN TSZ IP 陳祉燁", "3D04 CHUNG HEI YI HAILEY 鍾希兒", "3D05 HO HEI MAN 何希敏", "3D06 HUANG BIXUAN 黃碧萱", "3D07 LAI TING YAN 賴亭銦", "3D08 LAW SOFIA 羅上知", "3D09 LEE ARWEN 李加韻", "3D10 NG WAI TING 吳慧婷", "3D11 TANG SHEUNG YUNG 鄧湘蓉", "3D12 TANG TSZ CHING 鄧梓晴", "3D13 TIN HEI YU 田郗如", "3D14 WU SUM KIU 胡心蕎", "3D16 ZHANG XINYI 張芯怡", "3D17 CHAN CHEUK HIM 陳卓謙", "3D18 CHAN LOK MAN 陳樂文", "3D19 CHEN JIANXIN 陳健鑫", "3D20 CHEUNG SHUN HEI 張信晞", "3D21 HUI SHU WAI 許書瑋", "3D22 KWOK TSZ NGO GIO 郭子翱", "3D23 LAM PING YIN 林平彥", "3D24 LAM YIK LONG 林奕朗", "3D25 LAU YU HIM 劉諭謙", "3D26 LAW CHI CHUN 羅梓駿", "3D27 NG CHUNG HIM 吳頌謙", "3D28 NG YEE HIN HINSLEY 吳貽汧", "3D29 PANG WUI YIU 彭滙堯", "3D30 PUN TSZ LUNG 潘祉龍", "3D31 TANG CHING YIN 鄧政言", "3D32 WONG KI CHUN 黃淇雋", "3D33 ZHAN WENLUO 詹汶洛"],
+"4A": ["4A01 CHAN JUN YI 陳津兒", "4A02 CHAU HIU YIN 周曉玹", "4A03 CHEUNG HO CHING 張可晴", "4A04 CHEUNG SHIN TUNG BLAIR 張善童", "4A05 CHEUNG WING TUNG 張穎彤", "4A06 CHOY KA LEE 蔡嘉莉", "4A07 HO SZE WING 何思穎", "4A08 LAM YAN KEI 林欣錡", "4A09 LAM YU YIN 林雨嫣", "4A10 LEE SI NOK CHARLOTTE 李司諾", "4A11 LEUNG CHEUK LAM 梁焯嵐", "4A12 LI YAN CHING 李昕澄", "4A13 LIN LIXIN 林麗欣", "4A14 LO OI KIU 羅皚翹", "4A15 TAM SZE KI 譚詩琪", "4A16 WONG LOK 黃洛", "4A17 WU HIU TUNG KATIE 胡曉彤", "4A18 YIP SIN CHING 葉善晴", "4A19 ZENG HING YIU 曾馨瑶", "4A20 CHAN PAK HEI CHRIS 陳柏熹", "4A21 CHAN YIN WANG 陳彥宏", "4A22 CHOW TSUN WANG 周峻弘", "4A23 HO CHUN YAT 何俊逸", "4A24 HO TIM LOK 何添樂", "4A25 HONG WANG HEI 康弘熹", "4A26 KEI HO WANG 紀昊宏", "4A27 LAW KIT HEI 羅傑禧", "4A28 LEE HIN NAM 李顯男", "4A29 SIU YIP HUNG 蕭業洪", "4A30 SO TZE SUM 蘇梓森", "4A31 TANG HO SUM 鄧皓心", "4A32 WANG CLEAR 王金港", "4A33 WU CHI YUEN 吳志炫", "4A34 YANG LI YAN 楊立言", "4A35 YUEN PAK SHING 阮栢誠"],
+"4B": ["4B01 CHAN MING WAI 陳明慧", "4B02 CHAN NOI YI 陳奈兒", "4B03 CHAN SZE UE 陳思妤", "4B04 CHENG YUEN CHING 鄭苑澄", "4B05 CHEUNG NGAI YING 張藝瀠", "4B06 CHONG WING YEE 莊穎兒", "4B07 KONG SUET TING VIE 江雪霆", "4B08 LAM TSZ YAN 藍梓甄", "4B09 LAU SZE CHING AMARIS 劉詩晴", "4B10 PAU HOI TING 鮑凱婷", "4B11 SIN I LOK 冼苡樂", "4B12 TANG HEI TO 鄧晞桃", "4B13 TANG I CHING 鄧苡晴", "4B14 TONG TIK KI 湯廸淇", "4B15 YE YU SHAN 葉雨珊", "4B16 ZHU JUNRU ANNY 朱軍如", "4B17 CHENG CHUN HIN 鄭俊軒", "4B18 CHEUNG KING HUNG 張景雄", "4B19 CHONG HONG TO 莊康圖", "4B20 CHOW LOK TIN 周樂天", "4B21 CHOW YUK CHIT 周煜喆", "4B22 FOK NGAI 霍毅", "4B23 FONG KIN ONE 方健一", "4B24 LO CHUN HO 羅俊皓", "4B25 LUO LEUNG CHING 羅良正", "4B26 NG CHUN NOK DEREK 伍俊諾", "4B27 TAN JOY 譚業臻", "4B28 TSOI TING ON 蔡霆桉", "4B29 TSUI TSZ CHUNG 徐梓聰", "4B30 WAI HO CHING 韋昊澄", "4B31 WONG CHI FAI BRANDON 黃智暉", "4B32 WONG TORRES CHEUK HEI 黃綽禧", "4B33 ZENG FOR YUEN 曾科源"],
+"4C": ["4C01 CHAN HOI TING 陳凱庭", "4C02 CHAU OI TING 鄒磑亭", "4C03 CHEN HAU NGA 陳巧雅", "4C04 CUI LOK YIN KITTY 崔樂言", "4C05 HE NGA LAM 何雅琳", "4C06 HO KA MAN CARMAN 何家雯", "4C07 HUI KWAN YI 許筠沂", "4C08 LAU CHEUK SZE 劉卓思", "4C09 LI CHIN TUNG 李芊曈", "4C10 LUO SI HAN 羅思涵", "4C11 MAN KIU YAN 文喬姻", "4C12 NG SZE NGA 吳詩雅", "4C13 WONG CHUNG SUM 黃頌芯", "4C14 WONG TSZ CHING 黃子晴", "4C15 YIM SZE YU 嚴絲雨", "4C16 YIP PO HON 葉寶韓", "4C17 CHAU TSZ HIN 周子軒", "4C18 CHENG LAP KIU 鄭立翹", "4C19 CHEUNG KING YIU 張景堯", "4C20 CHOI CHI LAM 蔡知霖", "4C21 LAM CHI LONG 林智朗", "4C22 LEUNG LOK TIN 梁樂天", "4C23 LOU TAK CHI 盧德治", "4C24 TSE TIN YIU STEFAN 謝天堯", "4C25 TSUI YI 徐懿", "4C26 WONG KIN CHEUNG 王建翔", "4C27 WONG YIN HEI 黃彥希", "4C28 YE ENXIANG 叶恩祥"],
+"4D": ["4D01 CHAN SUM YUET 陳琛悅", "4D02 CHAN YAT TUNG 陳逸彤", "4D03 DING XIN YA 丁欣雅", "4D04 FONG YEE LAM 方依琳", "4D05 LEI HIU TUNG ZITA 李曉彤", "4D06 LEUNG HOI MAN 梁海汶", "4D07 LIANG ZI HANG 梁紫含", "4D08 LO HING YI 羅馨怡", "4D09 LO WING SA 勞泳莎", "4D10 NG WING KIU 吳詠荍", "4D11 TSUNG HONG KIU 曾康喬", "4D12 WONG CHING NAM 黃靖嵐", "4D13 WONG TIN OI AUDREY 黃天愛", "4D14 CHAN CHEUK HEI 陳卓希", "4D15 CHAN YU HEI 陳宇熙", "4D16 CHEUNG KING HIN 張景軒", "4D17 FAN AYDEN ZHUO XI 樊卓熙", "4D18 LEE YIN CHIT 李賢哲", "4D19 MA CHEUK HIM 馬卓謙", "4D20 TONG YUI KI 湯睿祈", "4D21 WO CHIT NING 胡哲寧", "4D22 WONG CHI WAH SAMUEL 黃子華", "4D23 WONG CHING FUNG 黃靖峰", "4D24 WONG LOK HANG 黃樂恆", "4D25 WONG YU HEI 王裕羲", "4D26 YU AUSTIN 余卓帆", "4D27 ZHONG YU HIN 鍾宇軒"],
+"5A": ["5A01 CHAN HOI CHING PATRICIA 陳凱晴", "5A02 CHAN SUM YUI 陳心睿", "5A03 CHAN TSZ KEI 陳子崎", "5A04 CHAN YEE WAN YANNIS 陳漪勻", "5A05 CHENG TSZ YIU 鄭紫瑤", "5A06 CHOW CHI YAN 周枳昕", "5A07 DENG MENGYUAN 鄧夢圓", "5A08 FAN KA YING 范珈瑩", "5A09 FUNG KA WING 馮家穎", "5A10 KWOK CHING TUNG 郭靖瞳", "5A11 LEUNG HO LI ELISE 梁可莉", "5A12 LIANG KIT YING 梁潔盈", "5A13 LIU XIN YING 劉幸瑩", "5A14 SO KA YIN 蘇珈然", "5A15 SO TUNG YUET 蘇彤悅", "5A16 WAN KA HEI 温珈羲", "5A17 WONG YING YUET 黃盈悅", "5A18 YIM KA CHING 嚴嘉晴", "5A19 ZHENG HAU YU 鄭巧渝", "5A20 CHEN ZIAN 陳子安", "5A21 CHEUNG LON 張朗", "5A22 CHIU PAK HEI 趙柏羲", "5A23 LEE CHEVO LIAM 李子和", "5A24 LEUNG FOON 梁寬", "5A25 LIANG CHIU HO 梁釗豪", "5A26 PANG HOI HIN 彭凱軒", "5A27 TANG CHI HUNG 鄧志鴻", "5A28 WONG HO LAM 王灝霖", "5A29 WONG TSZ KIT 黃祉傑", "5A30 XUE NUOLE 薛諾樂", "5A31 YEUNG MAN WAI 楊文偉"],
+"5B": ["5B01 CHAN HOI TUNG 陳凱童", "5B02 CHAN YING SHUN 陳映淳", "5B03 CHEN JINGYING 陳景莹", "5B04 CHEN YOYO 陳嘉嬋", "5B05 CHEUNG NGAI MEI 張藝鶥", "5B06 CHUI NGAI FEI 徐藝菲", "5B07 FUNG SZE WAI 馮思惠", "5B08 KUK MEI TING 谷美婷", "5B09 KWONG HAU YI 江巧怡", "5B10 LAM HUEN YAU 林瑄悠", "5B11 LAU HO YI 劉皓兒", "5B12 LI SUM YAN 李心欣", "5B13 MAN TSOI YI 文采兒", "5B14 POK MAN TING 濮敏婷", "5B15 TSE WING YI 謝詠兒", "5B16 WONG OI YING JADE 黃愛盈", "5B17 WU SHANSHAN 吳姍珊", "5B18 YAU KA YAN 丘家甄", "5B19 YEUNG WAI YIN 楊惠研", "5B20 CHEUNG HOK YU 張學儒", "5B21 CHUNG KAM HIN 鍾錦軒", "5B22 HUNG KA LEUK 洪嘉略", "5B23 LAM TSUN HANG HENRY 林浚鏗", "5B24 LAW TSZ LONG 羅子朗", "5B25 LI HUNG CHI 李雄始", "5B26 NG TSZ HIM 吳子謙", "5B27 OU YANG XUCHENG 歐陽旭成", "5B28 PAN YIN KWAN 潘彥均", "5B29 RONG KIN PAN 容健彬", "5B30 TAM DANIEL 譚俊希", "5B31 WU RUI 吳瑞"],
+"5C": ["5C01 CHAN SUM YI 陳心怡", "5C02 FAN HIU TUNG 樊曉彤", "5C03 GUAN MANYU 管曼羽", "5C04 GUO PUI YAN 郭貝恩", "5C05 HUANG HUIXIN CINDY 黃惠馨", "5C06 LAI SUM YUET 黎心悦", "5C07 LAI TSZ YIN 黎紫嫣", "5C08 LAU SIN YAN 劉倩欣", "5C09 LOONG WING TUNG 龍穎彤", "5C10 WONG WING SUM 黃穎芯", "5C11 YIU LOK CHING 姚樂晴", "5C12 CHAN CHUN HEI 陳俊熙", "5C13 CHAN HIU MING 陳曉銘", "5C14 CHAN LUK HEI 陳祿晞", "5C15 CHEN NIANXUN 陳念勛", "5C16 CHEUNG KIT YIU 張杰堯", "5C17 CHEUNG SHING KIT 張鋮杰", "5C18 HO HO SUM 何浩琛", "5C19 KOO TSZ HIN 顧梓騫", "5C20 LEUNG KA SHING 梁家鋮", "5C21 MA LOK MAN 馬樂民", "5C22 NG PAK KWAN 吳柏君", "5C23 TANG WANG CHUN 鄧泓雋", "5C24 YAU WING LOK 邱永樂", "5C25 YE YAN HEI 葉恩希", "5C26 ZHANG BAIHAO 張柏浩", "5C27 ZHANG TING KAI 張廷楷"],
+"5D": ["5D01 CHAU KA IU 鄒泇嬈", "5D02 CHAU TSZ WAN 鄒旨蘊", "5D03 HSUI WING KI 許穎淇", "5D04 HUEW PUI NAM 禤珮嵐", "5D05 HUI CHING 許晴", "5D06 LAU YIN LING 劉彥伶", "5D07 MAN CHING NAM 文靜嵐", "5D08 NG CHING YAU 吳青悠", "5D09 TSOI YEE TUNG 蔡依桐", "5D10 WAH KA WING 華迦詠", "5D11 WONG SIN YI 王善儀", "5D12 WONG TSZ YIN CAT 王子嫣", "5D13 XIONG QINGQIAN 熊慶茜", "5D14 YE HIU WAI 葉曉慧", "5D15 CHAN CHEUK LAM 陳卓霖", "5D16 CHAN HIU FAI 陳曉煇", "5D17 CHAN KA CHUN 陳嘉俊", "5D18 CHAN KING YIN KINGSLEY 陳敬賢", "5D19 CHEN YIU KIN 陳堯堅", "5D20 CHENG ISAAC 鄭子頌", "5D21 CHEUNG HIU KWAN 張曉軍", "5D22 HUNG HING HEY 孔慶熙", "5D23 KOON LOK HANG 官樂恆", "5D24 LAM WAI LOK 林湋洛", "5D25 LAU WING TO 劉穎濤", "5D26 LEE TSZ HIN 李子軒", "5D27 LEUNG HOI TIK 梁凱廸", "5D28 MAN HO SUM 文皓心", "5D29 WANEM BIJAY 王太明", "5D30 WONG YIU HONG 王耀康", "5D31 ZHOU CHAK HEI ETHAN 周澤曦"],
+"6A": ["6A01 CHENG HAU YEE 鄭巧兒", "6A02 CHENG KA YI 鄭家懿", "6A03 CHEUNG WAN HEI 張芸晞", "6A04 CHEUNG WUN YAN 張桓欣", "6A05 CHOI MAN SHAN 蔡旻姍", "6A06 DU CLARE 杜春雨", "6A07 GUO FEIQING 郭菲晴", "6A08 KONG KA YAN 江嘉欣", "6A09 LAM LOK YIU 林洛瑤", "6A10 LAM SIN YEE 林善儀", "6A11 LIN PUI SHAN 林沛珊", "6A12 NG MAN KI 吳曼錤", "6A13 SUEN CHING TUNG 孫靖桐", "6A14 TAM WING SZE 譚穎詩", "6A15 TANG CHUN SUM 鄧盡心", "6A16 TSANG SUM YIN 曾心鈃", "6A17 WONG PO IN 黃寶妍", "6A18 WONG SHUK YIN 王淑賢", "6A19 YIP HOI YAN 葉凱欣", "6A20 ZHENG SIYAN 鄭思言", "6A21 LAI PUN HIM 賴本謙", "6A22 LAW HO HIN 羅浩軒", "6A23 LEUNG CHING YIN 梁政彥", "6A25 WONG KAI LOK 黃啟樂"],
+"6B": ["6B01 CHAN HAU YU 陳巧瑜", "6B02 CHAN SUM YU ALGIE 陳杺榆", "6B03 CHIU WAI KI 趙韋淇", "6B04 HO PUI YEE 何沛頤", "6B05 HO SZE YUI 何思睿", "6B06 HUI LOK LAM CYNTHIA 許樂琳", "6B07 LIN MAN YUNG 林漫蓉", "6B08 LIU HOI YING 廖凱楹", "6B09 MANG TSZ YING 孟芷瑩", "6B10 MOK HOI TIK 莫凱迪", "6B11 NG YAN WAI 吳茵慧", "6B12 POON CHING PO 潘証寶", "6B13 TANG CHEUK YI 鄧卓兒", "6B14 TSANG HOI TUNG 曾凱彤", "6B15 VONG HO KIU 黃可喬", "6B16 WEI YI LIN 魏怡琳", "6B17 WONG SIN TUNG 黃茜瞳", "6B18 WONG TSZ HUEN 黃子瑄", "6B19 XIE KA YEE 謝嘉儀", "6B20 YU KA YING 余加盈", "6B21 CHAN KING HONG 陳景匡", "6B22 CHIU CHEUK LAM 趙卓藍", "6B23 CHUNG CHEUK KIT 鍾焯傑", "6B24 FUNG YAT HEI 馮逸希", "6B25 HUANG ZHE 黃哲", "6B26 NG CHUN YU 吳俊儒", "6B27 YIU CHI HIM 姚沚謙"],
+"6C": ["6C01 CHING CHIN YI 程千懿", "6C02 CHU WAI CHING 朱葦晴", "6C03 CHUNG YU TUNG 鍾雨潼", "6C04 FUNG SI MING 馮思銘", "6C05 KWAN ELLIE 關詠姸", "6C06 KWOK CHEUK TUNG 郭芍彤", "6C07 LAI CHEUK LAM 黎焯琳", "6C08 LAM TSZ KI 林子淇", "6C09 LEE YUI CHING 李睿婧", "6C10 LEUNG KWAN CHING 梁筠晴", "6C11 NG TSZ KI 吳紫祈", "6C12 TAM HEI YIN 譚曦賢", "6C13 WONG CHU WUN 王姝媛", "6C14 WONG YAT CHING 黃溢晴", "6C15 CHAN CHEUK LAP 陳卓立", "6C16 CHAN YIU CHUEN 陳耀全", "6C17 HE LAM TSANG 何林錚", "6C18 HO CHUEN HIM 何存謙", "6C19 LEI DEYU 雷德裕", "6C20 LI LOK HIM 李樂謙", "6C21 TANG HONG YU 鄧康裕", "6C22 TANG LONG KIU ROY 鄧朗翹", "6C23 TONG CHEUK HAN 唐卓恒", "6C24 TSANG CHEUK HIM 曾焯謙", "6C25 WEI KWING YU 魏炯裕", "6C26 WONG CHUN CHIU 黃俊潮", "6C27 YEUNG LOK TO 楊洛滔", "6C28 ZHU SUI WAN TONY 諸瑞雲"],
+"6D": ["6D01 CHAN CHI WING 陳智穎", "6D02 CHAN SUM YIN 陳心言", "6D03 CHAN YUEN LAM 陳菀琳", "6D04 CHONG YIU TONG 莊曜同", "6D05 CHOW HO YAN 周可欣", "6D06 FENG YINGXI 馮穎熙", "6D07 HO MAN HIU CYNTHIA 何旻曉", "6D08 HO TSZ KEI 何沚錡", "6D09 KAN SUM YUET 簡心悅", "6D10 LAI HIU YUET 黎曉悅", "6D11 LAM CHUNG YAN 林頌恩", "6D12 LAU OI YING 劉靄瀅", "6D13 TANG HEI LAM 鄧希琳", "6D14 WONG KIU YAN 黃喬欣", "6D15 WONG WING HEI 黃詠希", "6D16 CHAN PAK KIU 陳柏翹", "6D17 CHAN PUN LAP 陳本立", "6D18 CHAN WAI WA 陳偉華", "6D19 CHOI WAN CHAK 蔡昀澤", "6D20 CHONG HO CHING 莊皓程", "6D21 HO PAK YIN 何珀賢", "6D22 KWONG HOI KIT 鄺凱杰", "6D23 LAU KAI SUN 劉啟辰", "6D24 LOK WAI TO 駱韋圖", "6D25 PENG YIN POK 彭彥博", "6D26 TSE KWOK KEUNG 謝國強", "6D27 TSOI YUK SAN 蔡旭燊", "6D28 WONG CHUN YIU 王雋堯", "6D29 ZHANG TIN YU 張天宇"]
 };
 
 /* ── State ── */
-var selectedStudents = [];
-var selectedClasses = [];
+var selectedClasses = [];    /* whole classes */
+var groupStudents = [];      /* individual students */
+var pickedSet = {};          /* students ticked in the pick grid (not yet added) */
+var targetStars = {};        /* NEW: target -> stars for that class/student */
+var CODE_INDEX = {};         /* NEW: "1A01" -> "1A01 CHAN SIN YING 陳倩凝" */
 var selectedReasons = [];
 var otherChipActive = false;
 var teacherHighlightIndex = -1;
 var balanceCache = {};
 var isFetchingBalances = false;
-var carts = {};          /* target -> { lucky, bbss, tuckshop } */
-var cardRefs = {};       /* target -> DOM references of its cart card */
-var newlyAdded = {};     /* targets to animate on next render */
+var carts = {};
+var cardRefs = {};
+var newlyAdded = {};
 var pendingResolve = null;
 
-/* ── Toast (replaces alert) ── */
+/* ── Toast ── */
 function showToast(message, type) {
     var boxClass = 'toast-box';
     if (type === 'success') boxClass += ' success-toast';
@@ -666,6 +660,8 @@ function el(tag, cls, text) {
     if (text !== undefined) e.textContent = text;
     return e;
 }
+
+function isClassTarget(t) { return /^[1-6][A-D]$/.test(t); }
 
 function normalizeStr(str) {
     return str ? str.replace(/"/g, '').replace(/\s+/g, ' ').trim().toLowerCase() : '';
@@ -725,9 +721,7 @@ async function calculateBalances(targets) {
     return balances;
 }
 
-/* ══════════════════════════════════════════════════════════════
- *  Permission helpers
- * ────────────────────────────────────────────────────────────── */
+/* ── Permission helpers ── */
 function isSuperAdmin(name) { return SUPER_ADMINS.indexOf(name) !== -1; }
 function isRedeemOnlyAdmin(name) { return REDEEM_ONLY_ADMINS.indexOf(name) !== -1; }
 function isAnyAdmin(name) { return isSuperAdmin(name) || isRedeemOnlyAdmin(name); }
@@ -780,7 +774,6 @@ function filterTeachers() {
         return initials.indexOf(query) === 0 || fullLower.indexOf(query) !== -1;
     });
 
-    /* Regular teachers alphabetically first, then admins at the bottom */
     filtered.sort(function(a, b) {
         var aIsAdmin = REDEEM_ONLY_ADMINS.indexOf(a) !== -1;
         var bIsAdmin = REDEEM_ONLY_ADMINS.indexOf(b) !== -1;
@@ -815,7 +808,258 @@ function selectTeacher(teacher) {
 }
 
 /* ══════════════════════════════════════════════════════════════
- *  Per-target shopping carts
+ *  Targets (whole classes + individual students) & stars per target
+ * ────────────────────────────────────────────────────────────── */
+function clampStars(n) {
+    n = parseInt(n, 10);
+    if (isNaN(n) || n < 1) n = 1;
+    return Math.min(n, MAX_STARS);
+}
+function getDefaultStars() { return clampStars(document.getElementById('starsSelect').value); }
+function getStars(t) { return targetStars[t] || getDefaultStars(); }
+
+function getCurrentTargets() { return selectedClasses.concat(groupStudents); }
+
+/* Adds a class or student. Returns true if it was new.
+ * If it already exists and "stars" is given, its stars are updated. */
+function addTarget(t, stars) {
+    var list = isClassTarget(t) ? selectedClasses : groupStudents;
+    var isNew = list.indexOf(t) === -1;
+    if (isNew) {
+        list.push(t);
+        newlyAdded[t] = true;
+        targetStars[t] = stars || getDefaultStars();
+    } else if (stars) {
+        targetStars[t] = stars;
+    }
+    return isNew;
+}
+
+function removeTarget(t) {
+    if (isClassTarget(t)) selectedClasses = selectedClasses.filter(function(x) { return x !== t; });
+    else groupStudents = groupStudents.filter(function(x) { return x !== t; });
+    delete carts[t];
+    delete targetStars[t];
+    renderTargets();
+    hideBalanceError();
+}
+
+function changeTargetStars(t, delta) {
+    targetStars[t] = clampStars(getStars(t) + delta);
+    renderStarList();
+}
+
+function setAllStars(n) {
+    getCurrentTargets().forEach(function(t) { targetStars[t] = clampStars(n); });
+    renderStarList();
+}
+
+/* Re-draw everything that depends on the target list */
+function renderTargets() {
+    document.getElementById('classNames').value = selectedClasses.join(',');
+    renderStarList();
+    renderPickGrid();
+    if (isDeductMode()) renderBoard();
+}
+
+function renderStarList() {
+    var list = document.getElementById('starList');
+    var totalBox = document.getElementById('starListTotal');
+    var targets = getCurrentTargets();
+    list.innerHTML = '';
+    document.getElementById('starListCount').textContent = targets.length ? '(' + targets.length + ')' : '';
+
+    if (targets.length === 0) {
+        list.innerHTML = '<div class="sl-empty">No classes or students yet.<br>Add them above &mdash; each one can get a different number of stars.</div>';
+        totalBox.style.display = 'none';
+        if (!isDeductMode()) newlyAdded = {};
+        return;
+    }
+
+    var totalStudents = 0, totalStars = 0;
+    targets.forEach(function(t) {
+        var isCls = isClassTarget(t);
+        var parts = splitTarget(t);
+        var stars = getStars(t);
+        var size = isCls ? (CLASS_STUDENTS[t] || []).length : 1;
+        totalStudents += size;
+        totalStars += size * stars;
+
+        var row = el('div', 'sl-row' + (isCls ? ' is-class' : '') + (newlyAdded[t] ? ' new' : ''));
+        var info = el('div', 'sl-info');
+        info.appendChild(el('span', 'sl-code', parts.code));
+        var nm = el('span', 'sl-name', isCls ? 'Whole class \u00b7 ' + size + ' students' : parts.name);
+        nm.title = t;
+        info.appendChild(nm);
+        if (!isCls && selectedClasses.indexOf(t.substring(0, 2)) !== -1) {
+            info.appendChild(el('span', 'sl-warn', '\u26A0 Whole class ' + t.substring(0, 2) + ' is also in the list \u2014 will get both'));
+        }
+
+        var q = el('div', 'cart-qty sm');
+        var minus = el('button', 'qty-btn', '\u2212'); minus.type = 'button';
+        minus.addEventListener('click', function() { changeTargetStars(t, -1); });
+        var val = el('span', 'qty-value', stars + ' \u2b50');
+        var plus = el('button', 'qty-btn', '+'); plus.type = 'button';
+        plus.addEventListener('click', function() { changeTargetStars(t, 1); });
+        q.appendChild(minus); q.appendChild(val); q.appendChild(plus);
+
+        var rm = el('button', 'rcard-remove', '\u00d7');
+        rm.type = 'button'; rm.title = 'Remove';
+        rm.addEventListener('click', function() { removeTarget(t); });
+
+        row.appendChild(info); row.appendChild(q); row.appendChild(rm);
+        list.appendChild(row);
+    });
+
+    totalBox.style.display = 'block';
+    totalBox.textContent = 'Total: ' + totalStars + ' \u2b50 to ' + totalStudents + ' student(s)';
+    if (!isDeductMode()) newlyAdded = {};
+}
+
+/* ── Pick students from a class ── */
+function onGroupClassChange() {
+    pickedSet = {};
+    renderPickGrid();
+}
+
+function renderPickGrid() {
+    var cls = document.getElementById('groupClassSelect').value;
+    var grid = document.getElementById('pickGrid');
+    var list = CLASS_STUDENTS[cls] || [];
+    grid.innerHTML = '';
+    document.getElementById('pickToolbar').style.display = list.length ? 'flex' : 'none';
+
+    list.forEach(function(name) {
+        var added = groupStudents.indexOf(name) !== -1;
+        var parts = splitTarget(name);
+        var tile = el('button', 'pick-tile');
+        tile.type = 'button';
+        tile.title = added ? name + ' (already added)' : name;
+        var box = el('span', 'pick-box', (added || pickedSet[name]) ? '\u2713' : '');
+        if (added) tile.classList.add('added');
+        else if (pickedSet[name]) tile.classList.add('checked');
+
+        var txt = el('span', 'pick-tile-text');
+        txt.appendChild(document.createTextNode(parts.code));
+        txt.appendChild(el('small', '', parts.name));
+        tile.appendChild(box);
+        tile.appendChild(txt);
+
+        tile.addEventListener('click', function() {
+            if (groupStudents.indexOf(name) !== -1) return;
+            if (pickedSet[name]) {
+                delete pickedSet[name];
+                tile.classList.remove('checked');
+                box.textContent = '';
+            } else {
+                pickedSet[name] = true;
+                tile.classList.add('checked');
+                box.textContent = '\u2713';
+            }
+            updatePickCount();
+        });
+        grid.appendChild(tile);
+    });
+    updatePickCount();
+}
+
+function updatePickCount() {
+    var n = Object.keys(pickedSet).length;
+    var cls = document.getElementById('groupClassSelect').value;
+    var list = CLASS_STUDENTS[cls] || [];
+    var addedHere = list.filter(function(s) { return groupStudents.indexOf(s) !== -1; }).length;
+    document.getElementById('pickCount').textContent = n + ' selected' + (addedHere ? ' \u00b7 ' + addedHere + ' already added' : '');
+    var btn = document.getElementById('pickAddBtn');
+    btn.disabled = n === 0;
+    btn.textContent = n === 0 ? '+ ADD Selected Students'
+        : '+ ADD ' + n + ' Selected Student' + (n > 1 ? 's' : '') +
+          (isDeductMode() ? '' : ' (' + getDefaultStars() + ' \u2b50 each)');
+}
+
+function pickAll() {
+    var cls = document.getElementById('groupClassSelect').value;
+    (CLASS_STUDENTS[cls] || []).forEach(function(name) {
+        if (groupStudents.indexOf(name) === -1) pickedSet[name] = true;
+    });
+    renderPickGrid();
+}
+
+function pickNone() {
+    pickedSet = {};
+    renderPickGrid();
+}
+
+function addPickedStudents() {
+    var cls = document.getElementById('groupClassSelect').value;
+    var newTargets = [];
+    (CLASS_STUDENTS[cls] || []).forEach(function(name) {
+        if (pickedSet[name] && addTarget(name)) newTargets.push(name);
+    });
+    pickedSet = {};
+    renderTargets();
+    if (isDeductMode() && newTargets.length > 0) {
+        scrollToCard(newTargets[0]);
+        fetchBalanceForTargets(newTargets);
+    }
+}
+
+/* ── NEW: Quick add by student number ── */
+function quickAdd() {
+    var box = document.getElementById('quickAddBox');
+    var msg = document.getElementById('quickAddMsg');
+    var text = box.value.replace(/\uFF1A/g, ':').toUpperCase();
+    var tokens = text.split(/[\s,;\uFF0C\u3001\uFF1B]+/).filter(function(x) { return x; });
+    if (tokens.length === 0) {
+        msg.innerHTML = '<span class="bad">Please type at least one student number, e.g. 1A01</span>';
+        return;
+    }
+
+    var newTargets = [], updated = 0, bad = [];
+    tokens.forEach(function(tok) {
+        /* 1A01 | 1A01-1A10 | 1A01-10 | 1A   + optional :3 / *3 / x3 / =3 */
+        var m = tok.match(/^([1-6][A-D])(\d{1,2})?(?:-(?:[1-6][A-D])?(\d{1,2}))?(?:[:*X=](\d{1,2}))?$/);
+        if (!m || (m[3] && !m[2])) { bad.push(tok); return; }
+
+        var cls = m[1];
+        var stars = m[4] ? clampStars(m[4]) : null;
+        var found = [];
+
+        if (!m[2]) {
+            found.push(cls);                               /* whole class */
+        } else {
+            var from = parseInt(m[2], 10);
+            var to = m[3] ? parseInt(m[3], 10) : from;
+            if (to < from) { var tmp = from; from = to; to = tmp; }
+            for (var n = from; n <= to; n++) {
+                var code = cls + (n < 10 ? '0' : '') + n;
+                if (CODE_INDEX[code]) found.push(CODE_INDEX[code]);   /* gaps in a range are skipped */
+            }
+            if (found.length === 0) bad.push(tok);
+        }
+
+        found.forEach(function(t) {
+            if (addTarget(t, stars)) newTargets.push(t);
+            else if (stars) updated++;
+        });
+    });
+
+    var parts = [];
+    if (newTargets.length) parts.push('<span class="ok">\u2705 Added ' + newTargets.length + '</span>');
+    if (updated) parts.push('<span class="ok">\u270F\uFE0F Stars updated for ' + updated + '</span>');
+    if (bad.length) parts.push('<span class="bad">\u274C Not found: ' + escapeHTML(bad.join(', ')) + '</span>');
+    if (!parts.length) parts.push('<span class="ok">Already in the list.</span>');
+    msg.innerHTML = parts.join(' &nbsp;\u00b7&nbsp; ');
+
+    box.value = bad.join(' ');   /* keep only the entries that need fixing */
+    renderTargets();
+    if (isDeductMode() && newTargets.length > 0) {
+        scrollToCard(newTargets[0]);
+        fetchBalanceForTargets(newTargets);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+ *  Per-target shopping carts (redemption) — unchanged
  * ────────────────────────────────────────────────────────────── */
 function getCart(t) {
     if (!carts[t]) carts[t] = { lucky: 0, bbss: 0, tuckshop: 0 };
@@ -832,7 +1076,7 @@ function cartReason(c) {
 }
 
 function splitTarget(t) {
-    if (/^[1-6][A-D]$/.test(t)) return { code: t, name: 'Whole class' };
+    if (isClassTarget(t)) return { code: t, name: 'Whole class' };
     var i = t.indexOf(' ');
     if (i === -1) return { code: t, name: '' };
     return { code: t.substring(0, i), name: t.substring(i + 1) };
@@ -866,18 +1110,15 @@ function emptyAllCarts() {
     renderBoard();
 }
 
-function removeTarget(t) {
-    if (document.getElementById('rewardType').value === 'class') removeClassTag(t);
-    else removeStudentTag(t);
-}
-
 function removeAllTargets() {
     var targets = getCurrentTargets();
     if (targets.length === 0) return;
-    if (!confirm('Remove all ' + targets.length + ' cart(s)?')) return;
-    targets.forEach(function(t) { delete carts[t]; });
-    if (document.getElementById('rewardType').value === 'class') { selectedClasses = []; renderClassTags(); }
-    else { selectedStudents = []; renderStudentTags(); }
+    if (!confirm('Remove all ' + targets.length + ' class(es)/student(s)?')) return;
+    targets.forEach(function(t) { delete carts[t]; delete targetStars[t]; });
+    selectedClasses = [];
+    groupStudents = [];
+    pickedSet = {};
+    renderTargets();
     hideBalanceError();
 }
 
@@ -987,11 +1228,10 @@ function renderBoard() {
     grid.innerHTML = '';
     cardRefs = {};
     var targets = getCurrentTargets();
-    var isClass = document.getElementById('rewardType').value === 'class';
 
     if (targets.length === 0) {
-        grid.innerHTML = '<div class="board-empty"><span class="big">\uD83D\uDED2</span>No carts yet.<br>Pick a ' +
-            (isClass ? 'class' : 'student') + ' on the left and press <strong>+ ADD</strong>.</div>';
+        grid.innerHTML = '<div class="board-empty"><span class="big">\uD83D\uDED2</span>No carts yet.<br>' +
+            'Add a whole class, tick students, or type student numbers on the left and press <strong>+ ADD</strong>.</div>';
     } else {
         targets.forEach(function(t) { grid.appendChild(buildCard(t)); });
     }
@@ -1026,22 +1266,10 @@ function isDeductMode() {
     return document.getElementById('actionMode').value === 'DEDUCT';
 }
 
-function getCurrentTargets() {
-    var type = document.getElementById('rewardType').value;
-    return type === 'class' ? selectedClasses.slice() : selectedStudents.slice();
-}
-
-function renderCurrentTags() {
-    var type = document.getElementById('rewardType').value;
-    if (type === 'class') renderClassTags();
-    else renderStudentTags();
-}
-
 async function fetchBalanceForTargets(targets) {
     if (!targets || targets.length === 0) return;
     var uncached = targets.filter(function(t) { return balanceCache[t] === undefined; });
     if (uncached.length === 0) {
-        uncached = [];
         targets.forEach(refreshCard);
         return;
     }
@@ -1120,6 +1348,7 @@ function setActionMode(mode) {
         document.getElementById('formHeader').textContent = '\u2b50 Star Reward System';
         document.getElementById('reasonSection').style.display = 'block';
         document.getElementById('starsSection').style.display = 'block';
+        document.getElementById('starListSection').style.display = 'block';
     } else {
         document.body.classList.add('wide');
         document.getElementById('btnModeDeduct').className = 'action-btn active-deduct';
@@ -1129,6 +1358,7 @@ function setActionMode(mode) {
         document.getElementById('formHeader').textContent = '\uD83C\uDF81 Reward Redemption';
         document.getElementById('reasonSection').style.display = 'none';
         document.getElementById('starsSection').style.display = 'none';
+        document.getElementById('starListSection').style.display = 'none';
 
         selectedReasons = [];
         otherChipActive = false;
@@ -1141,152 +1371,30 @@ function setActionMode(mode) {
         if (targets.length > 0) fetchBalanceForTargets(targets);
     }
 
-    renderCurrentTags();
-}
-
-function setMode(mode) {
-    document.getElementById('rewardType').value = mode;
-    hideBalanceError();
-    if (mode === 'class') {
-        document.getElementById('btnClass').classList.add('active');
-        document.getElementById('btnStudent').classList.remove('active');
-        document.getElementById('classStreamSection').style.display = 'block';
-        document.getElementById('studentStreamSection').style.display = 'none';
-    } else {
-        document.getElementById('btnStudent').classList.add('active');
-        document.getElementById('btnClass').classList.remove('active');
-        document.getElementById('classStreamSection').style.display = 'none';
-        document.getElementById('studentStreamSection').style.display = 'block';
-    }
-    if (isDeductMode()) {
-        renderBoard();
-        fetchBalanceForTargets(getCurrentTargets());
-    }
-}
-
-function populateStudents() {
-    var cls = document.getElementById('studentClass').value;
-    var sel = document.getElementById('studentSelect');
-    sel.innerHTML = '<option value="" disabled selected>Select a student</option>';
-    if (CLASS_STUDENTS[cls]) {
-        CLASS_STUDENTS[cls].forEach(function(name) {
-            var o = document.createElement('option');
-            o.value = name; o.textContent = name;
-            sel.appendChild(o);
-        });
-        document.getElementById('selectAllStudentsBar').style.display = 'flex';
-    } else {
-        document.getElementById('selectAllStudentsBar').style.display = 'none';
-    }
-}
-
-function addStudentTag() {
-    var val = document.getElementById('studentSelect').value;
-    if (val && selectedStudents.indexOf(val) === -1) {
-        selectedStudents.push(val);
-        newlyAdded[val] = true;
-        renderStudentTags();
-        if (isDeductMode()) {
-            scrollToCard(val);
-            fetchBalanceForTargets([val]);
-        }
-    } else if (val && isDeductMode()) {
-        scrollToCard(val);
-    }
-}
-
-function removeStudentTag(name) {
-    selectedStudents = selectedStudents.filter(function(s) { return s !== name; });
-    delete carts[name];
-    renderStudentTags();
-    hideBalanceError();
-}
-
-function addAllStudentsInClass() {
-    var cls = document.getElementById('studentClass').value;
-    var newTargets = [];
-    if (CLASS_STUDENTS[cls]) {
-        CLASS_STUDENTS[cls].forEach(function(name) {
-            if (selectedStudents.indexOf(name) === -1) {
-                selectedStudents.push(name);
-                newlyAdded[name] = true;
-                newTargets.push(name);
-            }
-        });
-        renderStudentTags();
-        if (isDeductMode() && newTargets.length > 0) {
-            fetchBalanceForTargets(newTargets);
-        }
-    }
-}
-
-function renderStudentTags() {
-    var c = document.getElementById('selectedStudentsList');
-    c.innerHTML = '';
-    selectedStudents.forEach(function(name) {
-        var tag = el('div', 'tag');
-        var shortLabel = name.length > 20 ? name.substring(0, 20) + '...' : name;
-        tag.appendChild(el('span', 'tag-label', shortLabel));
-        var btn = el('span', 'tag-remove', '\u00d7');
-        btn.addEventListener('click', function() { removeStudentTag(name); });
-        tag.appendChild(btn);
-        c.appendChild(tag);
-    });
-    document.getElementById('studentNames').value = selectedStudents.join(',');
-    if (isDeductMode() && document.getElementById('rewardType').value === 'student') renderBoard();
+    renderTargets();
 }
 
 function addClassTag() {
     var val = document.getElementById('classSelect').value;
-    if (val && selectedClasses.indexOf(val) === -1) {
-        selectedClasses.push(val);
-        newlyAdded[val] = true;
-        renderClassTags();
-        if (isDeductMode()) {
-            scrollToCard(val);
-            fetchBalanceForTargets([val]);
-        }
-    } else if (val && isDeductMode()) {
+    if (!val) return;
+    var isNew = addTarget(val);
+    renderTargets();
+    if (isDeductMode()) {
         scrollToCard(val);
+        if (isNew) fetchBalanceForTargets([val]);
     }
-}
-
-function removeClassTag(name) {
-    selectedClasses = selectedClasses.filter(function(s) { return s !== name; });
-    delete carts[name];
-    renderClassTags();
-    hideBalanceError();
 }
 
 function addAllClasses() {
     var allClasses = ["1A","1B","1C","1D","2A","2B","2C","2D","3A","3B","3C","3D","4A","4B","4C","4D","5A","5B","5C","5D","6A","6B","6C","6D"];
     var newTargets = [];
     allClasses.forEach(function(cls) {
-        if (selectedClasses.indexOf(cls) === -1) {
-            selectedClasses.push(cls);
-            newlyAdded[cls] = true;
-            newTargets.push(cls);
-        }
+        if (addTarget(cls)) newTargets.push(cls);
     });
-    renderClassTags();
+    renderTargets();
     if (isDeductMode() && newTargets.length > 0) {
         fetchBalanceForTargets(newTargets);
     }
-}
-
-function renderClassTags() {
-    var c = document.getElementById('selectedClassesList');
-    c.innerHTML = '';
-    selectedClasses.forEach(function(name) {
-        var tag = el('div', 'tag');
-        tag.appendChild(el('span', 'tag-label', name));
-        var btn = el('span', 'tag-remove', '\u00d7');
-        btn.addEventListener('click', function() { removeClassTag(name); });
-        tag.appendChild(btn);
-        c.appendChild(tag);
-    });
-    document.getElementById('classNames').value = selectedClasses.join(',');
-    if (isDeductMode() && document.getElementById('rewardType').value === 'class') renderBoard();
 }
 
 function hideBalanceError() { var e = document.getElementById('balanceError'); e.style.display = 'none'; e.innerHTML = ''; }
@@ -1314,7 +1422,6 @@ function postToServer() {
             resolve(result);
         }
         pendingResolve = finish;
-        /* If the server never posts back, assume success (same as original behaviour) */
         fallback = setTimeout(function() { finish({ success: true, assumed: true, data: {} }); }, 10000);
         iframe.onload = function() {
             setTimeout(function() { finish({ success: true, assumed: true, data: {} }); }, 1500);
@@ -1344,6 +1451,53 @@ function handleServerFailure(data, prefixNote) {
     }
 }
 
+/* Send batches one after another.
+ * Each batch: { type: 'class'|'student', targets: [...], stars, cart, reason } */
+async function runBatches(batches, actionMode, submitBtn) {
+    isSubmitting = true;
+    submitBtn.disabled = true;
+    var customNote = document.getElementById('reason').value;
+    var done = [];
+
+    for (var i = 0; i < batches.length; i++) {
+        var b = batches[i];
+        submitBtn.textContent = batches.length > 1 ? ('Submitting ' + (i + 1) + ' / ' + batches.length + '...') : 'Submitting...';
+
+        document.getElementById('actionMode').value = actionMode;
+        document.getElementById('rewardType').value = b.type;
+        document.getElementById('classNames').value = b.type === 'class' ? b.targets.join(',') : '';
+        document.getElementById('studentNames').value = b.type === 'student' ? b.targets.join(',') : '';
+        document.getElementById('starsValue').value = b.stars;
+        document.getElementById('luckyDrawQtyField').value = b.cart.lucky;
+        document.getElementById('bbssSurpriseQtyField').value = b.cart.bbss;
+        document.getElementById('tuckShopCouponQtyField').value = b.cart.tuckshop;
+        document.getElementById('reason').value = b.reason;
+
+        var pending = postToServer();
+        document.getElementById('reason').value = customNote;   /* restore UI state */
+        var result = await pending;
+
+        if (!result.success) {
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            return { ok: false, done: done, data: result.data };
+        }
+        done = done.concat(b.targets);
+    }
+
+    isSubmitting = false;
+    submitBtn.disabled = false;
+    return { ok: true, done: done };
+}
+
+/* Remove targets that were already processed (prevents double stars / double redemption on retry) */
+function dropTargets(list) {
+    list.forEach(function(t) { delete carts[t]; delete balanceCache[t]; delete targetStars[t]; });
+    selectedClasses = selectedClasses.filter(function(x) { return list.indexOf(x) === -1; });
+    groupStudents = groupStudents.filter(function(x) { return list.indexOf(x) === -1; });
+    renderTargets();
+}
+
 /* ── Form submission ── */
 async function handleFormSubmit(event) {
     event.preventDefault();
@@ -1364,20 +1518,15 @@ async function handleFormSubmit(event) {
         return;
     }
 
-    var targetMode = document.getElementById('rewardType').value;
-    if (targetMode === 'class' && selectedClasses.length === 0) {
-        showToast('Please add at least one class before submitting.', 'error');
-        return;
-    }
-    if (targetMode === 'student' && selectedStudents.length === 0) {
-        showToast('Please add at least one student before submitting.', 'error');
+    var allTargets = getCurrentTargets();
+    if (allTargets.length === 0) {
+        showToast('Please add at least one class or student before submitting.', 'error');
         return;
     }
 
     var actionMode = document.getElementById('actionMode').value;
     var submitBtn = document.getElementById('submitBtn');
 
-    /* Client-side permission guard */
     if (actionMode === 'ADD' && isRedeemOnlyAdmin(teacher)) {
         showToast('This admin account can only redeem stars, not add.', 'error');
         return;
@@ -1387,138 +1536,104 @@ async function handleFormSubmit(event) {
         return;
     }
 
-    /* ─────────── ADD MODE (unchanged single submission) ─────────── */
+    var batches = [];
+    var emptyCart = { lucky: 0, bbss: 0, tuckshop: 0 };
+
     if (actionMode === 'ADD') {
-        document.getElementById('starsValue').value = document.getElementById('starsSelect').value;
-        document.getElementById('luckyDrawQtyField').value = 0;
-        document.getElementById('bbssSurpriseQtyField').value = 0;
-        document.getElementById('tuckShopCouponQtyField').value = 0;
-        document.getElementById('reason').value = getFullReason();
-        document.getElementById('classNames').value = selectedClasses.join(',');
-        document.getElementById('studentNames').value = selectedStudents.join(',');
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-        isSubmitting = true;
-        var r = await postToServer();
-        isSubmitting = false;
-        submitBtn.disabled = false;
-
-        if (r.success) {
-            showToast('\u2b50 Stars Submitted Successfully!', 'success');
-            setTimeout(function() { location.reload(); }, 1500);
-        } else {
-            handleServerFailure(r.data);
-            submitBtn.textContent = defaultSubmitText();
-        }
-        return;
-    }
-
-    /* ─────────── DEDUCT MODE (one cart per target) ─────────── */
-    var allTargets = getCurrentTargets();
-    var active = allTargets.filter(function(t) { return cartTotal(getCart(t)) > 0; });
-    if (active.length === 0) {
-        showToast('Please add at least one item to a cart.', 'error');
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Checking Balance...';
-
-    try {
-        var balances = await calculateBalances(active);
-        active.forEach(function(t) {
-            balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
+        /* ─────────── GIVE STARS ───────────
+         * Each class/student has its own stars. Targets with the same
+         * type + stars are grouped into one request. */
+        var reasonText = getFullReason();
+        var starGroups = {};
+        allTargets.forEach(function(t) {
+            var type = isClassTarget(t) ? 'class' : 'student';
+            var s = getStars(t);
+            var key = type + '|' + s;
+            if (starGroups[key] === undefined) {
+                starGroups[key] = batches.length;
+                batches.push({ type: type, targets: [], stars: s, cart: emptyCart, reason: reasonText });
+            }
+            batches[starGroups[key]].targets.push(t);
         });
-        allTargets.forEach(refreshCard);
-
-        var insufficientList = [];
-        active.forEach(function(t) {
-            var need = cartTotal(getCart(t));
-            if (balanceCache[t] < need) insufficientList.push({ name: t, balance: balanceCache[t], need: need });
-        });
-        if (insufficientList.length > 0) {
-            var html = '\u274c <strong>Redemption Rejected!</strong> Not enough stars.<br>';
-            insufficientList.forEach(function(item) {
-                html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> has <strong>' + item.balance +
-                        ' \u2b50</strong> but the cart needs <strong>' + item.need + ' \u2b50</strong>.<br>';
-            });
-            html += '<br>Please adjust the red cart(s) and try again.';
-            showBalanceError(html);
-            submitBtn.disabled = false;
-            submitBtn.textContent = defaultSubmitText();
-            if (cardRefs[insufficientList[0].name]) scrollToCard(insufficientList[0].name);
+    } else {
+        /* ─────────── REDEEM (one cart per target) ─────────── */
+        var active = allTargets.filter(function(t) { return cartTotal(getCart(t)) > 0; });
+        if (active.length === 0) {
+            showToast('Please add at least one item to a cart.', 'error');
             return;
         }
-    } catch (error) {
-        showToast('Error: ' + escapeHTML(error.message), 'error');
-        submitBtn.disabled = false;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Checking Balance...';
+        try {
+            var balances = await calculateBalances(active);
+            active.forEach(function(t) {
+                balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
+            });
+            allTargets.forEach(refreshCard);
+
+            var insufficientList = [];
+            active.forEach(function(t) {
+                var need = cartTotal(getCart(t));
+                if (balanceCache[t] < need) insufficientList.push({ name: t, balance: balanceCache[t], need: need });
+            });
+            if (insufficientList.length > 0) {
+                var html = '\u274c <strong>Redemption Rejected!</strong> Not enough stars.<br>';
+                insufficientList.forEach(function(item) {
+                    html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> has <strong>' + item.balance +
+                            ' \u2b50</strong> but the cart needs <strong>' + item.need + ' \u2b50</strong>.<br>';
+                });
+                html += '<br>Please adjust the red cart(s) and try again.';
+                showBalanceError(html);
+                submitBtn.disabled = false;
+                submitBtn.textContent = defaultSubmitText();
+                scrollToCard(insufficientList[0].name);
+                return;
+            }
+        } catch (error) {
+            showToast('Error: ' + escapeHTML(error.message), 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = defaultSubmitText();
+            return;
+        }
+
+        var groupIndex = {};
+        active.forEach(function(t) {
+            var c = getCart(t);
+            var type = isClassTarget(t) ? 'class' : 'student';
+            var key = type + '|' + c.lucky + '|' + c.bbss + '|' + c.tuckshop;
+            if (groupIndex[key] === undefined) {
+                groupIndex[key] = batches.length;
+                var copy = { lucky: c.lucky, bbss: c.bbss, tuckshop: c.tuckshop };
+                batches.push({ type: type, targets: [], stars: cartTotal(copy), cart: copy, reason: cartReason(copy) });
+            }
+            batches[groupIndex[key]].targets.push(t);
+        });
+    }
+
+    var outcome = await runBatches(batches, actionMode, submitBtn);
+
+    if (!outcome.ok) {
+        var note = '';
+        if (outcome.done.length > 0) {
+            note = '\u2705 ' + outcome.done.length + ' target(s) were already ' +
+                   (actionMode === 'DEDUCT' ? 'redeemed' : 'given stars') +
+                   ' successfully and have been removed from the list, so they will not be processed twice.';
+            dropTargets(outcome.done);
+        }
+        handleServerFailure(outcome.data, note);
         submitBtn.textContent = defaultSubmitText();
         return;
     }
 
-    /* Group targets that have identical carts -> fewer server requests */
-    var groups = [];
-    var groupIndex = {};
-    active.forEach(function(t) {
-        var c = getCart(t);
-        var key = c.lucky + '|' + c.bbss + '|' + c.tuckshop;
-        if (groupIndex[key] === undefined) {
-            groupIndex[key] = groups.length;
-            groups.push({ cart: { lucky: c.lucky, bbss: c.bbss, tuckshop: c.tuckshop }, targets: [] });
-        }
-        groups[groupIndex[key]].targets.push(t);
-    });
-
-    isSubmitting = true;
-    var doneTargets = [];
-
-    for (var i = 0; i < groups.length; i++) {
-        var g = groups[i];
-        submitBtn.textContent = groups.length > 1 ? ('Submitting ' + (i + 1) + ' / ' + groups.length + '...') : 'Submitting...';
-
-        document.getElementById('actionMode').value = 'DEDUCT';
-        document.getElementById('starsValue').value = cartTotal(g.cart);
-        document.getElementById('luckyDrawQtyField').value = g.cart.lucky;
-        document.getElementById('bbssSurpriseQtyField').value = g.cart.bbss;
-        document.getElementById('tuckShopCouponQtyField').value = g.cart.tuckshop;
-        document.getElementById('reason').value = cartReason(g.cart);
-        if (targetMode === 'class') {
-            document.getElementById('classNames').value = g.targets.join(',');
-            document.getElementById('studentNames').value = '';
-        } else {
-            document.getElementById('studentNames').value = g.targets.join(',');
-            document.getElementById('classNames').value = '';
-        }
-
-        var result = await postToServer();
-
-        if (!result.success) {
-            isSubmitting = false;
-            submitBtn.disabled = false;
-            var note = '';
-            if (doneTargets.length > 0) {
-                note = '\u2705 ' + doneTargets.length + ' cart(s) were already redeemed successfully and have been removed from the list.';
-                doneTargets.forEach(function(t) { delete carts[t]; });
-                if (targetMode === 'class') {
-                    selectedClasses = selectedClasses.filter(function(x) { return doneTargets.indexOf(x) === -1; });
-                } else {
-                    selectedStudents = selectedStudents.filter(function(x) { return doneTargets.indexOf(x) === -1; });
-                }
-            }
-            renderCurrentTags();
-            handleServerFailure(result.data, note);
-            submitBtn.textContent = defaultSubmitText();
-            return;
-        }
-        doneTargets = doneTargets.concat(g.targets);
-    }
-
-    isSubmitting = false;
-    submitBtn.disabled = false;
-    var skipped = allTargets.length - active.length;
-    var msg = '\uD83C\uDF81 Stars Redeemed Successfully!<br><small>' + doneTargets.length + ' cart(s) redeemed' +
+    var msg;
+    if (actionMode === 'DEDUCT') {
+        var skipped = allTargets.length - outcome.done.length;
+        msg = '\uD83C\uDF81 Stars Redeemed Successfully!<br><small>' + outcome.done.length + ' cart(s) redeemed' +
               (skipped > 0 ? ', ' + skipped + ' empty cart(s) skipped' : '') + '.</small>';
+    } else {
+        msg = '\u2b50 Stars Submitted Successfully!<br><small>' + outcome.done.length + ' class(es)/student(s) received stars.</small>';
+    }
     showToast(msg, 'success');
     setTimeout(function() { location.reload(); }, 1800);
 }
@@ -1526,7 +1641,28 @@ async function handleFormSubmit(event) {
 /* ── Init ── */
 window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('passcode').value = '';
+
+    var gcs = document.getElementById('groupClassSelect');
+    Object.keys(CLASS_STUDENTS).forEach(function(cls) {
+        var o = document.createElement('option');
+        o.value = cls;
+        o.textContent = cls + ' (' + CLASS_STUDENTS[cls].length + ' students)';
+        gcs.appendChild(o);
+
+        /* Student number lookup for Quick Add */
+        CLASS_STUDENTS[cls].forEach(function(name) {
+            CODE_INDEX[name.split(' ')[0].toUpperCase()] = name;
+        });
+    });
+
+    /* Ctrl/Cmd + Enter in the quick-add box = ADD */
+    document.getElementById('quickAddBox').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); quickAdd(); }
+    });
+
+    renderTargets();
     renderBoard();
+
     document.addEventListener('click', function(e) {
         var wrap = document.getElementById('teacherWrap');
         if (!wrap.contains(e.target)) {
