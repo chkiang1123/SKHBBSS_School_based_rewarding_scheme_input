@@ -114,25 +114,13 @@
         .search-dropdown-item:hover, .search-dropdown-item.highlighted { background: var(--gold-light); }
         .search-dropdown-empty { padding: 12px; color: var(--text-muted); font-size: 13px; text-align: center; }
 
-        .add-row { display: flex; gap: 8px; margin-top: 6px; }
-        .add-row select { flex: 1; }
-        .add-btn {
-            flex-shrink: 0; width: auto; background: var(--indigo); padding: 10px 14px;
-            color: #fff; border: none; border-radius: 10px; cursor: pointer;
-            font-weight: 700; font-size: 14px; font-family: inherit; transition: background 0.2s;
-        }
-        .add-btn:hover { background: var(--indigo-hover); }
-        body.wide .add-btn { padding: 10px 18px; font-size: 15px; }
-
-        /* ── Pick students / quick add boxes ── */
+        /* ── Pick students box ── */
         .group-pick {
             margin-top: 18px; padding: 14px; border: 1.5px dashed var(--border);
             border-radius: 14px; background: var(--input-bg);
         }
         .group-pick-title { font-weight: 800; font-size: 14px; color: var(--text); }
         .group-pick-sub { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 2px; line-height: 1.5; }
-        .group-pick code { background: var(--chip-bg); color: var(--chip-text); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
-        .group-pick textarea { height: 70px; font-size: 15px; }
         .pick-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
         .pick-count {
             font-size: 12px; font-weight: 800; color: var(--gold-text); background: var(--gold-light);
@@ -159,20 +147,13 @@
         }
         .pick-tile.checked { border-color: var(--gold); background: var(--gold-light); }
         .pick-tile.checked .pick-box { background: var(--gold); border-color: var(--gold); }
-        .pick-tile.added { opacity: 0.55; cursor: default; }
-        .pick-tile.added:hover { border-color: var(--border); }
-        .pick-tile.added .pick-box { background: var(--green); border-color: var(--green); }
         .pick-tile-text { min-width: 0; overflow: hidden; }
         .pick-tile-text small {
             display: block; font-weight: 600; color: var(--text-muted); font-size: 11px;
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         }
-        .pick-add-btn { width: 100%; margin-top: 10px; padding: 12px; }
-        .quick-msg { font-size: 12px; font-weight: 700; margin-top: 6px; line-height: 1.5; }
-        .quick-msg .ok { color: var(--green); }
-        .quick-msg .bad { color: var(--red); }
 
-        /* ── NEW: Reward list (each target has its own stars) ── */
+        /* ── Reward list (each target has its own stars) ── */
         .sl-toolbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
         .sl-hint { font-size: 12px; font-weight: 700; color: var(--text-muted); }
         .sl-quick {
@@ -387,14 +368,13 @@
     </div>
 
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-    <form id="rewardForm" action="https://script.google.com/macros/s/AKfycbw92v6PNHNU47r1mg67E3UZPhwLZhnapv_S_omhx9nwtE6PS6ssHCy6k8IbRLa7oNs7/exec" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
+    <form id="rewardForm" action="https://script.google.com/macros/s/AKfycbwfyKpw2W4TucjahhrxOMDNRwy5goCARYcFtAo_QRgzEj-8RQFjzTHva2m6VLTbT0Pm/exec" method="POST" target="hidden_iframe" onsubmit="handleFormSubmit(event)">
 
         <input type="hidden" name="actionMode" id="actionMode" value="ADD">
         <input type="hidden" name="stars" id="starsValue" value="1">
         <input type="hidden" name="luckyDrawQty" id="luckyDrawQtyField" value="0">
         <input type="hidden" name="bbssSurpriseQty" id="bbssSurpriseQtyField" value="0">
         <input type="hidden" name="tuckShopCouponQty" id="tuckShopCouponQtyField" value="0">
-        <!-- Still sent to the server for each batch (no visible toggle any more) -->
         <input type="hidden" name="rewardType" id="rewardType" value="class">
         <input type="hidden" name="classNames" id="classNames">
         <input type="hidden" name="studentNames" id="studentNames">
@@ -413,7 +393,7 @@
         <!-- Default stars (ADD mode only) -->
         <div id="starsSection">
             <label id="starsLabel" for="starsSelect">Default Stars <span class="optional">(for newly added classes / students &mdash; change each one below)</span></label>
-            <select id="starsSelect" onchange="updatePickCount()">
+            <select id="starsSelect">
                 <option value="1">&#11088; 1 Star</option>
                 <option value="2">&#11088;&#11088; 2 Stars</option>
                 <option value="3">&#11088;&#11088;&#11088; 3 Stars</option>
@@ -423,57 +403,40 @@
         </div>
 
         <div id="classStreamSection">
-            <!-- Whole classes -->
-            <label>Select Whole Class(es)</label>
-            <div class="add-row">
-                <select id="classSelect">
-                    <option value="" disabled selected>Pick a class (1A&#8211;6D)</option>
-                    <option value="1A">1A</option><option value="1B">1B</option><option value="1C">1C</option><option value="1D">1D</option>
-                    <option value="2A">2A</option><option value="2B">2B</option><option value="2C">2C</option><option value="2D">2D</option>
-                    <option value="3A">3A</option><option value="3B">3B</option><option value="3C">3C</option><option value="3D">3D</option>
-                    <option value="4A">4A</option><option value="4B">4B</option><option value="4C">4C</option><option value="4D">4D</option>
-                    <option value="5A">5A</option><option value="5B">5B</option><option value="5C">5C</option><option value="5D">5D</option>
-                    <option value="6A">6A</option><option value="6B">6B</option><option value="6C">6C</option><option value="6D">6D</option>
-                </select>
-                <button type="button" class="add-btn" onclick="addClassTag()">+ ADD</button>
-            </div>
+            <!-- Whole classes: picking a class adds it immediately -->
+            <label for="classSelect">Select Whole Class(es)</label>
+            <select id="classSelect" onchange="addClassTag()">
+                <option value="" disabled selected>Pick a class to add (1A&#8211;6D)</option>
+                <option value="1A">1A</option><option value="1B">1B</option><option value="1C">1C</option><option value="1D">1D</option>
+                <option value="2A">2A</option><option value="2B">2B</option><option value="2C">2C</option><option value="2D">2D</option>
+                <option value="3A">3A</option><option value="3B">3B</option><option value="3C">3C</option><option value="3D">3D</option>
+                <option value="4A">4A</option><option value="4B">4B</option><option value="4C">4C</option><option value="4D">4D</option>
+                <option value="5A">5A</option><option value="5B">5B</option><option value="5C">5C</option><option value="5D">5D</option>
+                <option value="6A">6A</option><option value="6B">6B</option><option value="6C">6C</option><option value="6D">6D</option>
+            </select>
             <div class="select-all-bar">
                 <span class="select-all-link" onclick="addAllClasses()">Select All 24 Classes</span>
             </div>
 
-            <!-- Pick students (tap) -->
+            <!-- Pick students: tap = add, tap again = remove -->
             <div class="group-pick" id="groupPick">
                 <div class="group-pick-title">&#128101; Pick Students</div>
-                <div class="group-pick-sub">Choose a class, tap the students you want, then press ADD. Switch to another class and repeat to add more.</div>
-                <select id="groupClassSelect" onchange="onGroupClassChange()">
+                <div class="group-pick-sub">Choose a class, then tap a student to add them to the list. Tap again to remove. Switch class to add students from other classes.</div>
+                <select id="groupClassSelect" onchange="renderPickGrid()">
                     <option value="" disabled selected>Choose one class...</option>
                 </select>
                 <div class="pick-toolbar" id="pickToolbar" style="display:none;">
-                    <span class="pick-count" id="pickCount">0 selected</span>
+                    <span class="pick-count" id="pickCount">0 in list</span>
                     <span class="pick-links">
                         <span class="select-all-link" onclick="pickAll()">Select All</span>
                         <span class="select-all-link" onclick="pickNone()">Clear</span>
                     </span>
                 </div>
                 <div class="pick-grid" id="pickGrid"></div>
-                <button type="button" class="add-btn pick-add-btn" id="pickAddBtn" onclick="addPickedStudents()" disabled>+ ADD Selected Students</button>
-            </div>
-
-            <!-- NEW: Quick add by student number -->
-            <div class="group-pick">
-                <div class="group-pick-title">&#9000;&#65039; Quick Add by Student Number</div>
-                <div class="group-pick-sub">
-                    Type or paste student numbers, separated by spaces, commas or new lines.<br>
-                    &bull; <code>1A01</code> one student &nbsp; &bull; <code>2B03-2B08</code> a range &nbsp; &bull; <code>4C</code> whole class<br>
-                    &bull; Add <code>:3</code> to give a different number of stars, e.g. <code>1A05:3</code> <code>2B03-08:2</code>
-                </div>
-                <textarea id="quickAddBox" placeholder="1A01 1A05:3&#10;2B03-2B08:2"></textarea>
-                <button type="button" class="add-btn pick-add-btn" onclick="quickAdd()">+ ADD from List</button>
-                <div id="quickAddMsg" class="quick-msg"></div>
             </div>
         </div>
 
-        <!-- NEW: Reward list with stars per class/student (ADD mode only) -->
+        <!-- Reward list with stars per class/student (ADD mode only) -->
         <div id="starListSection">
             <label>Reward List <span class="optional" id="starListCount"></span></label>
             <div class="sl-toolbar">
@@ -563,7 +526,7 @@ var REDEEM_ONLY_ADMINS = [
 /* ── Constants ── */
 var SPREADSHEET_ID = '1xD_LThLu70H5eG8jI9GX3FvkHS8AT6ud2upnkufYg6A';
 var isSubmitting = false;
-var MAX_STARS = 5;   /* highest number of stars per class/student (same as the old dropdown) */
+var MAX_STARS = 5;   /* highest number of stars per class/student */
 
 var ITEMS = [
     { key: 'lucky',    icon: '\uD83C\uDF9F\uFE0F', name: 'Lucky Draw Token',      cost: 1 },
@@ -623,9 +586,7 @@ var CLASS_STUDENTS = {
 /* ── State ── */
 var selectedClasses = [];    /* whole classes */
 var groupStudents = [];      /* individual students */
-var pickedSet = {};          /* students ticked in the pick grid (not yet added) */
-var targetStars = {};        /* NEW: target -> stars for that class/student */
-var CODE_INDEX = {};         /* NEW: "1A01" -> "1A01 CHAN SIN YING 陳倩凝" */
+var targetStars = {};        /* target -> stars for that class/student */
 var selectedReasons = [];
 var otherChipActive = false;
 var teacherHighlightIndex = -1;
@@ -820,19 +781,14 @@ function getStars(t) { return targetStars[t] || getDefaultStars(); }
 
 function getCurrentTargets() { return selectedClasses.concat(groupStudents); }
 
-/* Adds a class or student. Returns true if it was new.
- * If it already exists and "stars" is given, its stars are updated. */
-function addTarget(t, stars) {
+/* Adds a class or student. Returns true if it was new. */
+function addTarget(t) {
     var list = isClassTarget(t) ? selectedClasses : groupStudents;
-    var isNew = list.indexOf(t) === -1;
-    if (isNew) {
-        list.push(t);
-        newlyAdded[t] = true;
-        targetStars[t] = stars || getDefaultStars();
-    } else if (stars) {
-        targetStars[t] = stars;
-    }
-    return isNew;
+    if (list.indexOf(t) !== -1) return false;
+    list.push(t);
+    newlyAdded[t] = true;
+    targetStars[t] = getDefaultStars();
+    return true;
 }
 
 function removeTarget(t) {
@@ -870,7 +826,7 @@ function renderStarList() {
     document.getElementById('starListCount').textContent = targets.length ? '(' + targets.length + ')' : '';
 
     if (targets.length === 0) {
-        list.innerHTML = '<div class="sl-empty">No classes or students yet.<br>Add them above &mdash; each one can get a different number of stars.</div>';
+        list.innerHTML = '<div class="sl-empty">No classes or students yet.<br>Pick a class or tap students above &mdash; each one can get a different number of stars.</div>';
         totalBox.style.display = 'none';
         if (!isDeductMode()) newlyAdded = {};
         return;
@@ -916,150 +872,79 @@ function renderStarList() {
     if (!isDeductMode()) newlyAdded = {};
 }
 
-/* ── Pick students from a class ── */
-function onGroupClassChange() {
-    pickedSet = {};
-    renderPickGrid();
-}
-
+/* ── Pick students: tap = add, tap again = remove (no ADD button) ── */
 function renderPickGrid() {
     var cls = document.getElementById('groupClassSelect').value;
     var grid = document.getElementById('pickGrid');
     var list = CLASS_STUDENTS[cls] || [];
+    var keepScroll = grid.scrollTop;   /* don't jump to top after each tap */
     grid.innerHTML = '';
     document.getElementById('pickToolbar').style.display = list.length ? 'flex' : 'none';
 
     list.forEach(function(name) {
-        var added = groupStudents.indexOf(name) !== -1;
+        var inList = groupStudents.indexOf(name) !== -1;
         var parts = splitTarget(name);
-        var tile = el('button', 'pick-tile');
+        var tile = el('button', 'pick-tile' + (inList ? ' checked' : ''));
         tile.type = 'button';
-        tile.title = added ? name + ' (already added)' : name;
-        var box = el('span', 'pick-box', (added || pickedSet[name]) ? '\u2713' : '');
-        if (added) tile.classList.add('added');
-        else if (pickedSet[name]) tile.classList.add('checked');
-
+        tile.title = inList ? name + ' (tap to remove)' : name + ' (tap to add)';
+        var box = el('span', 'pick-box', inList ? '\u2713' : '');
         var txt = el('span', 'pick-tile-text');
         txt.appendChild(document.createTextNode(parts.code));
         txt.appendChild(el('small', '', parts.name));
         tile.appendChild(box);
         tile.appendChild(txt);
-
-        tile.addEventListener('click', function() {
-            if (groupStudents.indexOf(name) !== -1) return;
-            if (pickedSet[name]) {
-                delete pickedSet[name];
-                tile.classList.remove('checked');
-                box.textContent = '';
-            } else {
-                pickedSet[name] = true;
-                tile.classList.add('checked');
-                box.textContent = '\u2713';
-            }
-            updatePickCount();
-        });
+        tile.addEventListener('click', function() { togglePickStudent(name); });
         grid.appendChild(tile);
     });
+
+    grid.scrollTop = keepScroll;
     updatePickCount();
 }
 
+function togglePickStudent(name) {
+    if (groupStudents.indexOf(name) !== -1) {
+        removeTarget(name);
+        return;
+    }
+    addTarget(name);
+    renderTargets();
+    if (isDeductMode()) {
+        scrollToCard(name);
+        fetchBalanceForTargets([name]);
+    }
+}
+
 function updatePickCount() {
-    var n = Object.keys(pickedSet).length;
     var cls = document.getElementById('groupClassSelect').value;
     var list = CLASS_STUDENTS[cls] || [];
-    var addedHere = list.filter(function(s) { return groupStudents.indexOf(s) !== -1; }).length;
-    document.getElementById('pickCount').textContent = n + ' selected' + (addedHere ? ' \u00b7 ' + addedHere + ' already added' : '');
-    var btn = document.getElementById('pickAddBtn');
-    btn.disabled = n === 0;
-    btn.textContent = n === 0 ? '+ ADD Selected Students'
-        : '+ ADD ' + n + ' Selected Student' + (n > 1 ? 's' : '') +
-          (isDeductMode() ? '' : ' (' + getDefaultStars() + ' \u2b50 each)');
+    var n = list.filter(function(s) { return groupStudents.indexOf(s) !== -1; }).length;
+    document.getElementById('pickCount').textContent = n + ' of ' + list.length + ' in list';
 }
 
 function pickAll() {
     var cls = document.getElementById('groupClassSelect').value;
-    (CLASS_STUDENTS[cls] || []).forEach(function(name) {
-        if (groupStudents.indexOf(name) === -1) pickedSet[name] = true;
-    });
-    renderPickGrid();
-}
-
-function pickNone() {
-    pickedSet = {};
-    renderPickGrid();
-}
-
-function addPickedStudents() {
-    var cls = document.getElementById('groupClassSelect').value;
     var newTargets = [];
     (CLASS_STUDENTS[cls] || []).forEach(function(name) {
-        if (pickedSet[name] && addTarget(name)) newTargets.push(name);
+        if (addTarget(name)) newTargets.push(name);
     });
-    pickedSet = {};
     renderTargets();
-    if (isDeductMode() && newTargets.length > 0) {
-        scrollToCard(newTargets[0]);
-        fetchBalanceForTargets(newTargets);
-    }
+    if (isDeductMode() && newTargets.length > 0) fetchBalanceForTargets(newTargets);
 }
 
-/* ── NEW: Quick add by student number ── */
-function quickAdd() {
-    var box = document.getElementById('quickAddBox');
-    var msg = document.getElementById('quickAddMsg');
-    var text = box.value.replace(/\uFF1A/g, ':').toUpperCase();
-    var tokens = text.split(/[\s,;\uFF0C\u3001\uFF1B]+/).filter(function(x) { return x; });
-    if (tokens.length === 0) {
-        msg.innerHTML = '<span class="bad">Please type at least one student number, e.g. 1A01</span>';
-        return;
-    }
-
-    var newTargets = [], updated = 0, bad = [];
-    tokens.forEach(function(tok) {
-        /* 1A01 | 1A01-1A10 | 1A01-10 | 1A   + optional :3 / *3 / x3 / =3 */
-        var m = tok.match(/^([1-6][A-D])(\d{1,2})?(?:-(?:[1-6][A-D])?(\d{1,2}))?(?:[:*X=](\d{1,2}))?$/);
-        if (!m || (m[3] && !m[2])) { bad.push(tok); return; }
-
-        var cls = m[1];
-        var stars = m[4] ? clampStars(m[4]) : null;
-        var found = [];
-
-        if (!m[2]) {
-            found.push(cls);                               /* whole class */
-        } else {
-            var from = parseInt(m[2], 10);
-            var to = m[3] ? parseInt(m[3], 10) : from;
-            if (to < from) { var tmp = from; from = to; to = tmp; }
-            for (var n = from; n <= to; n++) {
-                var code = cls + (n < 10 ? '0' : '') + n;
-                if (CODE_INDEX[code]) found.push(CODE_INDEX[code]);   /* gaps in a range are skipped */
-            }
-            if (found.length === 0) bad.push(tok);
-        }
-
-        found.forEach(function(t) {
-            if (addTarget(t, stars)) newTargets.push(t);
-            else if (stars) updated++;
-        });
+/* Remove all students of the current class from the list */
+function pickNone() {
+    var cls = document.getElementById('groupClassSelect').value;
+    var inClass = CLASS_STUDENTS[cls] || [];
+    groupStudents = groupStudents.filter(function(s) {
+        if (inClass.indexOf(s) !== -1) { delete carts[s]; delete targetStars[s]; return false; }
+        return true;
     });
-
-    var parts = [];
-    if (newTargets.length) parts.push('<span class="ok">\u2705 Added ' + newTargets.length + '</span>');
-    if (updated) parts.push('<span class="ok">\u270F\uFE0F Stars updated for ' + updated + '</span>');
-    if (bad.length) parts.push('<span class="bad">\u274C Not found: ' + escapeHTML(bad.join(', ')) + '</span>');
-    if (!parts.length) parts.push('<span class="ok">Already in the list.</span>');
-    msg.innerHTML = parts.join(' &nbsp;\u00b7&nbsp; ');
-
-    box.value = bad.join(' ');   /* keep only the entries that need fixing */
+    hideBalanceError();
     renderTargets();
-    if (isDeductMode() && newTargets.length > 0) {
-        scrollToCard(newTargets[0]);
-        fetchBalanceForTargets(newTargets);
-    }
 }
 
 /* ══════════════════════════════════════════════════════════════
- *  Per-target shopping carts (redemption) — unchanged
+ *  Per-target shopping carts (redemption)
  * ────────────────────────────────────────────────────────────── */
 function getCart(t) {
     if (!carts[t]) carts[t] = { lucky: 0, bbss: 0, tuckshop: 0 };
@@ -1117,7 +1002,6 @@ function removeAllTargets() {
     targets.forEach(function(t) { delete carts[t]; delete targetStars[t]; });
     selectedClasses = [];
     groupStudents = [];
-    pickedSet = {};
     renderTargets();
     hideBalanceError();
 }
@@ -1231,7 +1115,7 @@ function renderBoard() {
 
     if (targets.length === 0) {
         grid.innerHTML = '<div class="board-empty"><span class="big">\uD83D\uDED2</span>No carts yet.<br>' +
-            'Add a whole class, tick students, or type student numbers on the left and press <strong>+ ADD</strong>.</div>';
+            'Pick a whole class, or tap students on the left &mdash; each one gets its own cart.</div>';
     } else {
         targets.forEach(function(t) { grid.appendChild(buildCard(t)); });
     }
@@ -1374,8 +1258,11 @@ function setActionMode(mode) {
     renderTargets();
 }
 
+/* Picking a class in the dropdown adds it immediately */
 function addClassTag() {
-    var val = document.getElementById('classSelect').value;
+    var sel = document.getElementById('classSelect');
+    var val = sel.value;
+    sel.selectedIndex = 0;   /* back to "Pick a class to add" */
     if (!val) return;
     var isNew = addTarget(val);
     renderTargets();
@@ -1648,16 +1535,6 @@ window.addEventListener('DOMContentLoaded', function() {
         o.value = cls;
         o.textContent = cls + ' (' + CLASS_STUDENTS[cls].length + ' students)';
         gcs.appendChild(o);
-
-        /* Student number lookup for Quick Add */
-        CLASS_STUDENTS[cls].forEach(function(name) {
-            CODE_INDEX[name.split(' ')[0].toUpperCase()] = name;
-        });
-    });
-
-    /* Ctrl/Cmd + Enter in the quick-add box = ADD */
-    document.getElementById('quickAddBox').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); quickAdd(); }
     });
 
     renderTargets();
