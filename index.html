@@ -39,13 +39,30 @@
             padding: 16px;
             display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
         }
+
+        /* ── App shell: narrow (teacher) vs wide (admin redemption) ── */
+        .app-shell { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 20px; }
+        body.wide .app-shell {
+            max-width: 1440px;
+            display: grid; grid-template-columns: minmax(340px, 420px) 1fr;
+            gap: 24px; align-items: start;
+        }
         .form-container {
             background: var(--card-bg);
             padding: 28px 24px;
             border-radius: 20px;
             box-shadow: 0 2px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
-            width: 100%; max-width: 500px;
+            width: 100%;
         }
+        body.wide .form-container {
+            position: sticky; top: 16px;
+            max-height: calc(100vh - 32px); overflow-y: auto;
+        }
+        @media (max-width: 880px) {
+            body.wide .app-shell { grid-template-columns: 1fr; }
+            body.wide .form-container { position: static; max-height: none; overflow: visible; }
+        }
+
         h2 { text-align: center; color: var(--text); margin-bottom: 8px; font-weight: 800; font-size: 22px; letter-spacing: -0.3px; }
 
         /* Admin badge */
@@ -115,6 +132,7 @@
 
         /* Tags */
         .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 10px; }
+        body.wide .tag-container { display: none; } /* carts replace tags in redemption mode */
         .tag {
             background: var(--gold-light); color: var(--gold-text);
             padding: 5px 10px; border-radius: 20px; font-weight: 700; font-size: 12px;
@@ -126,16 +144,6 @@
         .tag .tag-remove:hover { color: var(--red-hover); }
         .tag-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Balance indicator on tags */
-        .tag-balance {
-            font-size: 11px; font-weight: 800; padding: 1px 6px; border-radius: 10px;
-            white-space: nowrap; flex-shrink: 0;
-        }
-        .tag-balance.loading { color: var(--text-muted); }
-        .tag-balance.ok { background: var(--green-light); color: var(--green-text); }
-        .tag-balance.insufficient { background: var(--red-light); color: var(--red-text); }
-        .tag-balance.neutral { color: var(--text-muted); }
-
         /* Add row */
         .add-row { display: flex; gap: 8px; margin-top: 6px; }
         .add-row select { flex: 1; }
@@ -145,6 +153,7 @@
             font-weight: 700; font-size: 14px; font-family: inherit; transition: background 0.2s;
         }
         .add-btn:hover { background: var(--indigo-hover); }
+        body.wide .add-btn { padding: 10px 18px; font-size: 15px; }
 
         /* Reason chips */
         .reason-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
@@ -156,47 +165,26 @@
         .reason-chip:hover { background: var(--chip-hover); }
         .reason-chip.selected { background: var(--gold-light); color: var(--gold-text); border-color: var(--gold); }
 
-        /* Shopping cart for redemption */
-        .cart-section { margin-top: 16px; }
-        .cart-items { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 12px;
-            background: var(--input-bg); transition: border-color 0.2s, background 0.2s;
-        }
-        .cart-item.has-qty { border-color: var(--gold); background: var(--gold-light); }
-        .cart-item-info { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-        .cart-item-name { font-weight: 800; font-size: 14px; color: var(--text); }
-        .cart-item-cost { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        /* Quantity stepper (used inside cart cards) */
         .cart-qty {
             display: flex; align-items: center; gap: 0;
             border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden;
             flex-shrink: 0;
         }
         .qty-btn {
-            width: 40px; height: 40px; border: none; background: var(--chip-bg);
+            width: 42px; height: 42px; border: none; background: var(--chip-bg);
             color: var(--text); font-size: 20px; font-weight: 700; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             font-family: inherit; transition: background 0.15s; line-height: 1;
-            -webkit-user-select: none; user-select: none;
+            -webkit-user-select: none; user-select: none; touch-action: manipulation;
         }
         .qty-btn:hover { background: var(--chip-hover); }
         .qty-btn:active { background: var(--gold-light); }
         .qty-value {
             width: 44px; text-align: center; font-size: 18px; font-weight: 800;
-            color: var(--text); background: var(--card-bg); line-height: 40px;
+            color: var(--text); background: var(--card-bg); line-height: 42px;
             border-left: 1px solid var(--border); border-right: 1px solid var(--border);
         }
-        .cart-summary {
-            margin-top: 12px; padding: 12px 16px; border-radius: 12px;
-            background: var(--gold-light); text-align: center;
-            border: 1.5px solid var(--gold);
-        }
-        .cart-summary-total { font-weight: 800; font-size: 18px; color: var(--gold-text); }
-        .cart-summary-label { font-size: 12px; color: var(--gold-text); opacity: 0.8; margin-top: 2px; font-weight: 600; }
-        .cart-summary.empty { background: var(--inactive-bg); border-color: var(--inactive-border); }
-        .cart-summary.empty .cart-summary-total { color: var(--inactive-text); }
-        .cart-summary.empty .cart-summary-label { color: var(--inactive-text); }
 
         /* Submit button */
         button[type="submit"] {
@@ -209,6 +197,7 @@
         button[type="submit"]:hover { background: var(--gold-hover); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(212,149,12,0.35); }
         button[type="submit"].deduct-mode { background: var(--red); box-shadow: 0 2px 10px rgba(192,57,43,0.3); }
         button[type="submit"].deduct-mode:hover { background: var(--red-hover); box-shadow: 0 4px 14px rgba(192,57,43,0.35); }
+        body.wide button[type="submit"] { padding: 16px; font-size: 17px; }
         button:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
 
         .error-msg { color: var(--red); font-size: 12px; display: none; margin-top: 4px; font-weight: 700; }
@@ -226,7 +215,7 @@
         }
         .toast-box {
             background: var(--toast-bg); padding: 28px; border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2); max-width: 340px; width: 90%;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2); max-width: 360px; width: 90%;
             text-align: center; animation: scaleIn .25s ease;
         }
         .toast-box p { margin: 0 0 20px; font-size: 15px; color: var(--toast-text); line-height: 1.5; font-weight: 600; }
@@ -252,9 +241,101 @@
             font-style: italic; display: none;
         }
         .balance-fetch-status.visible { display: block; }
+
+        /* ══════════ CART BOARD (right side, admin redemption) ══════════ */
+        .cart-board { display: none; }
+        body.wide .cart-board {
+            display: block; background: var(--card-bg); border-radius: 20px; padding: 22px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
+            min-height: 420px;
+        }
+        .board-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .board-head h3 { font-size: 20px; font-weight: 800; color: var(--text); }
+        .board-sub { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+        .board-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        .board-btn {
+            padding: 8px 12px; border-radius: 10px; border: 1.5px solid var(--border);
+            background: var(--input-bg); color: var(--text); font-family: inherit;
+            font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.15s;
+        }
+        .board-btn:hover { border-color: var(--gold); background: var(--gold-light); }
+        .board-btn.danger { color: var(--red); }
+        .board-btn.danger:hover { border-color: var(--red); background: var(--red-light); }
+
+        .board-stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 6px; }
+        .stat-chip {
+            padding: 8px 14px; border-radius: 12px; background: var(--inactive-bg);
+            border: 1.5px solid var(--inactive-border); font-size: 13px; font-weight: 700; color: var(--text-muted);
+        }
+        .stat-chip strong { font-size: 17px; color: var(--text); margin-left: 4px; }
+        .stat-chip.gold { background: var(--gold-light); border-color: var(--gold); color: var(--gold-text); }
+        .stat-chip.gold strong { color: var(--gold-text); }
+
+        .board-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px; margin-top: 14px;
+        }
+        .board-empty {
+            grid-column: 1 / -1; text-align: center; padding: 60px 20px;
+            border: 2px dashed var(--border); border-radius: 16px; color: var(--text-muted);
+            font-weight: 700; font-size: 15px; line-height: 1.7;
+        }
+        .board-empty .big { font-size: 40px; display: block; margin-bottom: 6px; }
+
+        .rcard {
+            border: 2px solid var(--border); border-radius: 16px; padding: 14px;
+            background: var(--input-bg); display: flex; flex-direction: column; gap: 10px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .rcard.new { animation: cardIn 0.3s ease; }
+        @keyframes cardIn { from { transform: translateY(8px) scale(0.96); opacity: 0; } to { transform: none; opacity: 1; } }
+        .rcard.ready { border-color: var(--green); box-shadow: 0 2px 12px rgba(39,174,96,0.12); }
+        .rcard.insufficient { border-color: var(--red); box-shadow: 0 2px 12px rgba(192,57,43,0.15); }
+        .rcard-head { display: flex; align-items: flex-start; gap: 8px; }
+        .rcard-titles { flex: 1; min-width: 0; }
+        .rcard-code { font-weight: 800; font-size: 22px; color: var(--text); line-height: 1.1; }
+        .rcard-name { font-size: 13px; color: var(--text-muted); font-weight: 700; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .bal-pill {
+            flex-shrink: 0; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800;
+            background: var(--chip-bg); color: var(--chip-text); white-space: nowrap;
+        }
+        .bal-pill.ok { background: var(--green-light); color: var(--green-text); }
+        .bal-pill.bad { background: var(--red-light); color: var(--red-text); }
+        .rcard-remove {
+            flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; border: none;
+            background: var(--chip-bg); color: var(--red); font-size: 20px; font-weight: 800;
+            cursor: pointer; line-height: 1; font-family: inherit;
+        }
+        .rcard-remove:hover { background: var(--red-light); }
+        .rc-item {
+            display: flex; align-items: center; justify-content: space-between; gap: 8px;
+            padding: 8px 10px; border-radius: 12px; background: var(--card-bg);
+            border: 1.5px solid var(--border); transition: all 0.15s;
+        }
+        .rc-item.has-qty { border-color: var(--gold); background: var(--gold-light); }
+        .rc-info { display: flex; flex-direction: column; min-width: 0; }
+        .rc-name { font-weight: 800; font-size: 13px; color: var(--text); }
+        .rc-cost { font-size: 11px; color: var(--text-muted); font-weight: 700; }
+        .rcard-foot {
+            display: flex; justify-content: space-between; align-items: center; gap: 8px;
+            border-top: 1.5px dashed var(--border); padding-top: 10px;
+            font-weight: 800; font-size: 14px; color: var(--text);
+        }
+        .rc-status { font-size: 12px; font-weight: 800; color: var(--text-muted); text-align: right; }
+        .rcard.ready .rc-status { color: var(--green); }
+        .rcard.insufficient .rc-status { color: var(--red); }
+        .rcard-actions { display: flex; justify-content: space-between; gap: 8px; }
+        .link-btn {
+            background: none; border: none; color: var(--indigo); font-family: inherit;
+            font-weight: 700; font-size: 12px; cursor: pointer; text-decoration: underline; padding: 2px 0;
+        }
+        .link-btn:hover { color: var(--indigo-hover); }
     </style>
 </head>
 <body>
+<div class="app-shell">
+
+<!-- ════════ LEFT PANEL: FORM ════════ -->
 <div class="form-container">
     <h2 id="formHeader">&#11088; Star Reward System</h2>
 
@@ -358,50 +439,6 @@
             </select>
         </div>
 
-        <!-- Shopping cart section (DEDUCT / Redeem mode) -->
-        <div id="cartSection" style="display:none;">
-            <label>Redemption Items</label>
-            <div class="cart-items">
-                <div class="cart-item" id="cartItemLucky">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">&#127903;&#65039; Lucky Draw Token</span>
-                        <span class="cart-item-cost">1 &#11088; each</span>
-                    </div>
-                    <div class="cart-qty">
-                        <button type="button" class="qty-btn" onclick="changeQty('lucky', -1)">&minus;</button>
-                        <span class="qty-value" id="qty-lucky">0</span>
-                        <button type="button" class="qty-btn" onclick="changeQty('lucky', 1)">+</button>
-                    </div>
-                </div>
-                <div class="cart-item" id="cartItemBbss">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">&#127873; BBSS Surprise</span>
-                        <span class="cart-item-cost">2 &#11088; each</span>
-                    </div>
-                    <div class="cart-qty">
-                        <button type="button" class="qty-btn" onclick="changeQty('bbss', -1)">&minus;</button>
-                        <span class="qty-value" id="qty-bbss">0</span>
-                        <button type="button" class="qty-btn" onclick="changeQty('bbss', 1)">+</button>
-                    </div>
-                </div>
-                <div class="cart-item" id="cartItemTuckshop">
-                    <div class="cart-item-info">
-                        <span class="cart-item-name">&#127978; Tuck Shop Cash Coupon</span>
-                        <span class="cart-item-cost">3 &#11088; each</span>
-                    </div>
-                    <div class="cart-qty">
-                        <button type="button" class="qty-btn" onclick="changeQty('tuckshop', -1)">&minus;</button>
-                        <span class="qty-value" id="qty-tuckshop">0</span>
-                        <button type="button" class="qty-btn" onclick="changeQty('tuckshop', 1)">+</button>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-summary empty" id="cartSummary">
-                <div class="cart-summary-total" id="cartTotalStars">0 &#11088;</div>
-                <div class="cart-summary-label">Total cost per student / class</div>
-            </div>
-        </div>
-
         <!-- Reason section (ADD mode only) -->
         <div id="reasonSection">
             <label>Reason / Note <span class="optional">(optional)</span></label>
@@ -427,6 +464,30 @@
     </form>
 </div>
 
+<!-- ════════ RIGHT PANEL: SHOPPING CARTS (admin redemption) ════════ -->
+<section class="cart-board" id="cartBoard">
+    <div class="board-head">
+        <div>
+            <h3>&#128722; Redemption Carts</h3>
+            <div class="board-sub" id="boardSub">Add a class or student on the left &mdash; each one gets its own cart.</div>
+        </div>
+        <div class="board-actions">
+            <button type="button" class="board-btn" onclick="refreshBalances()">&#8635; Refresh Balances</button>
+            <button type="button" class="board-btn" onclick="emptyAllCarts()">&#129529; Empty All Carts</button>
+            <button type="button" class="board-btn danger" onclick="removeAllTargets()">&#10005; Remove All</button>
+        </div>
+    </div>
+    <div class="board-stats">
+        <div class="stat-chip">Carts<strong id="statCarts">0</strong></div>
+        <div class="stat-chip">Items<strong id="statItems">0</strong></div>
+        <div class="stat-chip gold">Total Stars<strong id="statStars">0 &#11088;</strong></div>
+    </div>
+    <div id="boardFetchStatus" class="balance-fetch-status">Fetching balances...</div>
+    <div class="board-grid" id="boardGrid"></div>
+</section>
+
+</div>
+
 <script>
 /* ── Dark mode ── */
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -442,6 +503,8 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
  *  SUPER_ADMINS       -> Can both ADD stars and REDEEM stars.
  *  REDEEM_ONLY_ADMINS -> Can ONLY redeem stars (no adding).
  *  Everyone else      -> Can ONLY add stars (no redeeming).
+ *  When an admin is in redeem mode, the page switches to the
+ *  wide shopping-cart layout automatically.
  * ────────────────────────────────────────────────────────────── */
 var SUPER_ADMINS = [
     'Kiang Chi Hong (KCH)'
@@ -458,26 +521,14 @@ var REDEEM_ONLY_ADMINS = [
 var SPREADSHEET_ID = '1xD_LThLu70H5eG8jI9GX3FvkHS8AT6ud2upnkufYg6A';
 var isSubmitting = false;
 
-/* ══════════════════════════════════════════════════════════════
- *  >>>>  LOCATION 1: PASTE YOUR TEACHER NAMES HERE  <<<<
- * ══════════════════════════════════════════════════════════════
- *  Replace the empty [] below with your full TEACHERS array.
- *
- *  IMPORTANT: You MUST include the 4 admin names AND the
- *  super admin (KCH) in this list so they appear in the
- *  searchable dropdown.  Example format:
- *
- *  var TEACHERS = [
- *      "Admin 1",
- *      "Admin 2",
- *      "Admin 3",
- *      "Admin 4",
- *      "Chan Hin Chiu (CHC)",
- *      "Kiang Chi Hong (KCH)",
- *      "Wong Suk Yin (WSY)",
- *      ...
- *  ];
- * ────────────────────────────────────────────────────────────── */
+/* Redemption items */
+var ITEMS = [
+    { key: 'lucky',    icon: '\uD83C\uDF9F\uFE0F', name: 'Lucky Draw Token',      cost: 1, field: 'luckyDrawQtyField' },
+    { key: 'bbss',     icon: '\uD83C\uDF81',       name: 'BBSS Surprise',         cost: 2, field: 'bbssSurpriseQtyField' },
+    { key: 'tuckshop', icon: '\uD83C\uDFEA',       name: 'Tuck Shop Cash Coupon', cost: 3, field: 'tuckShopCouponQtyField' }
+];
+
+/* ── Teachers ── */
 var TEACHERS = [
     "Bezant Samantha Diana (BSD)",
     "Chan Hin Chiu (CHC)",
@@ -550,20 +601,7 @@ var TEACHERS = [
     "Admin 4"
 ];
 
-/* ══════════════════════════════════════════════════════════════
- *  >>>>  LOCATION 2: PASTE YOUR STUDENT DATA HERE  <<<<
- * ══════════════════════════════════════════════════════════════
- *  Replace the empty {} below with your full CLASS_STUDENTS
- *  object.  Each key is a class name (e.g. "1A") and the
- *  value is an array of student name strings.  Format:
- *
- *  var CLASS_STUDENTS = {
- *      "1A": ["1A01 CHAN SIN YING 陳倩凝", "1A02 ..."],
- *      "1B": ["1B01 AU YEUNG TSZ NAM 歐陽芷楠", ...],
- *      ...
- *      "6D": ["6D01 CHAN CHI WING 陳智穎", ...]
- *  };
- * ────────────────────────────────────────────────────────────── */
+/* ── Students ── */
 var CLASS_STUDENTS = {
     "1A": ["1A01 CHAN SIN YING 陳倩凝", "1A02 CHAN SUM YIN 陳芯賢", "1A03 CHAN SZE LOK 陳詩駱", "1A04 CHAN TSE YU 陳沚如", "1A05 CHAN TSZ WING 陳紫穎", "1A06 CHIU TSZ YUE 趙紫妤", "1A07 IP NGA CHING 葉雅澄", "1A08 LAI CHUNG YAN 賴頌恩", "1A09 LAM HEI TUNG CALEY 林桸橦", "1A10 LAW PO HEI 羅寶曦", "1A11 LI TSZ YUE 李籽予", "1A12 NG SZE TING 吳施婷", "1A13 TANG YEE HEI HANNAH 鄧薾晞", "1A14 WONG CHING KIU 黃靖蕎", "1A15 WONG SUM YU YUNA 黃心瑜", "1A16 YAM CHING 任晴", "1A17 YEUNG TSZ CHING 楊芷晴", "1A18 AU YEUNG NGAI NGAI 歐陽巍巍", "1A19 CHAN PAAK KIU 陳珀喬", "1A20 CHUNG KA TUNG 鍾家棟", "1A21 FUNG YU KI 馮宇麒", "1A22 GURUNG UDHANT 余文達", "1A23 IP YIN KWAN 葉彥均", "1A24 LAW YUNG HO 羅榕灝", "1A25 LEE HO YEUNG 李灝揚", "1A26 NG HO CHUN 吳澔臻", "1A27 SIN YEE HANG 冼以恒", "1A28 TANG NING NGAI 鄧甯毅", "1A29 TANG SZE POK 鄧思博", "1A30 TSO TSZ MING 曹子銘", "1A31 WANG CHEUK YU 王琸宇", "1A32 YIM WAI KIU 嚴韋翹"],
     "1B": ["1B01 AU YEUNG TSZ NAM 歐陽芷楠", "1B02 CHAI YEE TUNG 蔡依彤", "1B03 CHEN YAN 陳恩", "1B04 CHEUNG SHIN YIN BRITNEY 張善然", "1B05 LAM LONG KIU 林朗翹", "1B06 LEE SIU BING 李紹冰", "1B07 LEE WING YIN 李穎妍", "1B08 LI PUI YING 李沛鎣", "1B09 LUI MAN HUEN 呂敏暄", "1B10 MOK KASUMI 莫夏澄", "1B11 NG CADENCE 吳海雪", "1B12 NG HOI TUNG 吳海僮", "1B13 POON WENDY 潘芷晴", "1B14 WONG TSZ CHING 黃梓晴", "1B15 WONG TSZ KIU 黃梓喬", "1B16 YAU WING YAU 邱詠悠", "1B17 YIN HEI WAI 殷希蕙", "1B18 ZHOU JIAJIA 周家嘉", "1B19 CHAN WING LUN 陳詠璘", "1B20 CHENG YU CHEUNG 鄭宇翔", "1B21 HUANG YI JE 黃以喆", "1B22 HUI KWAN LONG 許君朗", "1B23 KWOK YIK HANG KASPAR 郭奕亨", "1B24 LAM YIK HEI 林翊曦", "1B25 LAW HO FUNG 羅灝鋒", "1B26 LEE CHUNG NAM 李重男", "1B27 LEE LUNG WO 李龍和", "1B28 LIN PAK WAI 連柏維", "1B30 WONG CHUN YIP 黃振業", "1B31 YE YANGBIN 葉楊濱", "1B32 YIP SHUN KI 葉信祈"],
@@ -599,7 +637,10 @@ var otherChipActive = false;
 var teacherHighlightIndex = -1;
 var balanceCache = {};
 var isFetchingBalances = false;
-var cart = { lucky: 0, bbss: 0, tuckshop: 0 };
+var carts = {};          /* target -> { lucky, bbss, tuckshop } */
+var cardRefs = {};       /* target -> DOM references of its cart card */
+var newlyAdded = {};     /* targets to animate on next render */
+var pendingResolve = null;
 
 /* ── Toast (replaces alert) ── */
 function showToast(message, type) {
@@ -617,6 +658,13 @@ function escapeHTML(str) {
     var d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
+}
+
+function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
 }
 
 function normalizeStr(str) {
@@ -678,17 +726,11 @@ async function calculateBalances(targets) {
 }
 
 /* ══════════════════════════════════════════════════════════════
- *  Permission helpers — 3-tier model
+ *  Permission helpers
  * ────────────────────────────────────────────────────────────── */
-function isSuperAdmin(name) {
-    return SUPER_ADMINS.indexOf(name) !== -1;
-}
-function isRedeemOnlyAdmin(name) {
-    return REDEEM_ONLY_ADMINS.indexOf(name) !== -1;
-}
-function isAnyAdmin(name) {
-    return isSuperAdmin(name) || isRedeemOnlyAdmin(name);
-}
+function isSuperAdmin(name) { return SUPER_ADMINS.indexOf(name) !== -1; }
+function isRedeemOnlyAdmin(name) { return REDEEM_ONLY_ADMINS.indexOf(name) !== -1; }
+function isAnyAdmin(name) { return isSuperAdmin(name) || isRedeemOnlyAdmin(name); }
 
 function updateAdminUI(teacherName) {
     var modeGroup = document.getElementById('actionModeGroup');
@@ -738,7 +780,7 @@ function filterTeachers() {
         return initials.indexOf(query) === 0 || fullLower.indexOf(query) !== -1;
     });
 
-    /* Sort: regular teachers alphabetically first, then admins at the bottom */
+    /* Regular teachers alphabetically first, then admins at the bottom */
     filtered.sort(function(a, b) {
         var aIsAdmin = REDEEM_ONLY_ADMINS.indexOf(a) !== -1;
         var bIsAdmin = REDEEM_ONLY_ADMINS.indexOf(b) !== -1;
@@ -772,36 +814,211 @@ function selectTeacher(teacher) {
     updateAdminUI(teacher);
 }
 
-/* ── Cart functions ── */
-function changeQty(item, delta) {
-    cart[item] = Math.max(0, cart[item] + delta);
-    document.getElementById('qty-' + item).textContent = cart[item];
-
-    var itemIds = { lucky: 'cartItemLucky', bbss: 'cartItemBbss', tuckshop: 'cartItemTuckshop' };
-    var el = document.getElementById(itemIds[item]);
-    if (el) { el.classList.toggle('has-qty', cart[item] > 0); }
-
-    updateCartDisplay();
+/* ══════════════════════════════════════════════════════════════
+ *  Per-target shopping carts
+ * ────────────────────────────────────────────────────────────── */
+function getCart(t) {
+    if (!carts[t]) carts[t] = { lucky: 0, bbss: 0, tuckshop: 0 };
+    return carts[t];
 }
-
-function getCartTotal() {
-    return (cart.lucky * 1) + (cart.bbss * 2) + (cart.tuckshop * 3);
-}
-
-function getCartReason() {
+function cartTotal(c) { return (c.lucky * 1) + (c.bbss * 2) + (c.tuckshop * 3); }
+function cartItemCount(c) { return c.lucky + c.bbss + c.tuckshop; }
+function cartReason(c) {
     var parts = [];
-    if (cart.lucky > 0) parts.push('Lucky Draw Token \u00d7' + cart.lucky);
-    if (cart.bbss > 0) parts.push('BBSS Surprise \u00d7' + cart.bbss);
-    if (cart.tuckshop > 0) parts.push('Tuck Shop Cash Coupon \u00d7' + cart.tuckshop);
+    if (c.lucky > 0) parts.push('Lucky Draw Token \u00d7' + c.lucky);
+    if (c.bbss > 0) parts.push('BBSS Surprise \u00d7' + c.bbss);
+    if (c.tuckshop > 0) parts.push('Tuck Shop Cash Coupon \u00d7' + c.tuckshop);
     return parts.join(', ') || 'Redemption';
 }
 
-function updateCartDisplay() {
-    var total = getCartTotal();
-    var summaryEl = document.getElementById('cartSummary');
-    document.getElementById('cartTotalStars').textContent = total + ' \u2b50';
-    summaryEl.classList.toggle('empty', total === 0);
-    renderCurrentTags();
+function splitTarget(t) {
+    if (/^[1-6][A-D]$/.test(t)) return { code: t, name: 'Whole class' };
+    var i = t.indexOf(' ');
+    if (i === -1) return { code: t, name: '' };
+    return { code: t.substring(0, i), name: t.substring(i + 1) };
+}
+
+function changeCartQty(t, key, delta) {
+    var c = getCart(t);
+    c[key] = Math.max(0, c[key] + delta);
+    hideBalanceError();
+    refreshCard(t);
+    updateBoardSummary();
+}
+
+function resetCart(t) {
+    carts[t] = { lucky: 0, bbss: 0, tuckshop: 0 };
+    refreshCard(t);
+    updateBoardSummary();
+}
+
+function applyCartToAll(t) {
+    var src = getCart(t);
+    getCurrentTargets().forEach(function(x) {
+        carts[x] = { lucky: src.lucky, bbss: src.bbss, tuckshop: src.tuckshop };
+    });
+    renderBoard();
+}
+
+function emptyAllCarts() {
+    getCurrentTargets().forEach(function(t) { carts[t] = { lucky: 0, bbss: 0, tuckshop: 0 }; });
+    hideBalanceError();
+    renderBoard();
+}
+
+function removeTarget(t) {
+    if (document.getElementById('rewardType').value === 'class') removeClassTag(t);
+    else removeStudentTag(t);
+}
+
+function removeAllTargets() {
+    var targets = getCurrentTargets();
+    if (targets.length === 0) return;
+    if (!confirm('Remove all ' + targets.length + ' cart(s)?')) return;
+    targets.forEach(function(t) { delete carts[t]; });
+    if (document.getElementById('rewardType').value === 'class') { selectedClasses = []; renderClassTags(); }
+    else { selectedStudents = []; renderStudentTags(); }
+    hideBalanceError();
+}
+
+function refreshBalances() {
+    var targets = getCurrentTargets();
+    targets.forEach(function(t) { delete balanceCache[t]; });
+    renderBoard();
+    fetchBalanceForTargets(targets);
+}
+
+function buildCard(t) {
+    var c = getCart(t);
+    var parts = splitTarget(t);
+    var root = el('div', 'rcard');
+    if (newlyAdded[t]) root.classList.add('new');
+
+    var head = el('div', 'rcard-head');
+    var titles = el('div', 'rcard-titles');
+    titles.appendChild(el('div', 'rcard-code', parts.code));
+    var nm = el('div', 'rcard-name', parts.name);
+    nm.title = t;
+    titles.appendChild(nm);
+    var bal = el('span', 'bal-pill');
+    var rm = el('button', 'rcard-remove', '\u00d7');
+    rm.type = 'button'; rm.title = 'Remove this cart';
+    rm.addEventListener('click', function() { removeTarget(t); });
+    head.appendChild(titles); head.appendChild(bal); head.appendChild(rm);
+    root.appendChild(head);
+
+    var refs = { root: root, bal: bal, qty: {}, rows: {} };
+
+    ITEMS.forEach(function(it) {
+        var row = el('div', 'rc-item');
+        var info = el('div', 'rc-info');
+        info.appendChild(el('span', 'rc-name', it.icon + ' ' + it.name));
+        info.appendChild(el('span', 'rc-cost', it.cost + ' \u2b50 each'));
+        var q = el('div', 'cart-qty');
+        var minus = el('button', 'qty-btn', '\u2212'); minus.type = 'button';
+        minus.addEventListener('click', function() { changeCartQty(t, it.key, -1); });
+        var val = el('span', 'qty-value', String(c[it.key]));
+        var plus = el('button', 'qty-btn', '+'); plus.type = 'button';
+        plus.addEventListener('click', function() { changeCartQty(t, it.key, 1); });
+        q.appendChild(minus); q.appendChild(val); q.appendChild(plus);
+        row.appendChild(info); row.appendChild(q);
+        root.appendChild(row);
+        refs.qty[it.key] = val;
+        refs.rows[it.key] = row;
+    });
+
+    var foot = el('div', 'rcard-foot');
+    refs.subtotal = el('span', 'rc-subtotal');
+    refs.status = el('span', 'rc-status');
+    foot.appendChild(refs.subtotal); foot.appendChild(refs.status);
+    root.appendChild(foot);
+
+    var actions = el('div', 'rcard-actions');
+    var copyBtn = el('button', 'link-btn', '\u29C9 Apply this cart to all'); copyBtn.type = 'button';
+    copyBtn.addEventListener('click', function() { applyCartToAll(t); });
+    var resetBtn = el('button', 'link-btn', '\u21BA Reset'); resetBtn.type = 'button';
+    resetBtn.addEventListener('click', function() { resetCart(t); });
+    actions.appendChild(copyBtn); actions.appendChild(resetBtn);
+    root.appendChild(actions);
+
+    cardRefs[t] = refs;
+    refreshCard(t);
+    return root;
+}
+
+function refreshCard(t) {
+    var r = cardRefs[t];
+    if (!r) return;
+    var c = getCart(t);
+    var total = cartTotal(c);
+    var bal = balanceCache[t];
+
+    ITEMS.forEach(function(it) {
+        r.qty[it.key].textContent = c[it.key];
+        r.rows[it.key].classList.toggle('has-qty', c[it.key] > 0);
+    });
+    r.subtotal.textContent = 'Subtotal: ' + total + ' \u2b50';
+
+    r.bal.className = 'bal-pill';
+    r.root.classList.remove('ready', 'insufficient');
+
+    if (bal === undefined) {
+        r.bal.textContent = '\u2b50 \u2026';
+        r.status.textContent = total > 0 ? 'Checking balance\u2026' : 'Cart empty';
+        return;
+    }
+    r.bal.textContent = '\u2b50 ' + bal;
+
+    if (total === 0) {
+        r.status.textContent = 'Cart empty';
+    } else if (bal >= total) {
+        r.root.classList.add('ready');
+        r.bal.classList.add('ok');
+        r.status.textContent = '\u2714 Ready \u00b7 ' + (bal - total) + ' \u2b50 left';
+    } else {
+        r.root.classList.add('insufficient');
+        r.bal.classList.add('bad');
+        r.status.textContent = '\u2718 Need ' + (total - bal) + ' more \u2b50';
+    }
+}
+
+function renderBoard() {
+    var grid = document.getElementById('boardGrid');
+    grid.innerHTML = '';
+    cardRefs = {};
+    var targets = getCurrentTargets();
+    var isClass = document.getElementById('rewardType').value === 'class';
+
+    if (targets.length === 0) {
+        grid.innerHTML = '<div class="board-empty"><span class="big">\uD83D\uDED2</span>No carts yet.<br>Pick a ' +
+            (isClass ? 'class' : 'student') + ' on the left and press <strong>+ ADD</strong>.</div>';
+    } else {
+        targets.forEach(function(t) { grid.appendChild(buildCard(t)); });
+    }
+    newlyAdded = {};
+    updateBoardSummary();
+}
+
+function updateBoardSummary() {
+    var targets = getCurrentTargets();
+    var items = 0, stars = 0, filled = 0;
+    targets.forEach(function(t) {
+        var c = getCart(t);
+        items += cartItemCount(c);
+        stars += cartTotal(c);
+        if (cartTotal(c) > 0) filled++;
+    });
+    document.getElementById('statCarts').textContent = targets.length;
+    document.getElementById('statItems').textContent = items;
+    document.getElementById('statStars').textContent = stars + ' \u2b50';
+    document.getElementById('boardSub').textContent = targets.length === 0
+        ? 'Add a class or student on the left \u2014 each one gets its own cart.'
+        : filled + ' of ' + targets.length + ' cart(s) have items. Empty carts are skipped when redeeming.';
+}
+
+function scrollToCard(t) {
+    var r = cardRefs[t];
+    if (r && r.root.scrollIntoView) r.root.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /* ── Balance functions ── */
@@ -824,7 +1041,8 @@ async function fetchBalanceForTargets(targets) {
     if (!targets || targets.length === 0) return;
     var uncached = targets.filter(function(t) { return balanceCache[t] === undefined; });
     if (uncached.length === 0) {
-        renderCurrentTags();
+        uncached = [];
+        targets.forEach(refreshCard);
         return;
     }
 
@@ -837,22 +1055,17 @@ async function fetchBalanceForTargets(targets) {
             balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
         });
     } catch (e) {
-        uncached.forEach(function(t) {
-            balanceCache[t] = 0;
-        });
+        uncached.forEach(function(t) { balanceCache[t] = 0; });
         console.log('Balance fetch error: ' + e.message);
     }
 
     isFetchingBalances = false;
     showBalanceFetchStatus(false);
-    renderCurrentTags();
+    uncached.forEach(refreshCard);
 }
 
 function showBalanceFetchStatus(show) {
-    var type = document.getElementById('rewardType').value;
-    var statusId = type === 'class' ? 'classBalanceStatus' : 'studentBalanceStatus';
-    var el = document.getElementById(statusId);
-    el.classList.toggle('visible', show);
+    document.getElementById('boardFetchStatus').classList.toggle('visible', show);
 }
 
 /* ── Reason chips ── */
@@ -889,12 +1102,17 @@ function getFullReason() {
 }
 
 /* ── UI functions ── */
+function defaultSubmitText() {
+    return isDeductMode() ? '\uD83C\uDF81 Redeem All Carts' : 'Submit Stars';
+}
+
 function setActionMode(mode) {
     document.getElementById('actionMode').value = mode;
     var submitBtn = document.getElementById('submitBtn');
     hideBalanceError();
 
     if (mode === 'ADD') {
+        document.body.classList.remove('wide');
         document.getElementById('btnModeAdd').className = 'action-btn active-add';
         document.getElementById('btnModeDeduct').className = 'action-btn';
         submitBtn.className = '';
@@ -902,16 +1120,15 @@ function setActionMode(mode) {
         document.getElementById('formHeader').textContent = '\u2b50 Star Reward System';
         document.getElementById('reasonSection').style.display = 'block';
         document.getElementById('starsSection').style.display = 'block';
-        document.getElementById('cartSection').style.display = 'none';
     } else {
+        document.body.classList.add('wide');
         document.getElementById('btnModeDeduct').className = 'action-btn active-deduct';
         document.getElementById('btnModeAdd').className = 'action-btn';
         submitBtn.className = 'deduct-mode';
-        submitBtn.textContent = '\uD83C\uDF81 Redeem Items';
+        submitBtn.textContent = '\uD83C\uDF81 Redeem All Carts';
         document.getElementById('formHeader').textContent = '\uD83C\uDF81 Reward Redemption';
         document.getElementById('reasonSection').style.display = 'none';
         document.getElementById('starsSection').style.display = 'none';
-        document.getElementById('cartSection').style.display = 'block';
 
         selectedReasons = [];
         otherChipActive = false;
@@ -919,10 +1136,9 @@ function setActionMode(mode) {
         document.getElementById('reason').value = '';
         document.getElementById('reason').style.display = 'none';
 
+        renderBoard();
         var targets = getCurrentTargets();
-        if (targets.length > 0) {
-            fetchBalanceForTargets(targets);
-        }
+        if (targets.length > 0) fetchBalanceForTargets(targets);
     }
 
     renderCurrentTags();
@@ -941,6 +1157,10 @@ function setMode(mode) {
         document.getElementById('btnClass').classList.remove('active');
         document.getElementById('classStreamSection').style.display = 'none';
         document.getElementById('studentStreamSection').style.display = 'block';
+    }
+    if (isDeductMode()) {
+        renderBoard();
+        fetchBalanceForTargets(getCurrentTargets());
     }
 }
 
@@ -964,15 +1184,20 @@ function addStudentTag() {
     var val = document.getElementById('studentSelect').value;
     if (val && selectedStudents.indexOf(val) === -1) {
         selectedStudents.push(val);
+        newlyAdded[val] = true;
         renderStudentTags();
         if (isDeductMode()) {
+            scrollToCard(val);
             fetchBalanceForTargets([val]);
         }
+    } else if (val && isDeductMode()) {
+        scrollToCard(val);
     }
 }
 
 function removeStudentTag(name) {
     selectedStudents = selectedStudents.filter(function(s) { return s !== name; });
+    delete carts[name];
     renderStudentTags();
     hideBalanceError();
 }
@@ -984,6 +1209,7 @@ function addAllStudentsInClass() {
         CLASS_STUDENTS[cls].forEach(function(name) {
             if (selectedStudents.indexOf(name) === -1) {
                 selectedStudents.push(name);
+                newlyAdded[name] = true;
                 newTargets.push(name);
             }
         });
@@ -997,62 +1223,37 @@ function addAllStudentsInClass() {
 function renderStudentTags() {
     var c = document.getElementById('selectedStudentsList');
     c.innerHTML = '';
-    var deductMode = isDeductMode();
-    var cartTotal = getCartTotal();
-
     selectedStudents.forEach(function(name) {
-        var tag = document.createElement('div');
-        tag.className = 'tag';
-
-        var labelSpan = document.createElement('span');
-        labelSpan.className = 'tag-label';
+        var tag = el('div', 'tag');
         var shortLabel = name.length > 20 ? name.substring(0, 20) + '...' : name;
-        labelSpan.textContent = shortLabel;
-        tag.appendChild(labelSpan);
-
-        if (deductMode) {
-            var balSpan = document.createElement('span');
-            balSpan.className = 'tag-balance';
-            var balance = balanceCache[name];
-            if (balance === undefined) {
-                balSpan.textContent = '...';
-                balSpan.className += ' loading';
-            } else if (cartTotal > 0 && balance >= cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2714';
-                balSpan.className += ' ok';
-            } else if (cartTotal > 0 && balance < cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2718';
-                balSpan.className += ' insufficient';
-            } else {
-                balSpan.textContent = '\u2b50' + balance;
-                balSpan.className += ' neutral';
-            }
-            tag.appendChild(balSpan);
-        }
-
-        var btn = document.createElement('span');
-        btn.className = 'tag-remove';
-        btn.textContent = '\u00d7';
+        tag.appendChild(el('span', 'tag-label', shortLabel));
+        var btn = el('span', 'tag-remove', '\u00d7');
         btn.addEventListener('click', function() { removeStudentTag(name); });
         tag.appendChild(btn);
         c.appendChild(tag);
     });
     document.getElementById('studentNames').value = selectedStudents.join(',');
+    if (isDeductMode() && document.getElementById('rewardType').value === 'student') renderBoard();
 }
 
 function addClassTag() {
     var val = document.getElementById('classSelect').value;
     if (val && selectedClasses.indexOf(val) === -1) {
         selectedClasses.push(val);
+        newlyAdded[val] = true;
         renderClassTags();
         if (isDeductMode()) {
+            scrollToCard(val);
             fetchBalanceForTargets([val]);
         }
+    } else if (val && isDeductMode()) {
+        scrollToCard(val);
     }
 }
 
 function removeClassTag(name) {
     selectedClasses = selectedClasses.filter(function(s) { return s !== name; });
+    delete carts[name];
     renderClassTags();
     hideBalanceError();
 }
@@ -1063,6 +1264,7 @@ function addAllClasses() {
     allClasses.forEach(function(cls) {
         if (selectedClasses.indexOf(cls) === -1) {
             selectedClasses.push(cls);
+            newlyAdded[cls] = true;
             newTargets.push(cls);
         }
     });
@@ -1075,89 +1277,79 @@ function addAllClasses() {
 function renderClassTags() {
     var c = document.getElementById('selectedClassesList');
     c.innerHTML = '';
-    var deductMode = isDeductMode();
-    var cartTotal = getCartTotal();
-
     selectedClasses.forEach(function(name) {
-        var tag = document.createElement('div');
-        tag.className = 'tag';
-
-        var labelSpan = document.createElement('span');
-        labelSpan.className = 'tag-label';
-        labelSpan.textContent = name;
-        tag.appendChild(labelSpan);
-
-        if (deductMode) {
-            var balSpan = document.createElement('span');
-            balSpan.className = 'tag-balance';
-            var balance = balanceCache[name];
-            if (balance === undefined) {
-                balSpan.textContent = '...';
-                balSpan.className += ' loading';
-            } else if (cartTotal > 0 && balance >= cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2714';
-                balSpan.className += ' ok';
-            } else if (cartTotal > 0 && balance < cartTotal) {
-                balSpan.textContent = '\u2b50' + balance + ' \u2718';
-                balSpan.className += ' insufficient';
-            } else {
-                balSpan.textContent = '\u2b50' + balance;
-                balSpan.className += ' neutral';
-            }
-            tag.appendChild(balSpan);
-        }
-
-        var btn = document.createElement('span');
-        btn.className = 'tag-remove';
-        btn.textContent = '\u00d7';
+        var tag = el('div', 'tag');
+        tag.appendChild(el('span', 'tag-label', name));
+        var btn = el('span', 'tag-remove', '\u00d7');
         btn.addEventListener('click', function() { removeClassTag(name); });
         tag.appendChild(btn);
         c.appendChild(tag);
     });
     document.getElementById('classNames').value = selectedClasses.join(',');
+    if (isDeductMode() && document.getElementById('rewardType').value === 'class') renderBoard();
 }
 
 function hideBalanceError() { var e = document.getElementById('balanceError'); e.style.display = 'none'; e.innerHTML = ''; }
 function showBalanceError(msg) { var e = document.getElementById('balanceError'); e.style.display = 'block'; e.innerHTML = msg; }
 
-/* ── PostMessage listener (server-side feedback) ── */
+/* ══════════════════════════════════════════════════════════════
+ *  Server communication (hidden iframe + postMessage)
+ * ────────────────────────────────────────────────────────────── */
 window.addEventListener('message', function(event) {
-    if (!event.data || event.data.type !== 'STAR_RESULT' || !isSubmitting) return;
-    isSubmitting = false;
-    var submitBtn = document.getElementById('submitBtn');
-    var actionMode = document.getElementById('actionMode').value;
-    submitBtn.disabled = false;
+    if (!event.data || event.data.type !== 'STAR_RESULT') return;
+    if (pendingResolve) pendingResolve({ success: !!event.data.success, data: event.data });
+});
 
-    if (event.data.success) {
-        var msg = event.data.mode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2b50 Stars Submitted Successfully!';
-        showToast(msg, 'success');
-        setTimeout(function() { location.reload(); }, 1500);
-    } else if (event.data.insufficientList) {
-        var html = '\u274c <strong>Server Rejected!</strong> Not enough stars.<br>';
-        event.data.insufficientList.forEach(function(item) {
+function postToServer() {
+    return new Promise(function(resolve) {
+        var iframe = document.getElementById('hidden_iframe');
+        var done = false;
+        var fallback;
+        function finish(result) {
+            if (done) return;
+            done = true;
+            clearTimeout(fallback);
+            iframe.onload = null;
+            pendingResolve = null;
+            resolve(result);
+        }
+        pendingResolve = finish;
+        /* If the server never posts back, assume success (same as original behaviour) */
+        fallback = setTimeout(function() { finish({ success: true, assumed: true, data: {} }); }, 10000);
+        iframe.onload = function() {
+            setTimeout(function() { finish({ success: true, assumed: true, data: {} }); }, 1500);
+        };
+        document.getElementById('rewardForm').submit();
+    });
+}
+
+function handleServerFailure(data, prefixNote) {
+    data = data || {};
+    var prefix = prefixNote ? prefixNote + '<br><br>' : '';
+    if (data.insufficientList) {
+        var html = prefix + '\u274c <strong>Server Rejected!</strong> Not enough stars.<br>';
+        data.insufficientList.forEach(function(item) {
             html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> only has <strong>' + item.balance + ' star(s)</strong> remaining.<br>';
         });
-        html += '<br>You requested: <strong>' + event.data.requested + ' star(s)</strong>.';
+        html += '<br>You requested: <strong>' + data.requested + ' star(s)</strong>.';
         showBalanceError(html);
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
-    } else if (event.data.error && event.data.error.indexOf('Invalid passcode') !== -1) {
-        document.getElementById('passcodeError').textContent = event.data.error;
+    } else if (data.error && data.error.indexOf('Invalid passcode') !== -1) {
+        document.getElementById('passcodeError').textContent = data.error;
         document.getElementById('passcodeError').style.display = 'block';
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
-    } else if (event.data.error && (event.data.error.indexOf('administrator') !== -1 || event.data.error.indexOf('only perform') !== -1)) {
-        showToast(event.data.error, 'error');
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
+        if (prefix) showBalanceError(prefix);
+    } else if (data.error && (data.error.indexOf('administrator') !== -1 || data.error.indexOf('only perform') !== -1)) {
+        showToast(prefix + escapeHTML(data.error), 'error');
     } else {
-        showToast('Error: ' + (event.data.error || 'Unknown error'), 'error');
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
+        showToast(prefix + 'Error: ' + escapeHTML(data.error || 'Unknown error'), 'error');
     }
-});
+}
 
 /* ── Form submission ── */
 async function handleFormSubmit(event) {
-    if (isSubmitting) return;
     event.preventDefault();
+    if (isSubmitting) return;
     hideBalanceError();
+    document.getElementById('passcodeError').style.display = 'none';
 
     var teacher = document.getElementById('teacherName').value;
     if (!teacher) {
@@ -1195,108 +1387,146 @@ async function handleFormSubmit(event) {
         return;
     }
 
-    /* Set hidden form values based on mode */
+    /* ─────────── ADD MODE (unchanged single submission) ─────────── */
     if (actionMode === 'ADD') {
         document.getElementById('starsValue').value = document.getElementById('starsSelect').value;
         document.getElementById('luckyDrawQtyField').value = 0;
         document.getElementById('bbssSurpriseQtyField').value = 0;
         document.getElementById('tuckShopCouponQtyField').value = 0;
-        var fullReason = getFullReason();
-        document.getElementById('reason').value = fullReason;
-    } else {
-        var cartTotalVal = getCartTotal();
-        if (cartTotalVal === 0) {
-            showToast('Please select at least one redemption item.', 'error');
-            return;
+        document.getElementById('reason').value = getFullReason();
+        document.getElementById('classNames').value = selectedClasses.join(',');
+        document.getElementById('studentNames').value = selectedStudents.join(',');
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+        isSubmitting = true;
+        var r = await postToServer();
+        isSubmitting = false;
+        submitBtn.disabled = false;
+
+        if (r.success) {
+            showToast('\u2b50 Stars Submitted Successfully!', 'success');
+            setTimeout(function() { location.reload(); }, 1500);
+        } else {
+            handleServerFailure(r.data);
+            submitBtn.textContent = defaultSubmitText();
         }
-        document.getElementById('starsValue').value = cartTotalVal;
-        document.getElementById('luckyDrawQtyField').value = cart.lucky;
-        document.getElementById('bbssSurpriseQtyField').value = cart.bbss;
-        document.getElementById('tuckShopCouponQtyField').value = cart.tuckshop;
-        document.getElementById('reason').value = getCartReason();
+        return;
+    }
+
+    /* ─────────── DEDUCT MODE (one cart per target) ─────────── */
+    var allTargets = getCurrentTargets();
+    var active = allTargets.filter(function(t) { return cartTotal(getCart(t)) > 0; });
+    if (active.length === 0) {
+        showToast('Please add at least one item to a cart.', 'error');
+        return;
     }
 
     submitBtn.disabled = true;
+    submitBtn.textContent = 'Checking Balance...';
 
     try {
-        if (actionMode === 'DEDUCT') {
-            var starsRequested = getCartTotal();
-            submitBtn.textContent = 'Checking Balance...';
-            var targets = [];
-            if (targetMode === 'class') {
-                targets = selectedClasses.slice();
-            } else {
-                targets = selectedStudents.slice();
-            }
+        var balances = await calculateBalances(active);
+        active.forEach(function(t) {
+            balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
+        });
+        allTargets.forEach(refreshCard);
 
-            var balances = await calculateBalances(targets);
-            targets.forEach(function(t) {
-                balanceCache[t] = balances[t] !== undefined ? balances[t] : 0;
+        var insufficientList = [];
+        active.forEach(function(t) {
+            var need = cartTotal(getCart(t));
+            if (balanceCache[t] < need) insufficientList.push({ name: t, balance: balanceCache[t], need: need });
+        });
+        if (insufficientList.length > 0) {
+            var html = '\u274c <strong>Redemption Rejected!</strong> Not enough stars.<br>';
+            insufficientList.forEach(function(item) {
+                html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> has <strong>' + item.balance +
+                        ' \u2b50</strong> but the cart needs <strong>' + item.need + ' \u2b50</strong>.<br>';
             });
-            renderCurrentTags();
-
-            var insufficientList = [];
-            targets.forEach(function(t) {
-                var bal = balances[t] !== undefined ? balances[t] : 0;
-                if (bal < starsRequested) {
-                    insufficientList.push({ name: t, balance: bal });
-                }
-            });
-            if (insufficientList.length > 0) {
-                var html = '\u274c <strong>Redemption Rejected!</strong> Not enough stars.<br>';
-                insufficientList.forEach(function(item) {
-                    html += '\u2022 <strong>' + escapeHTML(item.name) + '</strong> only has <strong>' + item.balance + ' star(s)</strong> remaining.<br>';
-                });
-                html += '<br>You requested: <strong>' + starsRequested + ' star(s)</strong> per target.';
-                showBalanceError(html);
-                submitBtn.disabled = false;
-                submitBtn.textContent = '\uD83C\uDF81 Redeem Items';
-                return;
-            }
+            html += '<br>Please adjust the red cart(s) and try again.';
+            showBalanceError(html);
+            submitBtn.disabled = false;
+            submitBtn.textContent = defaultSubmitText();
+            if (cardRefs[insufficientList[0].name]) scrollToCard(insufficientList[0].name);
+            return;
         }
-
-        if (targetMode === 'class') {
-            document.getElementById('classNames').value = selectedClasses.join(',');
-        } else {
-            document.getElementById('studentNames').value = selectedStudents.join(',');
-        }
-
-        submitBtn.textContent = 'Submitting...';
-        isSubmitting = true;
-
-        var form = document.getElementById('rewardForm');
-        form.submit();
-
-        var fallbackTimer = setTimeout(function() {
-            if (isSubmitting) {
-                isSubmitting = false;
-                submitBtn.disabled = false;
-                showToast(actionMode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2b50 Stars Submitted Successfully!', 'success');
-                setTimeout(function() { location.reload(); }, 1500);
-            }
-        }, 8000);
-
-        document.getElementById('hidden_iframe').onload = function() {
-            setTimeout(function() {
-                if (isSubmitting) {
-                    isSubmitting = false;
-                    clearTimeout(fallbackTimer);
-                    showToast(actionMode === 'DEDUCT' ? '\uD83C\uDF81 Stars Redeemed Successfully!' : '\u2b50 Stars Submitted Successfully!', 'success');
-                    setTimeout(function() { location.reload(); }, 1500);
-                }
-            }, 1500);
-        };
-
     } catch (error) {
         showToast('Error: ' + escapeHTML(error.message), 'error');
         submitBtn.disabled = false;
-        submitBtn.textContent = actionMode === 'ADD' ? 'Submit Stars' : '\uD83C\uDF81 Redeem Items';
+        submitBtn.textContent = defaultSubmitText();
+        return;
     }
+
+    /* Group targets that have identical carts -> fewer server requests */
+    var groups = [];
+    var groupIndex = {};
+    active.forEach(function(t) {
+        var c = getCart(t);
+        var key = c.lucky + '|' + c.bbss + '|' + c.tuckshop;
+        if (groupIndex[key] === undefined) {
+            groupIndex[key] = groups.length;
+            groups.push({ cart: { lucky: c.lucky, bbss: c.bbss, tuckshop: c.tuckshop }, targets: [] });
+        }
+        groups[groupIndex[key]].targets.push(t);
+    });
+
+    isSubmitting = true;
+    var doneTargets = [];
+
+    for (var i = 0; i < groups.length; i++) {
+        var g = groups[i];
+        submitBtn.textContent = groups.length > 1 ? ('Submitting ' + (i + 1) + ' / ' + groups.length + '...') : 'Submitting...';
+
+        document.getElementById('actionMode').value = 'DEDUCT';
+        document.getElementById('starsValue').value = cartTotal(g.cart);
+        document.getElementById('luckyDrawQtyField').value = g.cart.lucky;
+        document.getElementById('bbssSurpriseQtyField').value = g.cart.bbss;
+        document.getElementById('tuckShopCouponQtyField').value = g.cart.tuckshop;
+        document.getElementById('reason').value = cartReason(g.cart);
+        if (targetMode === 'class') {
+            document.getElementById('classNames').value = g.targets.join(',');
+            document.getElementById('studentNames').value = '';
+        } else {
+            document.getElementById('studentNames').value = g.targets.join(',');
+            document.getElementById('classNames').value = '';
+        }
+
+        var result = await postToServer();
+
+        if (!result.success) {
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            var note = '';
+            if (doneTargets.length > 0) {
+                note = '\u2705 ' + doneTargets.length + ' cart(s) were already redeemed successfully and have been removed from the list.';
+                doneTargets.forEach(function(t) { delete carts[t]; });
+                if (targetMode === 'class') {
+                    selectedClasses = selectedClasses.filter(function(x) { return doneTargets.indexOf(x) === -1; });
+                } else {
+                    selectedStudents = selectedStudents.filter(function(x) { return doneTargets.indexOf(x) === -1; });
+                }
+            }
+            renderCurrentTags();
+            handleServerFailure(result.data, note);
+            submitBtn.textContent = defaultSubmitText();
+            return;
+        }
+        doneTargets = doneTargets.concat(g.targets);
+    }
+
+    isSubmitting = false;
+    submitBtn.disabled = false;
+    var skipped = allTargets.length - active.length;
+    var msg = '\uD83C\uDF81 Stars Redeemed Successfully!<br><small>' + doneTargets.length + ' cart(s) redeemed' +
+              (skipped > 0 ? ', ' + skipped + ' empty cart(s) skipped' : '') + '.</small>';
+    showToast(msg, 'success');
+    setTimeout(function() { location.reload(); }, 1800);
 }
 
 /* ── Init ── */
 window.addEventListener('DOMContentLoaded', function() {
     document.getElementById('passcode').value = '';
+    renderBoard();
     document.addEventListener('click', function(e) {
         var wrap = document.getElementById('teacherWrap');
         if (!wrap.contains(e.target)) {
