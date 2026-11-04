@@ -98,6 +98,16 @@
         select option { background: var(--card-bg); color: var(--text); }
         textarea { resize: vertical; height: 60px; }
 
+        /* ── Passcode check status ── */
+        .pass-status { display: none; font-size: 12px; font-weight: 700; margin-top: 6px; line-height: 1.5; }
+        .pass-status.show { display: block; }
+        .pass-status.ok { color: var(--green); }
+        .pass-status.bad { color: var(--red); }
+        .pass-status.warn { color: var(--gold-text); }
+        .pass-status.checking, .pass-status.hint { color: var(--text-muted); }
+        input.valid, input.valid:focus { border-color: var(--green); }
+        input.invalid, input.invalid:focus { border-color: var(--red); }
+
         .search-select-wrap { position: relative; margin-top: 6px; }
         .search-select-wrap input {
             margin-top: 0; padding-right: 36px;
@@ -228,7 +238,6 @@
         body.wide button[type="submit"] { padding: 16px; font-size: 17px; }
         button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
-        .error-msg { color: var(--red); font-size: 12px; display: none; margin-top: 4px; font-weight: 700; }
         .balance-error {
             background: var(--red-light); color: var(--red-text); padding: 14px; border-radius: 12px;
             border: 1px solid var(--red-border); margin-top: 16px; font-size: 13px;
@@ -387,8 +396,8 @@
         <input type="hidden" name="teacherName" id="teacherName">
 
         <label for="passcode">6-Digit Secret Passcode</label>
-        <input type="password" id="passcode" name="passcode" maxlength="6" pattern="\d{6}" placeholder="Enter 6-digit code" autocomplete="new-password" required>
-        <div id="passcodeError" class="error-msg">Incorrect passcode for selected teacher!</div>
+        <input type="password" id="passcode" name="passcode" maxlength="6" inputmode="numeric" placeholder="Enter 6-digit code" autocomplete="new-password">
+        <div id="passcodeStatus" class="pass-status"></div>
 
         <!-- Default stars (ADD mode only) -->
         <div id="starsSection">
@@ -682,6 +691,86 @@ async function calculateBalances(targets) {
     return balances;
 }
 
+/* ══════════════════════════════════════════════════════════════
+ *  NEW: Passcode check with the server (Apps Script "verify" action)
+ * ────────────────────────────────────────────────────────────── */
+var passState = { key: '', status: 'idle' };   /* status: idle | checking | ok | bad | error */
+var verifySeq = 0;
+var verifyTimer = null;
+
+function getScriptUrl() { return document.getElementById('rewardForm').action; }
+
+function setPasscodeStatus(type, text) {
+    var s = document.getElementById('passcodeStatus');
+    var input = document.getElementById('passcode');
+    s.className = 'pass-status' + (type ? ' show ' + type : '');
+    s.textContent = text || '';
+    input.classList.toggle('valid', type === 'ok');
+    input.classList.toggle('invalid', type === 'bad');
+}
+
+/* Asks the server whether this teacher + passcode is correct.
+ * Returns { valid: true } or { valid: false, error, networkError? } */
+async function verifyPasscode(teacher, code) {
+    var key = teacher + '|' + code;
+    if (passState.key === key && passState.status === 'ok') return { valid: true };
+
+    var seq = ++verifySeq;
+    passState = { key: key, status: 'checking' };
+    setPasscodeStatus('checking', '\u23F3 Checking passcode\u2026');
+
+    var result;
+    try {
+        var resp = await fetch(getScriptUrl(), {
+            method: 'POST',
+            body: new URLSearchParams({ action: 'verify', teacherName: teacher, passcode: code })
+        });
+        var text = await resp.text();
+        var data = null;
+        try { data = JSON.parse(text); } catch (e) {}
+        if (!data || typeof data.valid !== 'boolean') {
+            result = { valid: false, networkError: true,
+                error: 'The server could not check the passcode. (Admin: please make sure the updated Apps Script has been deployed as a NEW version.)' };
+        } else {
+            result = data;
+        }
+    } catch (e) {
+        result = { valid: false, networkError: true,
+            error: 'Could not reach the server to check the passcode. Please check the internet connection and try again.' };
+    }
+
+    if (seq !== verifySeq) return result;   /* user changed the name/passcode meanwhile - ignore old answer */
+
+    if (result.valid) {
+        passState.status = 'ok';
+        setPasscodeStatus('ok', '\u2705 Passcode correct');
+    } else if (result.networkError) {
+        passState.status = 'error';
+        setPasscodeStatus('warn', '\u26A0\uFE0F ' + result.error);
+    } else {
+        passState.status = 'bad';
+        setPasscodeStatus('bad', '\u274C ' + (result.error || 'Incorrect passcode for this teacher.'));
+    }
+    return result;
+}
+
+/* Called whenever the teacher name or passcode changes */
+function scheduleVerify() {
+    clearTimeout(verifyTimer);
+    var teacher = document.getElementById('teacherName').value;
+    var code = document.getElementById('passcode').value;
+
+    if (passState.key !== teacher + '|' + code) {
+        passState = { key: '', status: 'idle' };
+        verifySeq++;                          /* cancel any check still running */
+    }
+    if (!code) { setPasscodeStatus('', ''); return; }
+    if (!/^\d{6}$/.test(code)) { setPasscodeStatus('hint', code.length + ' / 6 digits'); return; }
+    if (!teacher) { setPasscodeStatus('hint', 'Please choose your name above first.'); return; }
+
+    verifyTimer = setTimeout(function() { verifyPasscode(teacher, code); }, 300);
+}
+
 /* ── Permission helpers ── */
 function isSuperAdmin(name) { return SUPER_ADMINS.indexOf(name) !== -1; }
 function isRedeemOnlyAdmin(name) { return REDEEM_ONLY_ADMINS.indexOf(name) !== -1; }
@@ -764,8 +853,8 @@ function selectTeacher(teacher) {
     document.getElementById('teacherSearch').value = teacher;
     document.getElementById('teacherName').value = teacher;
     document.getElementById('teacherDropdown').classList.remove('open');
-    document.getElementById('passcodeError').style.display = 'none';
     updateAdminUI(teacher);
+    scheduleVerify();   /* re-check the passcode for the newly chosen teacher */
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -872,12 +961,12 @@ function renderStarList() {
     if (!isDeductMode()) newlyAdded = {};
 }
 
-/* ── Pick students: tap = add, tap again = remove (no ADD button) ── */
+/* ── Pick students: tap = add, tap again = remove ── */
 function renderPickGrid() {
     var cls = document.getElementById('groupClassSelect').value;
     var grid = document.getElementById('pickGrid');
     var list = CLASS_STUDENTS[cls] || [];
-    var keepScroll = grid.scrollTop;   /* don't jump to top after each tap */
+    var keepScroll = grid.scrollTop;
     grid.innerHTML = '';
     document.getElementById('pickToolbar').style.display = list.length ? 'flex' : 'none';
 
@@ -931,7 +1020,6 @@ function pickAll() {
     if (isDeductMode() && newTargets.length > 0) fetchBalanceForTargets(newTargets);
 }
 
-/* Remove all students of the current class from the list */
 function pickNone() {
     var cls = document.getElementById('groupClassSelect').value;
     var inClass = CLASS_STUDENTS[cls] || [];
@@ -1262,7 +1350,7 @@ function setActionMode(mode) {
 function addClassTag() {
     var sel = document.getElementById('classSelect');
     var val = sel.value;
-    sel.selectedIndex = 0;   /* back to "Pick a class to add" */
+    sel.selectedIndex = 0;
     if (!val) return;
     var isNew = addTarget(val);
     renderTargets();
@@ -1328,8 +1416,8 @@ function handleServerFailure(data, prefixNote) {
         html += '<br>You requested: <strong>' + data.requested + ' star(s)</strong>.';
         showBalanceError(html);
     } else if (data.error && data.error.indexOf('Invalid passcode') !== -1) {
-        document.getElementById('passcodeError').textContent = data.error;
-        document.getElementById('passcodeError').style.display = 'block';
+        passState = { key: '', status: 'idle' };
+        setPasscodeStatus('bad', '\u274C ' + data.error);
         if (prefix) showBalanceError(prefix);
     } else if (data.error && (data.error.indexOf('administrator') !== -1 || data.error.indexOf('only perform') !== -1)) {
         showToast(prefix + escapeHTML(data.error), 'error');
@@ -1361,7 +1449,7 @@ async function runBatches(batches, actionMode, submitBtn) {
         document.getElementById('reason').value = b.reason;
 
         var pending = postToServer();
-        document.getElementById('reason').value = customNote;   /* restore UI state */
+        document.getElementById('reason').value = customNote;
         var result = await pending;
 
         if (!result.success) {
@@ -1390,8 +1478,8 @@ async function handleFormSubmit(event) {
     event.preventDefault();
     if (isSubmitting) return;
     hideBalanceError();
-    document.getElementById('passcodeError').style.display = 'none';
 
+    var submitBtn = document.getElementById('submitBtn');
     var teacher = document.getElementById('teacherName').value;
     if (!teacher) {
         showToast('Please select a teacher / admin before submitting.', 'error');
@@ -1399,9 +1487,9 @@ async function handleFormSubmit(event) {
     }
 
     var code = document.getElementById('passcode').value;
-    if (!code || code.length !== 6) {
-        document.getElementById('passcodeError').style.display = 'block';
-        document.getElementById('passcodeError').textContent = 'Please enter a 6-digit passcode.';
+    if (!/^\d{6}$/.test(code)) {
+        setPasscodeStatus('bad', '\u274C Please enter a 6-digit passcode.');
+        document.getElementById('passcode').focus();
         return;
     }
 
@@ -1412,7 +1500,6 @@ async function handleFormSubmit(event) {
     }
 
     var actionMode = document.getElementById('actionMode').value;
-    var submitBtn = document.getElementById('submitBtn');
 
     if (actionMode === 'ADD' && isRedeemOnlyAdmin(teacher)) {
         showToast('This admin account can only redeem stars, not add.', 'error');
@@ -1423,13 +1510,35 @@ async function handleFormSubmit(event) {
         return;
     }
 
+    /* ─────────── NEW: check the passcode with the server first ─────────── */
+    isSubmitting = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Checking passcode...';
+    var check = await verifyPasscode(teacher, code);
+    isSubmitting = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = defaultSubmitText();
+
+    if (!check.valid) {
+        if (check.networkError) {
+            showToast(escapeHTML(check.error), 'error');
+        } else {
+            showToast('\u274C ' + escapeHTML(check.error || 'Incorrect passcode for this teacher.') + '<br><small>Nothing was submitted.</small>', 'error');
+            document.getElementById('passcode').focus();
+        }
+        return;
+    }
+    /* Name or passcode changed while checking? Stop and let the user submit again. */
+    if (document.getElementById('teacherName').value !== teacher || document.getElementById('passcode').value !== code) {
+        scheduleVerify();
+        return;
+    }
+
     var batches = [];
     var emptyCart = { lucky: 0, bbss: 0, tuckshop: 0 };
 
     if (actionMode === 'ADD') {
-        /* ─────────── GIVE STARS ───────────
-         * Each class/student has its own stars. Targets with the same
-         * type + stars are grouped into one request. */
+        /* ─────────── GIVE STARS ─────────── */
         var reasonText = getFullReason();
         var starGroups = {};
         allTargets.forEach(function(t) {
@@ -1527,7 +1636,15 @@ async function handleFormSubmit(event) {
 
 /* ── Init ── */
 window.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('passcode').value = '';
+    var passInput = document.getElementById('passcode');
+    passInput.value = '';
+
+    /* Digits only, max 6, check with server once 6 digits are typed */
+    passInput.addEventListener('input', function() {
+        var clean = this.value.replace(/\D/g, '').slice(0, 6);
+        if (clean !== this.value) this.value = clean;
+        scheduleVerify();
+    });
 
     var gcs = document.getElementById('groupClassSelect');
     Object.keys(CLASS_STUDENTS).forEach(function(cls) {
@@ -1571,6 +1688,7 @@ window.addEventListener('DOMContentLoaded', function() {
         if (!this.value.trim()) {
             document.getElementById('teacherName').value = '';
             updateAdminUI('');
+            scheduleVerify();
         }
     });
 });
