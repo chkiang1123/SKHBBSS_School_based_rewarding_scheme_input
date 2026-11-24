@@ -166,6 +166,7 @@
         /* ── Reward list (each target has its own stars) ── */
         .sl-toolbar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
         .sl-hint { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+        .sl-rule { font-size: 12px; font-weight: 700; color: var(--gold-text); margin-top: 6px; line-height: 1.5; }
         .sl-quick {
             padding: 5px 10px; border-radius: 20px; border: 1.5px solid var(--gold);
             background: var(--card-bg); color: var(--gold-text); font-weight: 800; font-size: 12px;
@@ -195,6 +196,17 @@
         }
         .cart-qty.sm .qty-btn { width: 36px; height: 36px; font-size: 18px; }
         .cart-qty.sm .qty-value { width: 54px; line-height: 36px; font-size: 15px; }
+
+        /* ── NEW: Daily usage box ── */
+        .daily-usage {
+            display: none; margin-top: 8px; padding: 10px 12px; border-radius: 10px;
+            background: var(--inactive-bg); border: 1.5px solid var(--inactive-border);
+            color: var(--text-muted); font-weight: 700; font-size: 12px; line-height: 1.6; text-align: center;
+        }
+        .daily-usage strong { color: var(--text); }
+        .daily-usage.warn { background: var(--gold-light); border-color: var(--gold); color: var(--gold-text); }
+        .daily-usage.over { background: var(--red-light); border-color: var(--red-border); color: var(--red-text); }
+        .daily-usage.over strong { color: var(--red-text); }
 
         .reason-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
         .reason-chip {
@@ -261,6 +273,13 @@
         }
         .toast-box.success-toast button { background: var(--green); }
         .toast-box.error-toast button { background: var(--red); }
+        /* NEW: warning / confirm dialog */
+        .toast-box.warn-toast { max-width: 420px; }
+        .toast-box.warn-toast p { text-align: left; font-size: 14px; }
+        .toast-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .toast-box .toast-actions button { padding: 10px 20px; }
+        .toast-box button.btn-secondary { background: var(--inactive-bg); color: var(--text); border: 1.5px solid var(--border); }
+        .toast-box button.btn-warn { background: var(--gold); }
         @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
         @keyframes scaleIn { from { transform: scale(.92); opacity: 0 } to { transform: scale(1); opacity: 1 } }
 
@@ -401,7 +420,7 @@
 
         <!-- Default stars (ADD mode only) -->
         <div id="starsSection">
-            <label id="starsLabel" for="starsSelect">Default Stars <span class="optional">(for newly added classes / students &mdash; change each one below)</span></label>
+            <label id="starsLabel" for="starsSelect">Default Stars <span class="optional">(for newly added classes / students &mdash; individual students max 2 &#11088; each; change each one below)</span></label>
             <select id="starsSelect">
                 <option value="1">&#11088; 1 Star</option>
                 <option value="2">&#11088;&#11088; 2 Stars</option>
@@ -448,6 +467,7 @@
         <!-- Reward list with stars per class/student (ADD mode only) -->
         <div id="starListSection">
             <label>Reward List <span class="optional" id="starListCount"></span></label>
+            <div class="sl-rule" id="slRule"></div>
             <div class="sl-toolbar">
                 <span class="sl-hint">Set all to:</span>
                 <button type="button" class="sl-quick" onclick="setAllStars(1)">1&#11088;</button>
@@ -459,6 +479,7 @@
             </div>
             <div id="starList" class="star-list"></div>
             <div id="starListTotal" class="sl-total" style="display:none;"></div>
+            <div id="dailyUsage" class="daily-usage"></div>
         </div>
 
         <div id="reasonSection">
@@ -532,10 +553,21 @@ var REDEEM_ONLY_ADMINS = [
     'Admin 4'
 ];
 
+/* ══════════════════════════════════════════════════════════════
+ *  NEW: Awarding rules
+ *  - STUDENT_MAX_STARS   : hard limit per student per submission
+ *  - DAILY_STUDENT_LIMIT : suggested max students per teacher per day (warning only)
+ *  - DAILY_CLASS_LIMIT   : suggested max whole-class awards per teacher per day (warning only)
+ * ────────────────────────────────────────────────────────────── */
+var STUDENT_MAX_STARS = 2;
+var DAILY_STUDENT_LIMIT = 10;
+var DAILY_CLASS_LIMIT = 1;
+var SCHOOL_TIMEZONE = 'Asia/Hong_Kong';
+
 /* ── Constants ── */
 var SPREADSHEET_ID = '1xD_LThLu70H5eG8jI9GX3FvkHS8AT6ud2upnkufYg6A';
 var isSubmitting = false;
-var MAX_STARS = 5;   /* highest number of stars per class/student */
+var MAX_STARS = 5;   /* highest number of stars per whole class */
 
 var ITEMS = [
     { key: 'lucky',    icon: '\uD83C\uDF9F\uFE0F', name: 'Lucky Draw Token',      cost: 1 },
@@ -606,6 +638,10 @@ var cardRefs = {};
 var newlyAdded = {};
 var pendingResolve = null;
 
+/* NEW: today's record of the selected teacher (for daily limit warnings) */
+var todayUsage = { teacher: '', loaded: false, loading: false, failed: false, students: {}, classCount: 0 };
+var usageSeq = 0;
+
 /* ── Toast ── */
 function showToast(message, type) {
     var boxClass = 'toast-box';
@@ -615,6 +651,36 @@ function showToast(message, type) {
     overlay.className = 'toast-overlay';
     overlay.innerHTML = '<div class="' + boxClass + '"><p>' + message + '</p><button onclick="this.closest(\'.toast-overlay\').remove()">OK</button></div>';
     document.body.appendChild(overlay);
+}
+
+/* NEW: Confirm dialog with two buttons. Resolves true (continue) / false (go back). */
+function showConfirmDialog(html, okText, cancelText) {
+    return new Promise(function(resolve) {
+        var overlay = document.createElement('div');
+        overlay.className = 'toast-overlay';
+        var box = document.createElement('div');
+        box.className = 'toast-box warn-toast';
+        var p = document.createElement('p');
+        p.innerHTML = html;
+        var actions = document.createElement('div');
+        actions.className = 'toast-actions';
+        var cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'btn-secondary';
+        cancel.textContent = cancelText || 'Cancel';
+        var ok = document.createElement('button');
+        ok.type = 'button';
+        ok.className = 'btn-warn';
+        ok.textContent = okText || 'Continue';
+        cancel.addEventListener('click', function() { overlay.remove(); resolve(false); });
+        ok.addEventListener('click', function() { overlay.remove(); resolve(true); });
+        actions.appendChild(cancel);
+        actions.appendChild(ok);
+        box.appendChild(p);
+        box.appendChild(actions);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+    });
 }
 
 /* ── Helpers ── */
@@ -692,7 +758,174 @@ async function calculateBalances(targets) {
 }
 
 /* ══════════════════════════════════════════════════════════════
- *  NEW: Passcode check with the server (Apps Script "verify" action)
+ *  NEW: Daily limit check (reads today's rows from the Records sheet)
+ * ────────────────────────────────────────────────────────────── */
+function getSchoolToday() {
+    var o = {};
+    try {
+        new Intl.DateTimeFormat('en-CA', { timeZone: SCHOOL_TIMEZONE, year: 'numeric', month: '2-digit', day: '2-digit' })
+            .formatToParts(new Date())
+            .forEach(function(p) { o[p.type] = p.value; });
+    } catch (e) {
+        var d = new Date();
+        o = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+    }
+    return { y: parseInt(o.year, 10), m: parseInt(o.month, 10), d: parseInt(o.day, 10) };
+}
+
+/* Supports: "2026年11月24日 下午04:56:14", "2026/11/24 16:56:14", "2026-11-24",
+ * "24/11/2026 16:56:14" (or 11/24/2026), and "Date(2026,10,24,...)" */
+function isTimestampToday(ts, today) {
+    if (!ts) return false;
+    var m = ts.match(/Date\((\d{4}),\s*(\d{1,2}),\s*(\d{1,2})/);
+    if (m) return +m[1] === today.y && (+m[2] + 1) === today.m && +m[3] === today.d;
+    m = ts.match(/(\d{4})\D{1,3}(\d{1,2})\D{1,3}(\d{1,2})/);
+    if (m) return +m[1] === today.y && +m[2] === today.m && +m[3] === today.d;
+    m = ts.match(/(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})/);
+    if (m) {
+        var a = +m[1], b = +m[2];
+        if (+m[3] !== today.y) return false;
+        return (a === today.d && b === today.m) || (a === today.m && b === today.d);
+    }
+    return false;
+}
+
+async function fetchTodayUsage(teacher) {
+    var url = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID +
+              '/gviz/tq?tqx=out:csv&sheet=Records&_=' + Date.now();
+    var resp = await fetch(url, { cache: 'no-store' });
+    if (!resp.ok) throw new Error('Cannot read Records sheet');
+    var csv = await resp.text();
+    if (csv.trim().startsWith('<')) throw new Error('Records sheet is not readable');
+
+    var today = getSchoolToday();
+    var me = normalizeStr(teacher);
+    var students = {};
+    var classCount = 0;
+
+    csv.split(/\r?\n/).slice(1).forEach(function(line) {
+        if (!line.trim()) return;
+        var row = parseCSVRow(line);
+        if (normalizeStr(row[1] || '') !== me) return;
+        if (!isTimestampToday(row[0] || '', today)) return;
+        var type = normalizeStr(row[2] || '');
+        var rawTarget = (row[3] || '').replace(/"/g, '').trim();
+        if (type === 'class' || isClassTarget(rawTarget)) {
+            classCount++;
+        } else if (rawTarget) {
+            students[normalizeStr(rawTarget)] = true;
+        }
+    });
+    return { students: students, classCount: classCount };
+}
+
+function loadTodayUsage(teacher) {
+    var seq = ++usageSeq;
+    todayUsage = { teacher: teacher, loaded: false, loading: !!teacher, failed: false, students: {}, classCount: 0 };
+    updateDailyUsageBox();
+
+    if (!teacher || isRedeemOnlyAdmin(teacher)) {
+        todayUsage.loading = false;
+        updateDailyUsageBox();
+        return Promise.resolve(todayUsage);
+    }
+
+    return fetchTodayUsage(teacher).then(function(u) {
+        if (seq !== usageSeq) return todayUsage;
+        todayUsage = { teacher: teacher, loaded: true, loading: false, failed: false, students: u.students, classCount: u.classCount };
+        updateDailyUsageBox();
+        return todayUsage;
+    }).catch(function(e) {
+        console.log('Daily usage fetch error: ' + e.message);
+        if (seq !== usageSeq) return todayUsage;
+        todayUsage.loading = false;
+        todayUsage.failed = true;
+        updateDailyUsageBox();
+        return todayUsage;
+    });
+}
+
+/* Counts today's numbers INCLUDING the current list */
+function getPlannedCounts() {
+    var already = Object.keys(todayUsage.students).length;
+    var newStudents = groupStudents.filter(function(s) { return !todayUsage.students[normalizeStr(s)]; }).length;
+    return {
+        studentsBefore: already,
+        studentTotal: already + newStudents,
+        classesBefore: todayUsage.classCount,
+        classTotal: todayUsage.classCount + selectedClasses.length
+    };
+}
+
+function updateDailyUsageBox() {
+    var box = document.getElementById('dailyUsage');
+    if (!box) return;
+    var teacher = document.getElementById('teacherName').value;
+    if (!teacher || isDeductMode() || isRedeemOnlyAdmin(teacher)) {
+        box.style.display = 'none';
+        return;
+    }
+    box.style.display = 'block';
+    box.className = 'daily-usage';
+
+    if (todayUsage.teacher !== teacher || todayUsage.loading) {
+        box.textContent = '\u23F3 Checking your record for today\u2026';
+        return;
+    }
+    if (todayUsage.failed) {
+        box.classList.add('warn');
+        box.textContent = '\u26A0\uFE0F Could not load your record for today. The daily limit will be checked again when you submit.';
+        return;
+    }
+
+    var p = getPlannedCounts();
+    var overS = p.studentTotal > DAILY_STUDENT_LIMIT;
+    var overC = p.classTotal > DAILY_CLASS_LIMIT;
+    box.innerHTML = '\uD83D\uDCC5 Today (including this list): ' +
+        'Students <strong>' + p.studentTotal + ' / ' + DAILY_STUDENT_LIMIT + '</strong>' +
+        ' &middot; Class awards <strong>' + p.classTotal + ' / ' + DAILY_CLASS_LIMIT + '</strong>' +
+        ((overS || overC) ? '<br>\u26A0\uFE0F Over the suggested daily limit &mdash; you can still submit.' : '');
+    if (overS || overC) box.classList.add('over');
+}
+
+/* Returns true = go ahead, false = teacher chose to go back */
+async function checkDailyLimits(teacher, submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Checking today\'s limit...';
+    await loadTodayUsage(teacher);   /* always use fresh data */
+    submitBtn.disabled = false;
+    submitBtn.textContent = defaultSubmitText();
+
+    if (todayUsage.failed) return true;   /* cannot check - do not block the teacher */
+
+    var p = getPlannedCounts();
+    var warnings = [];
+
+    if (groupStudents.length > 0 && p.studentTotal > DAILY_STUDENT_LIMIT) {
+        warnings.push('\uD83D\uDC65 <strong>Students:</strong> You have rewarded <strong>' + p.studentsBefore +
+            '</strong> student(s) today. With this list it will be <strong>' + p.studentTotal +
+            '</strong>, which is more than the suggested limit of <strong>' + DAILY_STUDENT_LIMIT +
+            ' students per day</strong>.');
+    }
+    if (selectedClasses.length > 0 && p.classTotal > DAILY_CLASS_LIMIT) {
+        warnings.push('\uD83C\uDFEB <strong>Whole class:</strong> You have given <strong>' + p.classesBefore +
+            '</strong> class award(s) today. With this list it will be <strong>' + p.classTotal +
+            '</strong>, which is more than the suggested limit of <strong>' + DAILY_CLASS_LIMIT +
+            ' class award per day</strong>.');
+    }
+
+    if (warnings.length === 0) return true;
+
+    return await showConfirmDialog(
+        '\u26A0\uFE0F <strong>Daily Limit Reminder</strong><br><br>' + warnings.join('<br><br>') +
+        '<br><br>Do you still want to give these stars?',
+        'Yes, give stars',
+        'Go back'
+    );
+}
+
+/* ══════════════════════════════════════════════════════════════
+ *  Passcode check with the server (Apps Script "verify" action)
  * ────────────────────────────────────────────────────────────── */
 var passState = { key: '', status: 'idle' };   /* status: idle | checking | ok | bad | error */
 var verifySeq = 0;
@@ -854,19 +1087,23 @@ function selectTeacher(teacher) {
     document.getElementById('teacherName').value = teacher;
     document.getElementById('teacherDropdown').classList.remove('open');
     updateAdminUI(teacher);
-    scheduleVerify();   /* re-check the passcode for the newly chosen teacher */
+    scheduleVerify();        /* re-check the passcode for the newly chosen teacher */
+    loadTodayUsage(teacher); /* NEW: load today's record for the daily limit */
 }
 
 /* ══════════════════════════════════════════════════════════════
  *  Targets (whole classes + individual students) & stars per target
  * ────────────────────────────────────────────────────────────── */
-function clampStars(n) {
+/* NEW: students max STUDENT_MAX_STARS, whole classes max MAX_STARS */
+function getMaxStars(t) { return isClassTarget(t) ? MAX_STARS : STUDENT_MAX_STARS; }
+
+function clampStars(n, max) {
     n = parseInt(n, 10);
     if (isNaN(n) || n < 1) n = 1;
-    return Math.min(n, MAX_STARS);
+    return Math.min(n, max || MAX_STARS);
 }
 function getDefaultStars() { return clampStars(document.getElementById('starsSelect').value); }
-function getStars(t) { return targetStars[t] || getDefaultStars(); }
+function getStars(t) { return clampStars(targetStars[t] || getDefaultStars(), getMaxStars(t)); }
 
 function getCurrentTargets() { return selectedClasses.concat(groupStudents); }
 
@@ -876,7 +1113,7 @@ function addTarget(t) {
     if (list.indexOf(t) !== -1) return false;
     list.push(t);
     newlyAdded[t] = true;
-    targetStars[t] = getDefaultStars();
+    targetStars[t] = clampStars(getDefaultStars(), getMaxStars(t));
     return true;
 }
 
@@ -890,12 +1127,12 @@ function removeTarget(t) {
 }
 
 function changeTargetStars(t, delta) {
-    targetStars[t] = clampStars(getStars(t) + delta);
+    targetStars[t] = clampStars(getStars(t) + delta, getMaxStars(t));
     renderStarList();
 }
 
 function setAllStars(n) {
-    getCurrentTargets().forEach(function(t) { targetStars[t] = clampStars(n); });
+    getCurrentTargets().forEach(function(t) { targetStars[t] = clampStars(n, getMaxStars(t)); });
     renderStarList();
 }
 
@@ -904,6 +1141,7 @@ function renderTargets() {
     document.getElementById('classNames').value = selectedClasses.join(',');
     renderStarList();
     renderPickGrid();
+    updateDailyUsageBox();
     if (isDeductMode()) renderBoard();
 }
 
@@ -913,6 +1151,9 @@ function renderStarList() {
     var targets = getCurrentTargets();
     list.innerHTML = '';
     document.getElementById('starListCount').textContent = targets.length ? '(' + targets.length + ')' : '';
+    document.getElementById('slRule').textContent =
+        '\u2139\uFE0F Individual students: max ' + STUDENT_MAX_STARS + ' \u2b50 each time \u00b7 Suggested daily limit: ' +
+        DAILY_STUDENT_LIMIT + ' students & ' + DAILY_CLASS_LIMIT + ' class award per teacher';
 
     if (targets.length === 0) {
         list.innerHTML = '<div class="sl-empty">No classes or students yet.<br>Pick a class or tap students above &mdash; each one can get a different number of stars.</div>';
@@ -926,6 +1167,7 @@ function renderStarList() {
         var isCls = isClassTarget(t);
         var parts = splitTarget(t);
         var stars = getStars(t);
+        var maxS = getMaxStars(t);
         var size = isCls ? (CLASS_STUDENTS[t] || []).length : 1;
         totalStudents += size;
         totalStars += size * stars;
@@ -933,7 +1175,7 @@ function renderStarList() {
         var row = el('div', 'sl-row' + (isCls ? ' is-class' : '') + (newlyAdded[t] ? ' new' : ''));
         var info = el('div', 'sl-info');
         info.appendChild(el('span', 'sl-code', parts.code));
-        var nm = el('span', 'sl-name', isCls ? 'Whole class \u00b7 ' + size + ' students' : parts.name);
+        var nm = el('span', 'sl-name', isCls ? 'Whole class \u00b7 ' + size + ' students' : parts.name + ' \u00b7 max ' + maxS + ' \u2b50');
         nm.title = t;
         info.appendChild(nm);
         if (!isCls && selectedClasses.indexOf(t.substring(0, 2)) !== -1) {
@@ -942,9 +1184,12 @@ function renderStarList() {
 
         var q = el('div', 'cart-qty sm');
         var minus = el('button', 'qty-btn', '\u2212'); minus.type = 'button';
+        minus.disabled = stars <= 1;
         minus.addEventListener('click', function() { changeTargetStars(t, -1); });
         var val = el('span', 'qty-value', stars + ' \u2b50');
         var plus = el('button', 'qty-btn', '+'); plus.type = 'button';
+        plus.disabled = stars >= maxS;
+        if (stars >= maxS) plus.title = 'Maximum ' + maxS + ' star(s)';
         plus.addEventListener('click', function() { changeTargetStars(t, 1); });
         q.appendChild(minus); q.appendChild(val); q.appendChild(plus);
 
@@ -1510,7 +1755,7 @@ async function handleFormSubmit(event) {
         return;
     }
 
-    /* ─────────── NEW: check the passcode with the server first ─────────── */
+    /* ─────────── Check the passcode with the server first ─────────── */
     isSubmitting = true;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Checking passcode...';
@@ -1534,6 +1779,16 @@ async function handleFormSubmit(event) {
         return;
     }
 
+    /* ─────────── NEW: Daily limit warning (ADD mode only, teacher may still continue) ─────────── */
+    if (actionMode === 'ADD') {
+        isSubmitting = true;
+        var goAhead = await checkDailyLimits(teacher, submitBtn);
+        isSubmitting = false;
+        if (!goAhead) return;
+        allTargets = getCurrentTargets();
+        if (allTargets.length === 0) return;
+    }
+
     var batches = [];
     var emptyCart = { lucky: 0, bbss: 0, tuckshop: 0 };
 
@@ -1543,7 +1798,7 @@ async function handleFormSubmit(event) {
         var starGroups = {};
         allTargets.forEach(function(t) {
             var type = isClassTarget(t) ? 'class' : 'student';
-            var s = getStars(t);
+            var s = getStars(t);   /* already capped: students max STUDENT_MAX_STARS */
             var key = type + '|' + s;
             if (starGroups[key] === undefined) {
                 starGroups[key] = batches.length;
@@ -1689,6 +1944,7 @@ window.addEventListener('DOMContentLoaded', function() {
             document.getElementById('teacherName').value = '';
             updateAdminUI('');
             scheduleVerify();
+            loadTodayUsage('');
         }
     });
 });
